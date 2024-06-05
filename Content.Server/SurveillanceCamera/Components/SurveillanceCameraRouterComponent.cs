@@ -26,6 +26,11 @@ public sealed partial class SurveillanceCameraRouterComponent : Component
     [DataField("subnetFrequency", customTypeSerializer:typeof(PrototypeIdSerializer<DeviceFrequencyPrototype>))]
     public string? SubnetFrequencyId { get; set;  }
 
-    [DataField("setupAvailableNetworks")]
-    public List<ProtoId<DeviceFrequencyPrototype>> AvailableNetworks { get; private set; } = new();
+    [DataField("setupAvailableNetworks", customTypeSerializer:typeof(PrototypeIdListSerializer<DeviceFrequencyPrototype>))]
+    public List<string> AvailableNetworks { get; private set; } = new();
+
+    // Sunrise-start
+    [DataField("subnetColor")]
+    public Color SubnetColor;
+    // Sunrise-end
 }

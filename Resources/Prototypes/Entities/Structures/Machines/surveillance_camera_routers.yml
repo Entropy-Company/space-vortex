@@ -59,6 +59,7 @@
         - SurveillanceCameraGeneral
         - SurveillanceCameraMedical
         - SurveillanceCameraCommand
+      subnetColor: "#088743" # Sunrise-Edit
 
 - type: entity
   parent: SurveillanceCameraRouterBase
@@ -68,6 +69,7 @@
   components:
     - type: SurveillanceCameraRouter
       subnetFrequency: SurveillanceCameraEngineering
+      subnetColor: "#EFB341" # Sunrise-Edit
 
 - type: entity
   parent: SurveillanceCameraRouterBase
@@ -77,6 +79,7 @@
   components:
     - type: SurveillanceCameraRouter
       subnetFrequency: SurveillanceCameraSecurity
+      subnetColor: "#DE3A3A" # Sunrise-Edit
 
 - type: entity
   parent: SurveillanceCameraRouterBase
@@ -86,6 +89,7 @@
   components:
     - type: SurveillanceCameraRouter
       subnetFrequency: SurveillanceCameraScience
+      subnetColor: "#D381C9" # Sunrise-Edit
 
 - type: entity
   parent: SurveillanceCameraRouterBase
@@ -95,6 +99,7 @@
   components:
     - type: SurveillanceCameraRouter
       subnetFrequency: SurveillanceCameraSupply
+      subnetColor: "#A46106" # Sunrise-Edit
 
 - type: entity
   parent: SurveillanceCameraRouterBase
@@ -104,6 +109,7 @@
   components:
     - type: SurveillanceCameraRouter
       subnetFrequency: SurveillanceCameraCommand
+      subnetColor: "#052EED" # Sunrise-Edit
 
 - type: entity
   parent: SurveillanceCameraRouterBase
@@ -113,6 +119,7 @@
   components:
     - type: SurveillanceCameraRouter
       subnetFrequency: SurveillanceCameraService
+      subnetColor: "#9FED58" # Sunrise-Edit
 
 - type: entity
   parent: SurveillanceCameraRouterBase
@@ -122,6 +129,7 @@
   components:
     - type: SurveillanceCameraRouter
       subnetFrequency: SurveillanceCameraMedical
+      subnetColor: "#52B4E9" # Sunrise-Edit
 
 - type: entity
   parent: SurveillanceCameraRouterBase
@@ -131,6 +139,7 @@
   components:
     - type: SurveillanceCameraRouter
       subnetFrequency: SurveillanceCameraGeneral
+      subnetColor: "#088743" # Sunrise-Edit
 
 - type: entity
   abstract: true
@@ -186,6 +195,7 @@
     - type: SurveillanceCameraRouter
       setupAvailableNetworks:
         - SurveillanceCameraEntertainment
+      subnetColor: "#088743" # Sunrise-Edit
 
 - type: entity
   parent: SurveillanceCameraWirelessRouterBase
@@ -195,3 +205,4 @@
   components:
     - type: SurveillanceCameraRouter
       subnetFrequency: SurveillanceCameraEntertainment
+      subnetColor: "#088743" # Sunrise-Edit
