@@ -4,15 +4,22 @@ using Content.Server.Cargo.Systems;
 using Content.Server.Emp;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
-using Content.Server.Vocalization.Systems;
-using Content.Shared.Cargo;
+using Content.Server.Stack;
+using Content.Server.Store.Components;
+using Content.Server.ADT.Economy;
+using Content.Shared.ADT.Economy;
+using Content.Shared.Access.Components;
+using Content.Shared.Access.Systems;
+using Content.Shared.Actions;
 using Content.Shared.Damage;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Emp;
-using Content.Shared.IdentityManagement;
+using Content.Shared.Interaction;
+using Content.Shared.PDA;
 using Content.Shared.Popups;
-using Content.Shared.Power;
+using Content.Shared.Stacks;
+using Content.Shared.Tag;
 using Content.Shared.Throwing;
 using Content.Shared.UserInterface;
 using Content.Shared.VendingMachines;
@@ -31,8 +38,15 @@ namespace Content.Server.VendingMachines
         [Dependency] private readonly PricingSystem _pricing = default!;
         [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
         [Dependency] private readonly IGameTiming _timing = default!;
+        [Dependency] private readonly SpeakOnUIClosedSystem _speakOnUIClosed = default!;
+        //ADT-Economy-Start
+        [Dependency] private readonly BankCardSystem _bankCard = default!;
+        [Dependency] private readonly TagSystem _tag = default!;
+        [Dependency] private readonly StackSystem _stackSystem = default!;
+        //ADT-Economy-End
 
         private const float WallVendEjectDistanceFromWall = 1f;
+        private const double GlobalPriceMultiplier = 2.0; //ADT-Economy
 
         public override void Initialize()
         {
@@ -40,7 +54,8 @@ namespace Content.Server.VendingMachines
 
             SubscribeLocalEvent<VendingMachineComponent, PowerChangedEvent>(OnPowerChanged);
             SubscribeLocalEvent<VendingMachineComponent, BreakageEventArgs>(OnBreak);
-            SubscribeLocalEvent<VendingMachineComponent, DamageChangedEvent>(OnDamageChanged);
+            SubscribeLocalEvent<VendingMachineComponent, GotEmaggedEvent>(OnEmagged);
+            SubscribeLocalEvent<VendingMachineComponent, DamageChangedEvent>(OnDamage); //ADT-Economy
             SubscribeLocalEvent<VendingMachineComponent, PriceCalculationEvent>(OnVendingPrice);
             SubscribeLocalEvent<VendingMachineComponent, EmpPulseEvent>(OnEmpPulse);
             SubscribeLocalEvent<VendingMachineComponent, TryVocalizeEvent>(OnTryVocalize);
@@ -50,6 +65,11 @@ namespace Content.Server.VendingMachines
             SubscribeLocalEvent<VendingMachineComponent, VendingMachineSelfDispenseEvent>(OnSelfDispense);
 
             SubscribeLocalEvent<VendingMachineComponent, RestockDoAfterEvent>(OnDoAfter);
+
+            //ADT-Economy-Start
+            SubscribeLocalEvent<VendingMachineComponent, InteractUsingEvent>(OnInteractUsing);
+            SubscribeLocalEvent<VendingMachineComponent, VendingMachineWithdrawMessage>(OnWithdrawMessage);
+            //ADT-Economy-End
 
             SubscribeLocalEvent<VendingMachineRestockComponent, PriceCalculationEvent>(OnPriceCalculation);
         }
@@ -88,6 +108,30 @@ namespace Content.Server.VendingMachines
                 args.Cancel();
         }
 
+        private void OnBoundUIOpened(EntityUid uid, VendingMachineComponent component, BoundUIOpenedEvent args)
+        {
+            UpdateVendingMachineInterfaceState(uid, component);
+        }
+
+        private void UpdateVendingMachineInterfaceState(EntityUid uid, VendingMachineComponent component)
+        {
+            var state = new VendingMachineInterfaceState(GetAllInventory(uid, component), GetPriceMultiplier(component),
+                component.Credits); //ADT-Economy
+
+            _userInterfaceSystem.SetUiState(uid, VendingMachineUiKey.Key, state);
+        }
+
+        private void OnInventoryEjectMessage(EntityUid uid, VendingMachineComponent component, VendingMachineEjectMessage args)
+        {
+            if (!this.IsPowered(uid, EntityManager))
+                return;
+
+            if (args.Actor is not { Valid: true } entity || Deleted(entity))
+                return;
+
+            AuthorizedVend(uid, entity, args.Type, args.ID, component);
+        }
+
         private void OnPowerChanged(EntityUid uid, VendingMachineComponent component, ref PowerChangedEvent args)
         {
             TryUpdateVisualState((uid, component));
@@ -96,18 +140,19 @@ namespace Content.Server.VendingMachines
         private void OnBreak(EntityUid uid, VendingMachineComponent vendComponent, BreakageEventArgs eventArgs)
         {
             vendComponent.Broken = true;
-            TryUpdateVisualState((uid, vendComponent));
+            TryUpdateVisualState(uid, vendComponent);
         }
 
-        private void OnDamageChanged(EntityUid uid, VendingMachineComponent component, DamageChangedEvent args)
+        private void OnEmagged(EntityUid uid, VendingMachineComponent component, ref GotEmaggedEvent args)
         {
-            if (!args.DamageIncreased && component.Broken)
-            {
-                component.Broken = false;
-                TryUpdateVisualState((uid, component));
-                return;
-            }
+            //ADT-Economy-Start
+            args.Handled = component.EmaggedInventory.Count > 0 || component.PriceMultiplier > 0;
+            UpdateVendingMachineInterfaceState(uid, component);
+            //ADT-Economy-End
+        }
 
+        private void OnDamage(EntityUid uid, VendingMachineComponent component, DamageChangedEvent args) //ADT-Economy
+        {
             if (component.Broken || component.DispenseOnHitCoolingDown ||
                 component.DispenseOnHitChance == null || args.DamageDelta == null)
                 return;
@@ -157,6 +202,54 @@ namespace Content.Server.VendingMachines
             args.Handled = true;
         }
 
+        //ADT-Economy-Start
+        private void OnInteractUsing(EntityUid uid, VendingMachineComponent component, InteractUsingEvent args)
+        {
+            if (args.Handled)
+                return;
+
+            if (component.Broken || !this.IsPowered(uid, EntityManager))
+                return;
+
+            if (!TryComp<CurrencyComponent>(args.Used, out var currency) ||
+                !currency.Price.Keys.Contains(component.CurrencyType))
+                return;
+
+            var stack = Comp<StackComponent>(args.Used);
+            component.Credits += stack.Count;
+            Del(args.Used);
+            UpdateVendingMachineInterfaceState(uid, component);
+            Audio.PlayPvs(component.SoundInsertCurrency, uid);
+            args.Handled = true;
+        }
+
+        protected override int GetEntryPrice(EntityPrototype proto)
+        {
+            var price = (int) _pricing.GetEstimatedPrice(proto);
+            return price > 0 ? price : 25;
+        }
+
+        private int GetPrice(VendingMachineInventoryEntry entry, VendingMachineComponent comp)
+        {
+            return (int) (entry.Price * GetPriceMultiplier(comp));
+        }
+
+        private double GetPriceMultiplier(VendingMachineComponent comp)
+        {
+            return comp.PriceMultiplier * GlobalPriceMultiplier;
+        }
+
+        private void OnWithdrawMessage(EntityUid uid, VendingMachineComponent component, VendingMachineWithdrawMessage args)
+        {
+            _stackSystem.Spawn(component.Credits, PrototypeManager.Index(component.CreditStackPrototype),
+                Transform(uid).Coordinates);
+            component.Credits = 0;
+            Audio.PlayPvs(component.SoundWithdrawCurrency, uid);
+
+            UpdateVendingMachineInterfaceState(uid, component);
+        }
+        //ADT-Economy-End
+
         /// <summary>
         /// Sets the <see cref="VendingMachineComponent.CanShoot"/> property of the vending machine.
         /// </summary>
@@ -173,11 +266,162 @@ namespace Content.Server.VendingMachines
         /// </summary>
         public void SetContraband(EntityUid uid, bool contraband, VendingMachineComponent? component = null)
         {
-            if (!Resolve(uid, ref component))
+            if (!Resolve(uid, ref vendComponent))
+                return false;
+
+            if (!TryComp<AccessReaderComponent>(uid, out var accessReader))
+                return true;
+
+            if (_accessReader.IsAllowed(sender, uid, accessReader) || HasComp<EmaggedComponent>(uid))
+                return true;
+
+            Popup.PopupEntity(Loc.GetString("vending-machine-component-try-eject-access-denied"), uid, sender); //ADT-Economy
+            Deny(uid, vendComponent);
+            return false;
+        }
+
+        /// <summary>
+        /// Tries to eject the provided item. Will do nothing if the vending machine is incapable of ejecting, already ejecting
+        /// or the item doesn't exist in its inventory.
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="type">The type of inventory the item is from</param>
+        /// <param name="itemId">The prototype ID of the item</param>
+        /// <param name="throwItem">Whether the item should be thrown in a random direction after ejection</param>
+        /// <param name="vendComponent"></param>
+        public void TryEjectVendorItem(EntityUid uid, InventoryType type, string itemId, bool throwItem, VendingMachineComponent? vendComponent = null, EntityUid? sender = null) //ADT-Economy
+        {
+            if (!Resolve(uid, ref vendComponent))
                 return;
 
-            component.Contraband = contraband;
-            Dirty(uid, component);
+            if (vendComponent.Ejecting || vendComponent.Broken || !this.IsPowered(uid, EntityManager))
+            {
+                return;
+            }
+
+            var entry = GetEntry(uid, itemId, type, vendComponent);
+
+            if (entry == null)
+            {
+                //ADT-Economy-Start
+                if (sender.HasValue)
+                    Popup.PopupEntity(Loc.GetString("vending-machine-component-try-eject-invalid-item"), uid, sender.Value);
+                //ADT-Economy-End
+
+                Deny(uid, vendComponent);
+                return;
+            }
+
+            if (entry.Amount <= 0)
+            {
+                //ADT-Economy-Start
+                if (sender.HasValue)
+                    Popup.PopupEntity(Loc.GetString("vending-machine-component-try-eject-out-of-stock"), uid, sender.Value);
+                //ADT-Economy-End
+
+                Deny(uid, vendComponent);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(entry.ID))
+                return;
+
+            //ADT-Economy-Start
+            var price = GetPrice(entry, vendComponent);
+            if (price > 0 && sender.HasValue && !_tag.HasTag(sender.Value, "IgnoreBalanceChecks"))
+            {
+                var success = false;
+                if (vendComponent.Credits >= price)
+                {
+                    vendComponent.Credits -= price;
+                    success = true;
+                }
+                else
+                {
+                    var items = _accessReader.FindPotentialAccessItems(sender.Value);
+                    foreach (var item in items)
+                    {
+                        var nextItem = item;
+                        if (TryComp(item, out PdaComponent? pda) && pda.ContainedId is { Valid: true } id)
+                            nextItem = id;
+
+                        if (!TryComp<BankCardComponent>(nextItem, out var bankCard) || !bankCard.AccountId.HasValue
+                            || !_bankCard.TryGetAccount(bankCard.AccountId.Value, out var account)
+                            || account.Balance < price)
+                            continue;
+
+                        _bankCard.TryChangeBalance(bankCard.AccountId.Value, -price);
+                        success = true;
+                        break;
+                    }
+                }
+
+                if (!success)
+                {
+                    Popup.PopupEntity(Loc.GetString("vending-machine-component-no-balance"), uid);
+                    Deny(uid, vendComponent);
+                    return;
+                }
+            }
+            //ADT-Economy-End
+
+            // Start Ejecting, and prevent users from ordering while anim playing
+            vendComponent.Ejecting = true;
+            vendComponent.NextItemToEject = entry.ID;
+            vendComponent.ThrowNextItem = throwItem;
+
+            if (TryComp(uid, out SpeakOnUIClosedComponent? speakComponent))
+                _speakOnUIClosed.TrySetFlag((uid, speakComponent));
+
+            entry.Amount--;
+            UpdateVendingMachineInterfaceState(uid, vendComponent);
+            TryUpdateVisualState(uid, vendComponent);
+            Audio.PlayPvs(vendComponent.SoundVend, uid);
+        }
+
+        /// <summary>
+        /// Checks whether the user is authorized to use the vending machine, then ejects the provided item if true
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="sender">Entity that is trying to use the vending machine</param>
+        /// <param name="type">The type of inventory the item is from</param>
+        /// <param name="itemId">The prototype ID of the item</param>
+        /// <param name="component"></param>
+        public void AuthorizedVend(EntityUid uid, EntityUid sender, InventoryType type, string itemId, VendingMachineComponent component)
+        {
+            if (IsAuthorized(uid, sender, component))
+            {
+                TryEjectVendorItem(uid, type, itemId, component.CanShoot, component, sender); //ADT-Economy-Start
+            }
+        }
+
+        /// <summary>
+        /// Tries to update the visuals of the component based on its current state.
+        /// </summary>
+        public void TryUpdateVisualState(EntityUid uid, VendingMachineComponent? vendComponent = null)
+        {
+            if (!Resolve(uid, ref vendComponent))
+                return;
+
+            var finalState = VendingMachineVisualState.Normal;
+            if (vendComponent.Broken)
+            {
+                finalState = VendingMachineVisualState.Broken;
+            }
+            else if (vendComponent.Ejecting)
+            {
+                finalState = VendingMachineVisualState.Eject;
+            }
+            else if (vendComponent.Denying)
+            {
+                finalState = VendingMachineVisualState.Deny;
+            }
+            else if (!this.IsPowered(uid, EntityManager))
+            {
+                finalState = VendingMachineVisualState.Off;
+            }
+
+            _appearanceSystem.SetData(uid, VendingMachineVisuals.VisualState, finalState);
         }
 
         /// <summary>

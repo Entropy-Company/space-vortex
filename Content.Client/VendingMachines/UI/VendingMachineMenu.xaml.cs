@@ -21,15 +21,9 @@ namespace Content.Client.VendingMachines.UI
         [Dependency] private readonly IEntityManager _entityManager = default!;
 
         private readonly Dictionary<EntProtoId, EntityUid> _dummies = [];
-        private readonly Dictionary<EntProtoId, (ListContainerButton Button, VendingMachineItem Item)> _listItems = new();
-        private readonly Dictionary<EntProtoId, uint> _amounts = new();
-
-        /// <summary>
-        /// Whether the vending machine is able to be interacted with or not.
-        /// </summary>
-        private bool _enabled;
-
-        public event Action<GUIBoundKeyEventArgs, ListData>? OnItemSelected;
+        public Action<VendingMachineWithdrawMessage>? OnWithdraw; //ADT-Economy
+        public event Action<ItemList.ItemListSelectedEventArgs>? OnItemSelected;
+        public event Action<string>? OnSearchChanged;
 
         public VendingMachineMenu()
         {
@@ -87,11 +81,19 @@ namespace Content.Client.VendingMachines.UI
         /// Populates the list of available items on the vending machine interface
         /// and sets icons based on their prototypes
         /// </summary>
-        public void Populate(List<VendingMachineInventoryEntry> inventory, bool enabled)
+        public void Populate(List<VendingMachineInventoryEntry> inventory, out List<int> filteredInventory, double priceMultiplier, int credits, string? filter = null) //ADT-Economy
         {
-            _enabled = enabled;
-            _listItems.Clear();
-            _amounts.Clear();
+            //ADT-Economy-Start
+            CreditsLabel.Text = Loc.GetString("vending-ui-credits-amount", ("credits", credits));
+            WithdrawButton.Disabled = credits == 0;
+            WithdrawButton.OnPressed += _ =>
+            {
+                if (credits == 0)
+                    return;
+                OnWithdraw?.Invoke(new VendingMachineWithdrawMessage());
+            };
+            //ADT-Economy-End
+            filteredInventory = new();
 
             if (inventory.Count == 0 && VendingContents.Visible)
             {
@@ -120,12 +122,10 @@ namespace Content.Client.VendingMachines.UI
             for (var i = 0; i < inventory.Count; i++)
             {
                 var entry = inventory[i];
-
-                if (!_prototypeManager.TryIndex(entry.ID, out var prototype))
-                {
-                    _amounts[entry.ID] = 0;
-                    continue;
-                }
+                var price = (int)(entry.Price * priceMultiplier); //ADT-Economy
+                var vendingItem = VendingContents[i - filterCount];
+                vendingItem.Text = string.Empty;
+                vendingItem.Icon = null;
 
                 if (!_dummies.TryGetValue(entry.ID, out var dummy))
                 {
@@ -142,8 +142,24 @@ namespace Content.Client.VendingMachines.UI
 
                 listData.Add(new VendorItemsListData(prototype.ID, i)
                 {
-                    ItemText = itemText,
-                });
+                    icon = spriteSystem.GetPrototypeIcon(prototype).Default;
+                }
+
+                // search filter
+                if (!string.IsNullOrEmpty(filter) &&
+                    !itemName.ToLowerInvariant().Contains(filter.Trim().ToLowerInvariant()))
+                {
+                    VendingContents.Remove(vendingItem);
+                    filterCount++;
+                    continue;
+                }
+
+                if (itemName.Length > longestEntry.Length)
+                    longestEntry = itemName;
+
+                vendingItem.Text = $" [{price}$] {itemName} [{entry.Amount}]"; //ADT-Economy
+                vendingItem.Icon = icon;
+                filteredInventory.Add(i);
             }
 
             VendingContents.PopulateList(listData);

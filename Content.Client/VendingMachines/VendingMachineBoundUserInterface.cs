@@ -23,10 +23,21 @@ namespace Content.Client.VendingMachines
         {
             base.Open();
 
-            _menu = this.CreateWindowCenteredLeft<VendingMachineMenu>();
+            var vendingMachineSys = EntMan.System<VendingMachineSystem>();
+
+            var component = EntMan.GetComponent<VendingMachineComponent>(Owner); //ADT-Economy
+            _cachedInventory = vendingMachineSys.GetAllInventory(Owner, component); //ADT-Economy
+
+            _menu = this.CreateWindow<VendingMachineMenu>();
+            _menu.OpenCenteredLeft();
             _menu.Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
+
+            _menu.OnClose += Close; //ADT-Economy
             _menu.OnItemSelected += OnItemSelected;
-            Refresh();
+            _menu.OnSearchChanged += OnSearchChanged;
+            _menu.OnWithdraw += SendMessage; //ADT-Economy
+
+            _menu.Populate(_cachedInventory, out _cachedFilteredIndex, component.PriceMultiplier, component.Credits); //ADT-Economy
         }
 
         public void Refresh()
@@ -56,6 +67,11 @@ namespace Content.Client.VendingMachines
             if (data is not VendorItemsListData { ItemIndex: var itemIndex })
                 return;
 
+            _menu?.Populate(_cachedInventory, out _cachedFilteredIndex, newState.PriceMultiplier, newState.Credits); //ADT-Economy
+        }
+
+        private void OnItemSelected(ItemList.ItemListSelectedEventArgs args)
+        {
             if (_cachedInventory.Count == 0)
                 return;
 
@@ -79,6 +95,14 @@ namespace Content.Client.VendingMachines
             _menu.OnItemSelected -= OnItemSelected;
             _menu.OnClose -= Close;
             _menu.Dispose();
+        }
+
+        private void OnSearchChanged(string? filter)
+        {
+            //ADT-Economy-Start
+            var component = EntMan.GetComponent<VendingMachineComponent>(Owner);
+            _menu?.Populate(_cachedInventory, out _cachedFilteredIndex, component.PriceMultiplier, component.Credits, filter);
+            //ADT-Economy-End
         }
     }
 }
