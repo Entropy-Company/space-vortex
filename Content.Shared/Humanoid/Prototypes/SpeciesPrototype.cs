@@ -164,63 +164,51 @@ public sealed partial class SpeciesPrototype : IPrototype
     [DataField]
     public int MaxAge = 120;
 
-    // begin Goobstation: port EE height/width sliders
+    // Begin DV - CD Character Records shouldn't nuke species heights
+    /// <summary>
+    /// The base height scale for this species
+    /// </summary>
+    [DataField("baseScale")]
+    public System.Numerics.Vector2 BaseScale = new(1f, 1f);
+    // End DV - CD Character Records shouldn't nuke species heights
+
+    // Begin CD - Character Records
+    /// <summary>
+    /// The minimum height for this species
+    /// </summary>
+    [DataField("minHeight")]
+    public float MinHeight = 0.85f; // DeltaV - less trolling with the heights
 
     /// <summary>
-    ///     The minimum height and width ratio for this species
+    /// The maximum height for this species
     /// </summary>
-    [DataField]
-    public float SizeRatio = 1.2f;
+    [DataField("maxHeight")]
+    public float MaxHeight = 1.2f; // DeltaV - less trolling with the heights
 
     /// <summary>
-    ///     The minimum height for this species
+    /// The default height for this species
     /// </summary>
-    [DataField]
-    public float MinHeight = 0.80f;
-
-    /// <summary>
-    ///     The default height for this species
-    /// </summary>
-    [DataField]
+    [DataField("defaultHeight")]
     public float DefaultHeight = 1f;
 
     /// <summary>
-    ///     The maximum height for this species
+    /// The default width for this species
     /// </summary>
-    [DataField]
-    public float MaxHeight = 1.20f;
-
-    /// <summary>
-    ///     The minimum width for this species
-    /// </summary>
-    [DataField]
-    public float MinWidth = 0.85f;
-
-    /// <summary>
-    ///     The default width for this species
-    /// </summary>
-    [DataField]
+    [DataField("defaultWidth")]
     public float DefaultWidth = 1f;
 
     /// <summary>
-    ///     The maximum width for this species
+    /// Whether to scale horizontally or not
     /// </summary>
-    [DataField]
-    public float MaxWidth = 1.15f;
+    [DataField("scaleWidth")]
+    public bool ScaleWidth = true;
 
     /// <summary>
-    ///     The average height in centimeters for this species, used to calculate player facing height values in UI elements
+    /// Whether to scale vertically or not
     /// </summary>
-    [DataField]
-    public float AverageHeight = 176.1f;
-
-    /// <summary>
-    ///     The average shoulder-to-shoulder width in cm for this species, used to calculate player facing width values in UI elements
-    /// </summary>
-    [DataField]
-    public float AverageWidth = 40f;
-
-    // end Goobstation: port EE height/width sliders
+    [DataField("scaleHeight")]
+    public bool ScaleHeight = true;
+    // End CD - Character Records
 }
 
 public enum SpeciesNaming : byte

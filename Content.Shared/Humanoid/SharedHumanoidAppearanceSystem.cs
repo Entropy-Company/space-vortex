@@ -212,6 +212,8 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         targetHumanoid.CustomBaseLayers = new(sourceHumanoid.CustomBaseLayers);
         targetHumanoid.MarkingSet = new(sourceHumanoid.MarkingSet);
 
+        targetHumanoid.Height = sourceHumanoid.Height; // CD - Character Records
+
         targetHumanoid.Gender = sourceHumanoid.Gender;
 
         if (TryComp<GrammarComponent>(target, out var grammar))
@@ -564,18 +566,9 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         }
 
         humanoid.Age = profile.Age;
+        humanoid.Height = profile.Height; // CD - Character Records
 
-        // CorvaxGoob-Clearing
-/*        // begin Goobstation: port EE height/width sliders
-        var species = _proto.Index(humanoid.Species);
-
-        if (profile.Height <= 0 || profile.Width <= 0)
-            SetScale(uid, new Vector2(species.DefaultWidth, species.DefaultHeight), true, humanoid);
-        else
-            SetScale(uid, new Vector2(profile.Width, profile.Height), true, humanoid);
-
-        _heightAdjust.SetScale(uid, new Vector2(humanoid.Width, humanoid.Height));
-        // end Goobstation: port EE height/width sliders*/
+        humanoid.LastProfileLoaded = profile; // DeltaV - let paradox anomaly be cloned
 
         RaiseLocalEvent(uid, new ProfileLoadFinishedEvent()); // Shitmed Change
         Dirty(uid, humanoid);

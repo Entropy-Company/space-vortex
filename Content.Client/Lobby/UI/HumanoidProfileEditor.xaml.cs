@@ -194,6 +194,11 @@ using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
 using Content.Client._CorvaxGoob.TTS;
 using Content.Shared._CorvaxGoob; // CorvaxGoob-TTS
+// Begin CD - Character Records
+using System.Globalization;
+using Content.Client._CD.Records.UI;
+using Content.Shared._CD.Records;
+// End CD - Character Records
 
 namespace Content.Client.Lobby.UI
 {
@@ -265,7 +270,14 @@ namespace Content.Client.Lobby.UI
 
         private bool _isDirty;
 
-        private static readonly ProtoId<GuideEntryPrototype> DefaultSpeciesGuidebook = "Species";
+        // Begin CD - Station Records
+        private float _defaultHeight = 1f;
+
+        private readonly RecordEditorGui _recordsTab;
+        // End CD - Station Records
+
+        [ValidatePrototypeId<GuideEntryPrototype>]
+        private const string DefaultSpeciesGuidebook = "Species";
 
         public event Action<List<ProtoId<GuideEntryPrototype>>>? OnOpenGuidebook;
 
@@ -394,33 +406,42 @@ namespace Content.Client.Lobby.UI
                 // UpdateHeightWidthSliders(); // Goobstation: port EE height/width sliders // CorvaxGoob-Clearing
             };
 
-            /*// begin Goobstation: port EE height/width sliders
-            #region Height and Width
+            // Begin CD - Character Records
+            #region CDHeight
 
-            var prototype = _species.Find(x => x.ID == Profile?.Species) ?? _species.First();
-
-            UpdateHeightWidthSliders(); // CorvaxGoob-Clearing
-            UpdateDimensions(SliderUpdate.Both);
-
-            HeightSlider.OnValueChanged += _ => UpdateDimensions(SliderUpdate.Height);
-            WidthSlider.OnValueChanged += _ => UpdateDimensions(SliderUpdate.Width);
-
-            HeightReset.OnPressed += _ =>
+            CDHeight.OnTextChanged += args =>
             {
-                var prototype = _species.Find(x => x.ID == Profile?.Species) ?? _species.First();
-                HeightSlider.Value = prototype.DefaultHeight;
-                UpdateDimensions(SliderUpdate.Height);
+                if (Profile is null || !float.TryParse(args.Text, out var newHeight))
+                    return;
+
+                var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
+                newHeight = MathF.Round(Math.Clamp(newHeight, prototype.MinHeight, prototype.MaxHeight), 2);
+
+                // The percentage between the start and end numbers, aka "inverse lerp"
+                var sliderPercent = (newHeight - prototype.MinHeight) /
+                                    (prototype.MaxHeight - prototype.MinHeight);
+                CDHeightSlider.Value = sliderPercent;
+
+                SetProfileHeight(newHeight);
             };
 
-            WidthReset.OnPressed += _ =>
+            CDHeightReset.OnPressed += _ =>
             {
-                var prototype = _species.Find(x => x.ID == Profile?.Species) ?? _species.First();
-                WidthSlider.Value = prototype.DefaultWidth;
-                UpdateDimensions(SliderUpdate.Width);
+                CDHeight.SetText(_defaultHeight.ToString(CultureInfo.InvariantCulture), true);
             };
 
-            #endregion Height and Width
-            // end Goobstation: port EE height/width sliders*/
+            CDHeightSlider.OnValueChanged += _ =>
+            {
+                if (Profile is null)
+                    return;
+                var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
+                var newHeight = MathF.Round(MathHelper.Lerp(prototype.MinHeight, prototype.MaxHeight, CDHeightSlider.Value), 2);
+                CDHeight.Text = newHeight.ToString(CultureInfo.InvariantCulture);
+                SetProfileHeight(newHeight);
+            };
+
+            #endregion CDHeight
+            // End CD - Character Records
 
             #region Skin
 
@@ -617,6 +638,16 @@ namespace Content.Client.Lobby.UI
             Markings.OnMarkingRankChange += OnMarkingChange;
 
             #endregion Markings
+
+            // Begin CD - Character Records
+            #region CosmaticRecords
+
+            _recordsTab = new RecordEditorGui(UpdateProfileRecords);
+            TabContainer.AddChild(_recordsTab);
+            TabContainer.SetTabTitle(TabContainer.ChildCount - 1, Loc.GetString("humanoid-profile-editor-cd-records-tab"));
+
+            #endregion CosmaticRecords
+            // End CD - Character Records
 
             RefreshFlavorText();
 
@@ -1032,6 +1063,11 @@ namespace Content.Client.Lobby.UI
             // UpdateHeightWidthSliders(); // Goobstation: port EE height/width sliders // CorvaxGoob-Clearing
             // UpdateWeight(); // Goobstation: port EE height/width sliders // CorvaxGoob-Clearing
 
+            // Begin CD - Character Records
+            UpdateHeightControls();
+            _recordsTab.Update(profile);
+            // End CD - Character Records
+
             RefreshAntags();
             RefreshJobs();
             RefreshLoadouts();
@@ -1328,6 +1364,16 @@ namespace Content.Client.Lobby.UI
             UpdateJobPriorities();
         }
 
+        // Start CD - Character Records
+        private void UpdateProfileRecords(PlayerProvidedCharacterRecords records)
+        {
+            if (Profile is null)
+                return;
+            Profile = Profile.WithCDCharacterRecords(records);
+            IsDirty = true;
+        }
+        // End CD - Character Records
+
         private void OnFlavorTextChange(string content)
         {
             if (Profile is null)
@@ -1539,6 +1585,15 @@ namespace Content.Client.Lobby.UI
 
             _entManager.System<MetaDataSystem>().SetEntityName(PreviewDummy, newName);
         }
+
+        // Begin CD - Character Records
+        private void SetProfileHeight(float height)
+        {
+            Profile = Profile?.WithHeight(height);
+            SetDirty();
+            ReloadProfilePreview();
+        }
+        // End CD - Character Records
 
         private void SetSpawnPriority(SpawnPriorityPreference newSpawnPriority)
         {
@@ -1765,6 +1820,26 @@ namespace Content.Client.Lobby.UI
 
             PronounsButton.SelectId((int) Profile.Gender);
         }
+
+        // Begin CD - Character Records
+        private void UpdateHeightControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            var species = _species.Find(x => x.ID == Profile.Species);
+            if (species != null)
+                _defaultHeight = species.DefaultHeight;
+
+            var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
+            var sliderPercent = (Profile.Height - prototype.MinHeight) /
+                                (prototype.MaxHeight - prototype.MinHeight);
+            CDHeightSlider.Value = sliderPercent;
+            CDHeight.Text = Profile.Height.ToString(CultureInfo.InvariantCulture);
+        }
+        // End CD - Character Records
 
         private void UpdateSpawnPriorityControls()
         {
@@ -2005,6 +2080,8 @@ namespace Content.Client.Lobby.UI
             var name = HumanoidCharacterProfile.GetName(Profile.Species, Profile.Gender);
             SetName(name);
             UpdateNameEdit();
+
+            _recordsTab.Update(Profile); // CD - Character Records
         }
 
         private async void ExportImage()
