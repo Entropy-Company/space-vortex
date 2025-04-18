@@ -1,0 +1,29 @@
+- type: entity
+  id: ADTBaseWeaponCaseNTBS
+  name: weapon case
+  description: Weapon case, special designed for ERT.
+  parent: [ BaseStorageItem, BaseBagOpenClose ]
+  components:
+  - type: Sprite
+    sprite: ADT/Objects/Storage/weaponcase.rsi
+    layers:
+    - state: closed
+    - state: open
+      map: ["openLayer"]
+  - type: Appearance
+  - type: Item
+    sprite: ADT/Objects/Storage/weaponcase.rsi
+    size: Ginormous
+  - type: Storage
+    grid:
+    - 0,0,6,3
+    maxItemSize: Huge
+  - type: StorageFill
+    contents:
+      - id: TrackingImplanter
+        amount: 2
+      - id: MedkitCombatFilled
+      - id: HandheldCrewMonitor
+      - id: MedkitAdvancedFilled
+      - id: EmergencyMedipen
+        amount: 2

@@ -19,7 +19,8 @@
           path: /Maps/Shuttles/cargo_exo.yml
         - type: StationJobs
           availableJobs:
-            #service
+            # command
+            ADTBlueShieldOfficer: [ 0, 1 ] #ADT-Roles
             Captain: [ 1, 1 ]
             HeadOfPersonnel: [ 1, 1 ]
             Bartender: [ 2, 2 ]

@@ -21,7 +21,8 @@
           path: /Maps/Shuttles/cargo_relic.yml
         - type: StationJobs
           availableJobs:
-            #command (7)
+            #command
+            ADTBlueShieldOfficer: [ 0, 1 ] #ADT-Roles
             Captain: [ 1, 1 ]
             IAA: [ 1, 1 ] # Corvax-IAA
             #service

@@ -15,8 +15,9 @@
         - type: StationEmergencyShuttle
           emergencyShuttlePath: /Maps/Shuttles/emergency_box.yml
         - type: StationJobs
-          availableJobs: # 63 jobs total w/o latejoins & interns, 82 jobs total w/ latejoins & interns
-            #Command (7)
+          availableJobs:
+            #service
+            ADTBlueShieldOfficer: [ 0, 1 ] #ADT-Roles
             Captain: [ 1, 1 ]
             IAA: [ 1, 1 ] # Corvax-IAA
             HeadOfPersonnel: [ 1, 1 ]

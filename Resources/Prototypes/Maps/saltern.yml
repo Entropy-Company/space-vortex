@@ -19,8 +19,9 @@
         - type: StationEmergencyShuttle
           emergencyShuttlePath: /Maps/Shuttles/emergency.yml
         - type: StationJobs
-          availableJobs: # 45 jobs total w/o latejoins & interns, 62 jobs total w/ latejoins & interns
-            #command (7)
+          availableJobs:
+            #service
+            ADTBlueShieldOfficer: [ 0, 1 ] #ADT-Roles
             Captain: [ 1, 1 ]
             HeadOfPersonnel: [ 1, 1 ]
             HeadOfSecurity: [ 1, 1 ]
