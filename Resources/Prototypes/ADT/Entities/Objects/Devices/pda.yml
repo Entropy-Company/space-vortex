@@ -1,0 +1,69 @@
+- type: entity
+  parent: BasePDA
+  id: ADTBasePDA
+  suffix: ADT
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: ADT/Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: Icon
+    sprite: ADT/Objects/Devices/pda.rsi
+
+- type: entity
+  parent: ADTBasePDA
+  id: ADTBaseMedicalPDA
+  abstract: true
+  components:
+  - type: ItemToggle
+    onUse: false
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+      - CrewManifestCartridge
+      - NotekeeperCartridge
+      - NewsReaderCartridge
+      - MedTekCartridge
+    diskSpace: 8 # ADT tweak
+
+- type: entity
+  parent: ADTBaseMedicalPDA
+  id: ADTBlueshieldOfficerPDA
+  name: BlueShield PDA
+  description: Smells like protection.
+  components:
+    - type: Pda
+      id: ADTBlueShieldOfficerIDCard
+    - type: PdaBorderColor
+      borderColor: "#424248"
+      accentHColor: "#2851a4"
+      accentVColor: "#e1e1e1"
+    - type: Icon
+      state: pda-blueshield
+    - type: Appearance
+      appearanceDataInit:
+       enum.PdaVisuals.PdaType:
+        !type:String
+        pda-blueshield
+    - type: Sprite
+      sprite: ADT/Objects/Devices/pda.rsi
+      layers:
+      - map: [ "enum.PdaVisualLayers.Base" ]
+        state: "pda-blueshield"
+      - state: "light_overlay"
+        map: [ "enum.PdaVisualLayers.Flashlight" ]
+        shader: "unshaded"
+        visible: false
+      - state: "id_overlay"
+        map: [ "enum.PdaVisualLayers.IdLight" ]
+        shader: "unshaded"
+        visible: false

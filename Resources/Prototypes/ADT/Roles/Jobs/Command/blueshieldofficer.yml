@@ -1,0 +1,65 @@
+- type: job
+  id: ADTBlueShieldOfficer
+  name: job-name-ADTBlueShieldOfficer
+  description: job-description-ADTBlueShieldOfficer
+  playTimeTracker: JobADTBlueShieldOfficer
+  requirements:
+    - !type:RoleTimeRequirement
+      role: JobCaptain
+      time: 13800 #3 hrs
+    - !type:RoleTimeRequirement
+      role: JobHeadOfSecurity
+      time: 13800 #3 hrs
+    - !type:RoleTimeRequirement
+      role: JobChiefMedicalOfficer
+      time: 13800 #3 hrs
+  weight: 15
+  startingGear: ADTBlueShieldOfficerGear
+  icon: "JobIconADTBlueShieldOfficer"
+  supervisors: job-supervisors-centcom
+  canBeAntag: false
+  access:
+    - Captain
+    - Command
+    - Brig
+    - Security
+    - Armory
+    - Maintenance
+    - Service
+    - External
+    - Research
+    - Medical
+    - Engineering
+    - Cargo
+    # - Centcom
+    - BlueShield
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant ]
+  - !type:AddComponentSpecial
+    components:
+      - type: Skills # Corvax-Next-Skills
+        skills:
+        - ShuttleControl
+        - Shooting
+        - Surgery
+        - MedicalEquipment
+      - type: CanChokeGrab
+
+- type: startingGear
+  id: ADTBlueShieldOfficerGear
+  equipment:
+    head: ADTClothingHeadHatBeretBlueshieldBlack
+    eyes: ADTClothingEyesGlassesBlueshield
+    ears: ADTClothingHeadsetBlueshield
+    shoes: ClothingShoesBootsCombatFilled
+    outerClothing: ADTBlueshieldSuit
+    belt: ClothingBeltSheathBS
+    gloves: ClothingHandsGlovesCombat
+    id: ADTBlueshieldOfficerPDA
+    pocket1: WeaponX2DualphaseEnergyLaserGun
+    pocket2: Handcuffs
+    satchel: ADTClothingBackpackSatchelBlueshield
+    neck: ADTClothingNeckCloakBlueshield
+  inhand:
+  - ADTBaseWeaponCaseNTBS

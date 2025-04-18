@@ -22,6 +22,7 @@
         - type: StationJobs
           availableJobs:
             # command
+            ADTBlueShieldOfficer: [ 0, 1 ] #ADT-Roles
             Captain: [ 1, 1 ]
             IAA: [ 1, 1 ]
             # cargo

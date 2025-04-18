@@ -27,6 +27,7 @@
         - type: StationJobs
           availableJobs:
             # service
+            ADTBlueShieldOfficer: [ 0, 1 ] #ADT-Roles
             HeadOfPersonnel: [ 1, 1 ]
             Passenger: [ -1, -1 ]
             ServiceWorker: [ 1, 2 ]

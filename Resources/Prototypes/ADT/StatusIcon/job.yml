@@ -1,0 +1,7 @@
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconADTBlueShieldOfficer
+  icon:
+    sprite: /Textures/ADT/Interface/Misc/job_icons.rsi
+    state: ADTBlueShieldOfficer
+  jobName: job-name-ADTBlueShieldOfficer
