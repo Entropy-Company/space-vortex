@@ -10,3 +10,5 @@
         - EncryptionKeyIAA
     - type: Sprite
       sprite: Clothing/Ears/Headsets/servicesecurity.rsi
+    - type: Headset
+      color: "#d98b71"
