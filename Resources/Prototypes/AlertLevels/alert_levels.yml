@@ -70,3 +70,22 @@
       emergencyLightColor: DarkViolet
       forceEnableEmergencyLights: true
       shuttleTime: 1200
+    omicron: # Goobstation
+      announcement: alert-level-omicron-announcement
+      selectable: false
+      sound:
+        path: /Audio/_Goobstation/Misc/omicron.ogg
+      disableSelection: true
+      color: Ivory
+      emergencyLightColor: Ivory
+      forceEnableEmergencyLights: true
+      shuttleTime: 2400
+    octarine: # DeltaV - Cosmic Cult
+      announcement: alert-level-octarine-announcement
+      selectable: false
+      sound: /Audio/Announcements/Alerts/code_octarine.ogg
+      disableSelection: true
+      color: CadetBlue
+      emergencyLightColor: CadetBlue
+      forceEnableEmergencyLights: true
+      shuttleTime: 600

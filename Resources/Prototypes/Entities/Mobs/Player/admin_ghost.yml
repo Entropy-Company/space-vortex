@@ -135,6 +135,12 @@
     - Surgery
     - MedicalEquipment
     - Butchering
+  - type: Eye
+    visMask:
+      - Ghost
+      - Normal
+      - CosmicCultMonument # DeltaV - Cosmic Cult
+
 
 - type: entity
   abstract: true
