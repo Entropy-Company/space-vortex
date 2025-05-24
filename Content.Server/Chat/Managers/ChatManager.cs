@@ -206,23 +206,8 @@ internal sealed partial class ChatManager : IChatManager
 
     public void SendHookAdmin(string sender, string message)
     {
-        var clients = _adminManager.ActiveAdmins.Select(p => p.Channel);
-
         var wrappedMessage = Loc.GetString("chat-manager-send-hook-admin-wrap-message", ("senderName", sender), ("message", FormattedMessage.EscapeText(message)));
-        foreach (var client in clients)
-        {
-            ChatMessageToOne(
-                ChatChannel.AdminChat,
-                message,
-                wrappedMessage,
-                source: EntityUid.Invalid,
-                hideChat: false,
-                client: client,
-                recordReplay: false,
-                audioPath: _netConfigManager.GetClientCVar(client, CCVars.AdminChatSoundPath),
-                audioVolume: _netConfigManager.GetClientCVar(client, CCVars.AdminChatSoundVolume));
-        }
-
+        ChatMessageToAll(ChatChannel.AdminChat, message, wrappedMessage, source: EntityUid.Invalid, hideChat: false, recordReplay: false);
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Hook admin from {sender}: {message}");
     }
 
