@@ -1,3 +1,11 @@
+# SPDX-FileCopyrightText: 2025 Armok <155400926+ARMOKS@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2025 GoobBot <uristmchands@proton.me>
+# SPDX-FileCopyrightText: 2025 Solstice <solsticeofthewinter@gmail.com>
+# SPDX-FileCopyrightText: 2025 TheBorzoiMustConsume <197824988+TheBorzoiMustConsume@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2025 gluesniffler <159397573+gluesniffler@users.noreply.github.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 - type: entity
   id: ActionCosmicSiphon
   name: Собрать энтропию
@@ -5,7 +13,7 @@
   components:
   - type: EntityTargetAction
     deselectOnMiss: true
-    useDelay: 50
+    useDelay: 10
     whitelist:
       components:
         - HumanoidAppearance
@@ -26,6 +34,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: EntityTargetAction
+    deselectOnMiss: true
     canTargetSelf: true
     useDelay: 120
     whitelist:
@@ -100,8 +109,9 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: EntityTargetAction
+    deselectOnMiss: true
     canTargetSelf: true
-    useDelay: 45
+    useDelay: 24
     whitelist:
       components:
         - HumanoidAppearance
@@ -120,12 +130,8 @@
   description: Испускает ужасающую вспышку космического света, замедляя и дезориентируя окружающих.
   categories: [ HideSpawnMenu ]
   components:
-  - type: ConfirmableAction
-    popup: cosmicability-glare-confirm
-    confirmDelay: 0.1
-    primeTime: 5 #increased to give you more time to figure out where you want to put it
   - type: InstantAction
-    useDelay: 55
+    useDelay: 10
     itemIconStyle: NoItem
     icon:
       sprite: _DV/CosmicCult/Icons/cosmiccult_abilities.rsi
@@ -139,7 +145,8 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: EntityTargetAction
-    useDelay: 40
+    deselectOnMiss: true
+    useDelay: 5
     whitelist:
       components:
         - Door
@@ -156,7 +163,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
-    useDelay: 160
+    useDelay: 60
     itemIconStyle: NoItem
     icon:
       sprite: _DV/CosmicCult/Icons/cosmiccult_abilities.rsi
@@ -204,6 +211,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: EntityTargetAction
+    deselectOnMiss: true
     useDelay: 5
     whitelist:
       components:
@@ -226,6 +234,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: EntityTargetAction
+    deselectOnMiss: true
     useDelay: 55
     whitelist:
       components:
