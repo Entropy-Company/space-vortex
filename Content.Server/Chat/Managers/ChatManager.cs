@@ -47,6 +47,8 @@ internal sealed partial class ChatManager : IChatManager
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly DiscordChatLink _discordLink = default!;
     private ISharedSponsorsManager? _sponsorsManager; // Corvax-Sponsors
+    [Dependency] private readonly DiscordChatLink _discordLink = default!;
+
 
     /// <summary>
     /// The maximum length a player-sent message can be sent
