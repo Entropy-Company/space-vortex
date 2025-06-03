@@ -32,11 +32,4 @@
   requiredTags:
   - MansusLinkMind
 
-- type: collectiveMind
-  id: Abductormind
-  name: collective-mind-abductormind
-  keycode: 'a'
-  color: "#d600bd"
-  requiredTags:
-  - AbductorMind
 

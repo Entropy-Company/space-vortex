@@ -53,7 +53,6 @@
       - Ghost
       - Normal
       - CosmicCultMonument # DeltaV - Cosmic Cult
-      - Abductor # Shitmed - Starlight Abductors
   - type: Input
     context: "ghost"
   - type: Examiner

@@ -1,6 +1,5 @@
 using Content.Server._DV.CosmicCult.Components;
 using Content.Server.Atmos.Components;
-using Content.Goobstation.Shared.Bible; // Goobstation - Bible
 using Content.Server.Popups;
 using Content.Shared._DV.CosmicCult;
 using Content.Shared._DV.CosmicCult.Components;
@@ -37,11 +36,6 @@ public sealed class CosmicRiftSystem : EntitySystem
             return;
         }
 
-        if (HasComp<BibleUserComponent>(args.User))
-        {
-            _popup.PopupEntity(Loc.GetString("cosmiccult-rift-chaplainoops"), args.User, args.User);
-            return;
-        }
 
         if (!TryComp<CosmicCultComponent>(args.User, out var cultist))
         {
@@ -80,22 +74,6 @@ public sealed class CosmicRiftSystem : EntitySystem
             return;
         }
 
-        if (HasComp<BibleComponent>(args.Used))
-        {
-            uid.Comp.Occupied = true;
-            _popup.PopupEntity(Loc.GetString("cosmiccult-rift-beginpurge"), args.User, args.User);
-            var doargs = new DoAfterArgs(EntityManager,
-                args.User,
-                uid.Comp.BibleTime,
-                new EventPurgeRiftDoAfter(),
-                uid,
-                uid)
-            {
-                DistanceThreshold = 1.5f, Hidden = false, BreakOnDamage = true, BreakOnDropItem = true,
-                BreakOnMove = true, MovementThreshold = 2f,
-            };
-            _doAfter.TryStartDoAfter(doargs);
-        }
         else if (TryComp<CleanseOnUseComponent>(args.Used, out var comp) && comp.CanPurge)
         {
             uid.Comp.Occupied = true;

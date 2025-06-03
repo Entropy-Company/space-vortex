@@ -6,7 +6,6 @@
 
 using System.Collections.Immutable;
 using Content.Server._DV.CosmicCult.Components;
-using Content.Goobstation.Shared.Bible; // Goobstation - Bible
 using Content.Server.Popups;
 using Content.Shared._DV.CosmicCult;
 using Content.Shared._DV.CosmicCult.Components;
@@ -51,7 +50,6 @@ public sealed class CosmicBlankSystem : EntitySystem
     {
         if (_cosmicCult.EntityIsCultist(args.Target)
             || HasComp<CosmicBlankComponent>(args.Target)
-            || HasComp<BibleUserComponent>(args.Target)
             || HasComp<ActiveNPCComponent>(args.Target))
         {
             _popup.PopupEntity(Loc.GetString("cosmicability-generic-fail"), uid, uid);

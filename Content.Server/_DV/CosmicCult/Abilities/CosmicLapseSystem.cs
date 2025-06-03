@@ -4,7 +4,6 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-using Content.Goobstation.Shared.Bible; // Goobstation - Bible
 using Content.Server.Polymorph.Systems;
 using Content.Server.Popups;
 using Content.Shared._DV.CosmicCult;
@@ -38,7 +37,7 @@ public sealed class CosmicLapseSystem : EntitySystem
         if (action.Handled
             || HasComp<CosmicBlankComponent>(action.Target)
             || HasComp<CleanseCultComponent>(action.Target)
-            || HasComp<BibleUserComponent>(action.Target))
+            )
         {
             _popup.PopupEntity(Loc.GetString("cosmicability-generic-fail"), uid, uid);
             return;

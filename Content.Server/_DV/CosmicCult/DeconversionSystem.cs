@@ -1,5 +1,4 @@
 using Content.Server._DV.CosmicCult.Components;
-using Content.Goobstation.Shared.Bible; // Goobstation - Bible
 using Content.Shared._DV.CosmicCult;
 using Content.Shared._DV.CosmicCult.Components;
 using Content.Shared._DV.CosmicCult.Components.Examine;
@@ -66,18 +65,6 @@ public sealed class DeconversionSystem : EntitySystem
             || args.Target == null
             || _mobState.IsDead(args.Target.Value))
             return;
-
-        if (!HasComp<BibleUserComponent>(args.User))
-        {
-            _popup.PopupEntity(Loc.GetString("cleanse-item-sizzle",
-                ("target", Identity.Entity(args.Used, EntityManager))),
-                args.User,
-                args.User);
-            _audio.PlayPvs(uid.Comp.SizzleSound, args.User);
-            _damageable.TryChangeDamage(args.User, uid.Comp.SelfDamage, origin: uid);
-            _delay.TryResetDelay((uid, useDelay));
-            return;
-        }
 
         _popup.PopupEntity(Loc.GetString("cleanse-deconvert-attempt-begin",
             ("target", Identity.Entity(args.User, EntityManager))),

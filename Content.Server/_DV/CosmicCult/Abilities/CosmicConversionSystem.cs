@@ -5,7 +5,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 using Content.Server._DV.CosmicCult.Components;
-using Content.Goobstation.Shared.Bible; // Goobstation - Bible
 using Content.Server.Popups;
 using Content.Shared._DV.CosmicCult.Components;
 using Content.Shared._DV.CosmicCult;
@@ -59,11 +58,6 @@ public sealed class CosmicConversionSystem : EntitySystem
             if (_mobState.IsDead(target))
             {
                 _popup.PopupEntity(Loc.GetString("cult-glyph-target-dead"), uid, args.User);
-                args.Cancel();
-            }
-            else if (uid.Comp.NegateProtection == false && HasComp<BibleUserComponent>(target))
-            {
-                _popup.PopupEntity(Loc.GetString("cult-glyph-target-chaplain"), uid, args.User);
                 args.Cancel();
             }
             else if (uid.Comp.NegateProtection == false && HasComp<MindShieldComponent>(target))

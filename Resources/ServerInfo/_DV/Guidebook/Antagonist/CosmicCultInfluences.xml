@@ -1,30 +1,27 @@
 <Document>
   # Influences
+Культисты начинают с двумя мощными влияниями и постепенно откроют новые по мере продвижения Монумента через три стадии.
 
-  Culists begin with two powerful inflences, and will gradually unlock more as they progress the Monument through its three stages.
+Как только Монумент достигнет второй стадии, при использовании любого влияния у культиста есть шанс создать заметный [color=#4cabb3]Зловещий Отголосок[/color]. Он исчезнет через короткое время, но может преждевременно выдать присутствие вашего культа посторонним!
 
-  Once the Monument reaches its second stage, any time a cultist uses an influence, they have a chance to generate a telltale [color=#4cabb3]Malign Echo[/color]. These will fade after a short time, but may alert outsiders to the presence of your cult prematurely!
-
-  Using Siphon Entropy will never generate a Malign Echo.
-
+Использование [color=#4cabb3]Вытягивания Энтропии[/color] никогда не создает Зловещий Отголосок.
   <Box>
     <GuideEntityEmbed Entity="CosmicEchoVfx" Caption=""/>
   </Box>
+## Начальные Влияния
+  - [color=#4cabb3][bold]Вытягивание Энтропии:[/bold][/color] Тихо вытягивайте энтропию из цели, нанося ей небольшой урон.
+  - [color=#4cabb3][bold]Пустой Взгляд:[/bold][/color] Испустите ужасающую вспышку космического света, замедляя и дезориентируя всех вокруг.
 
-  ## Starting Influences
-  - [color=#4cabb3][bold]Siphon Entropy:[/bold][/color] Silently siphon entropy from your target, dealing some damage in the process.
-  - [color=#4cabb3][bold]Null Glare:[/bold][/color] Emit a horrific pulse of cosmic light, slowing and disorienting everyone around you.
+  ## Открываемые Активные Влияния
+  - [color=#4cabb3][bold]Аберрантный Провал:[/bold][/color] На время лишайте цель физической формы, делая её неподвижной, непреодолимой и замороженной.
+  - [color=#4cabb3][bold]Сдвиг Субъективности:[/bold][/color] Выбрасывайте разум цели из тела в космическую тьму, временно оставляя тело без сознания.
+  - [color=#4cabb3][bold]Принудительный Вход:[/bold][/color] Используйте концентрированный выброс энергии, чтобы взломать защищённую дверь.
+  - [color=#4cabb3][bold]Астральная Нова:[/bold][/color] Создайте мощный разрушительный взрыв астральной энергии.
+  - [color=#4cabb3][bold]Пустотное Вторжение:[/bold][/color] На короткое время блокируйте весь входящий урон.
 
-  ## Unlockable Active Influences
-  - [color=#4cabb3][bold]Abberant Lapse:[/bold][/color] Lapse your target's corporeal form, temporarily rendering it immutable, impassible, and frozen in place.
-  - [color=#4cabb3][bold]Shunt Subjectivity:[/bold][/color] Shunt your target's mind out of their body and unto the cosmic dark, temporarily rendering their body mindless.
-  - [color=#4cabb3][bold]Force Ingress:[/bold][/color] Use a concentrated blast of power to force a secure doorway open.
-  - [color=#4cabb3][bold]Astral Nova:[/bold][/color] Hurl a large and disruptive blast of astral energy.
-  - [color=#4cabb3][bold]Vacuous Imposition:[/bold][/color] You negate any incoming damage for a short time.
-
-  ## Unlockable Passive Influences
-  - [color=#4cabb3][bold]Eschew Metabolism:[/bold][/color] Your corporeal needs of hunger and thirst are sundered - you no longer need to eat or drink.
-  - [color=#4cabb3][bold]Unbound Step:[/bold][/color] You move relative only to the starless black - your movement is no longer affected by gravity.
-  - [color=#4cabb3][bold]Astral Stride:[/bold][/color] Astral energy invigorates your every move, subtly hastening your speed.
-  - [color=#4cabb3][bold]Vacuous Vitality:[/bold][/color] The starless emptiness of The Monument overwhelms your mind and body. Your corporeal form slowly regenerates while in its presence.
+  ## Открываемые Пассивные Влияния
+  - [color=#4cabb3][bold]Отказ от Метаболизма:[/bold][/color] Ваша потребность в пище и воде исчезает — вам больше не нужно есть или пить.
+  - [color=#4cabb3][bold]Несвязанный Шаг:[/bold][/color] Ваше движение зависит только от беззвёздной тьмы — гравитация больше не влияет на вас.
+  - [color=#4cabb3][bold]Астральный Шаг:[/bold][/color] Астральная энергия ускоряет ваши движения, слегка увеличивая скорость.
+  - [color=#4cabb3][bold]Пустотная Живучесть:[/bold][/color] Беззвёздная пустота Монумента наполняет ваш разум и тело. Ваша физическая форма медленно восстанавливается в его присутствии.
 </Document>
