@@ -2,7 +2,7 @@
 - type: entity
   parent: BaseStructure
   id: CosmicShuttleCore
-  name: malign instrument
+  name: Космо-интремент
   description: Its surface glows with a myriad of inscrutable glyphs that commmunicate a single word into your mind; "Flight".
   components:
   - type: Sprite
@@ -81,7 +81,7 @@
 - type: entity
   parent: BaseStructure
   id: CosmicObelisk
-  name: malign obelisk
+  name: Космо-обелиск
   description: A mysterious-yet-inert sturcture. Unsettling.
   components:
   - type: Sprite
@@ -257,8 +257,8 @@
 - type: entity
   id: CosmicVacuousSpire
   parent: BaseStructure
-  name: vacuous spire
-  description: Also known as the "chuuni fork".
+  name: Потусторонний добытчик
+  description: Добывает энтропию из астрала.
   components:
   - type: Pullable
   - type: Anchorable
