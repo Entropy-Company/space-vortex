@@ -22,7 +22,6 @@
         Slash: 8
         Asphyxiation: 18
         Structural: 15
-        Ion: 25
     soundHit:
       path: /Audio/_DV/CosmicCult/cosmicsword_hit.ogg
       params:
@@ -97,7 +96,6 @@
       types:
         Piercing: 12
         Asphyxiation: 20
-        Ion: 25
     soundHit:
       path: /Audio/_DV/CosmicCult/cosmiclance_hit.ogg
       params:
@@ -118,7 +116,6 @@
       types:
         Piercing: 35
         Asphyxiation: 35
-        Ion: 35
   - type: Wieldable
     wieldSound:
       path: /Audio/_DV/CosmicCult/cosmic_wield.ogg
@@ -212,7 +209,6 @@
       types:
         Slash: 6
         Asphyxiation: 6
-        Ion: 6
         Structural: 15
     soundHit:
       path: /Audio/_DV/CosmicCult/cosmicsword_hit.ogg
