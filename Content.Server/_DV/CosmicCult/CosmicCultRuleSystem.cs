@@ -4,7 +4,6 @@ using Content.Server.Administration.Logs;
 using Content.Server.Antag;
 using Content.Server.Atmos.Components;
 using Content.Server.Audio;
-using Content.Goobstation.Shared.Bible; // Goobstation - Bible
 using Content.Server.Chat.Systems;
 using Content.Server.EUI;
 using Content.Server.GameTicking.Rules;
@@ -722,7 +721,7 @@ public sealed class CosmicCultRuleSystem : GameRuleSystem<CosmicCultRuleComponen
         if (_mind.TryGetSession(mindId, out var session))
             _euiMan.OpenEui(new CosmicConvertedEui(), session);
 
-        RemComp<BibleUserComponent>(uid);
+        //RemComp<BibleUserComponent>(uid);
 
         cosmicGamerule.TotalCult++;
         cosmicGamerule.Cultists.Add(uid);
