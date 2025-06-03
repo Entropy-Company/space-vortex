@@ -33,7 +33,7 @@
 - type: entity
   parent: ClothingHeadHardsuitBase
   id: ClothingHeadHelmetCosmicCult
-  name: Энтропический шлем
+  name: Космо-шлем
   description: Кажется, будто этот шлем является продолжением скафандра, как если бы они были единым целым.
   categories: [ HideSpawnMenu ]
   components:
