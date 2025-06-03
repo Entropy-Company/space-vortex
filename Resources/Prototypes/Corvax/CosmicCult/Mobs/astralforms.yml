@@ -3,8 +3,8 @@
   - Incorporeal
   - BaseMob
   id: MobCosmicAstralAscended
-  name: astral ascended
-  description: Transcendant, ascendant.
+  name: Астральный вознесённый
+  description: Одной ногой в реальности, другой тоже.
   components:
   - type: Input
     context: "ghost"
@@ -49,8 +49,8 @@
 - type: entity
   parent: [ Incorporeal, BaseMob ]
   id: MobCosmicAstralProjection
-  name: astral projection
-  description: Neither here nor there.
+  name: Астральный призрак
+  description: Одной ногой в реальности, одной ногой в небытье.
   components:
   - type: ActionGrant
     actions:
