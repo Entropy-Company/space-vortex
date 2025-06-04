@@ -135,3 +135,6 @@
         orGroup: SpacemenFig
       - id: ADTToyFigurineBlueshieldOfficer  #ADT-Tweak
         orGroup: SpacemenFig
+      - id: ToyFigurineCosmicCultist # DeltaV Figurine
+        prob: 0.50
+        orGroup: SpacemenFig
