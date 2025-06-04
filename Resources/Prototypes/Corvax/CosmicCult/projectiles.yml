@@ -74,16 +74,16 @@
       types:
         Cold: 10
         Asphyxiation: 5
-        Blunt: 18
+        Blunt: 19
     soundHit:
       path: /Audio/_DV/CosmicCult/projectile_razor_hit.ogg
   - type: Ammo
     muzzleFlash: null
   # Short lifespan
   - type: TimedDespawn
-    lifetime: 5
+    lifetime: 6
   - type: SingularityDistortion
-    intensity: +5
+    intensity: +4
     falloffPower: 1.5
   - type: PointLight
     color: "#42a4ae"
@@ -101,7 +101,6 @@
         property: Energy
         enabled: true
         reverseWhenFinished: true
-
 
 - type: entity
   id: BulletImpactEffectCosmic

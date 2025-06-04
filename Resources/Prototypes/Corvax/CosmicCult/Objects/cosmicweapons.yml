@@ -22,13 +22,13 @@
     resistanceBypass: true
     angle: 90
     animation: WeaponArcCosmic
-    attackRate: 1
+    attackRate: 1.5
     clickDamageModifier: 1.1
     damage:
       types:
         Slash: 8
-        Asphyxiation: 18
-        Structural: 15
+        Asphyxiation: 20
+        Structural: 40
     soundHit:
       path: /Audio/_DV/CosmicCult/cosmicsword_hit.ogg
       params:
@@ -86,7 +86,7 @@
   components:
   - type: CosmicEquipment
   - type: EmbeddableProjectile
-    removalTime: 2
+    removalTime: 1
     sound: /Audio/_DV/CosmicCult/cosmiclance_impact.ogg
   - type: Sprite
     sprite: _DV/CosmicCult/Objects/cosmiclance.rsi
@@ -98,10 +98,10 @@
     resistanceBypass: true
     angle: 0
     animation: WeaponArcCosmic
-    attackRate: 0.62
+    attackRate: 0.8
     damage:
       types:
-        Piercing: 12
+        Piercing: 15
         Asphyxiation: 20
     soundHit:
       path: /Audio/_DV/CosmicCult/cosmiclance_hit.ogg
@@ -174,7 +174,8 @@
 
 
 - type: entity
-  name: Космо-лезвие
+  name: Космо-коса
+  description: Поджарьте попки неверующим! Стреляет маленькими сингулярностями из глубин космоса!
   parent: BaseItem
   id: ScytheCosmicCult
   components:
@@ -194,10 +195,10 @@
       groups:
         Brute: -10
   - type: Gun
-    projectileSpeed: 3
+    projectileSpeed: 7
     soundGunshot: /Audio/_DV/CosmicCult/projectile_razor.ogg
     soundEmpty: null
-    fireRate: 2
+    fireRate: 2.2
     useKey: false
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 0.3
@@ -256,7 +257,6 @@
     damage:
       types:
         Structural: 5
-  - type: GunRequiresWield
   - type: Item
     size: Ginormous
     sprite: _DV/CosmicCult/Objects/cosmicscythe-inhands.rsi
