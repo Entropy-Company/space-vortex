@@ -1,7 +1,7 @@
 - type: entity
   parent: BaseWall
   id: WallCosmicCult
-  name: malign wall
+  name: Космо-стена
   description: A strange-looking wall. Staring at it for too long instills a sense of discomfort.
   components:
   - type: CosmicCultExamine
@@ -29,7 +29,7 @@
 - type: entity
   parent: WallCosmicCult
   id: WallCosmicCultTrimmed
-  name: malign wall
+  name: Космо-стена
   suffix: Trimmed
   components:
   - type: Icon
@@ -54,7 +54,7 @@
 
 - type: entity
   id: WindowCosmicCult
-  name: malign pane
+  name: Космо-окно
   description: An odd-looking window. Something about it unnerves you.
   parent: WindowRCDResistant
   components:
@@ -98,7 +98,7 @@
 
 - type: entity
   id: WindowCosmicCultDark
-  name: malign pane
+  name: Космо-окно
   suffix: Tinted
   parent: WindowCosmicCult
   components:
@@ -115,7 +115,7 @@
   parent: WallShuttleDiagonal
   description: An odd-looking window. Something about it unnerves you.
   id: WindowCosmicCultDiagonal
-  name: malign pane
+  name: Космо-окно
   suffix: Diagonal
   placement:
     mode: SnapgridCenter
@@ -148,7 +148,7 @@
 - type: entity
   parent: WindowCosmicCultDiagonal
   id: WindowCosmicCultDiagonalDark
-  name: malign pane
+  name: Космо-окно
   suffix: Diagonal, Tinted
   placement:
     mode: SnapgridCenter

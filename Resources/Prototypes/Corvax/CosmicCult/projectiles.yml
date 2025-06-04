@@ -68,15 +68,6 @@
     layers:
       - state: razor
         shader: unshaded
-  - type: DamageMarkerOnCollide
-    whitelist:
-      components:
-      - MobState
-    damage:
-      types:
-        Cold: 15
-        Asphyxiation: 10
-        Blunt: 18
   - type: Projectile
     impactEffect: BulletImpactEffectCosmic
     damage:
@@ -90,7 +81,7 @@
     muzzleFlash: null
   # Short lifespan
   - type: TimedDespawn
-    lifetime: 4
+    lifetime: 5
   - type: SingularityDistortion
     intensity: +5
     falloffPower: 1.5
