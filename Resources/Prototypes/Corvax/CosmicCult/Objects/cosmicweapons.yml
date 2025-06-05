@@ -26,8 +26,8 @@
     clickDamageModifier: 1.1
     damage:
       types:
-        Slash: 8
-        Asphyxiation: 20
+        Slash: 9
+        Asphyxiation: 16
         Structural: 40
     soundHit:
       path: /Audio/_DV/CosmicCult/cosmicsword_hit.ogg
@@ -98,11 +98,11 @@
     resistanceBypass: true
     angle: 0
     animation: WeaponArcCosmic
-    attackRate: 0.8
+    attackRate: 0.7
     damage:
       types:
-        Piercing: 15
-        Asphyxiation: 20
+        Piercing: 16
+        Asphyxiation: 17
     soundHit:
       path: /Audio/_DV/CosmicCult/cosmiclance_hit.ogg
       params:
@@ -195,7 +195,7 @@
       groups:
         Brute: -10
   - type: Gun
-    projectileSpeed: 7
+    projectileSpeed: 8
     soundGunshot: /Audio/_DV/CosmicCult/projectile_razor.ogg
     soundEmpty: null
     fireRate: 2.2
