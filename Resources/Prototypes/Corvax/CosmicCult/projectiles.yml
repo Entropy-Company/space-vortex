@@ -72,7 +72,7 @@
     impactEffect: BulletImpactEffectCosmic
     damage:
       types:
-        Cold: 10
+        Cold: 5
         Asphyxiation: 5
         Blunt: 19
     soundHit:
