@@ -62,9 +62,9 @@ ghost-role-information-smile-name = Слайм Смайл
 ghost-role-information-smile-description = Самое милое создание в мире. Улыбайся, Смайл!
 ghost-role-information-punpun-name = Пун Пун
 ghost-role-information-punpun-description = Почётный член общины обезьян, ответственный за бар, и помогающий барменам во всём, чем может.
-ghost-role-information-xeno-name = Ксено
-ghost-role-information-xeno-description = Вы ксено. Скооперируйтесь со своим ульем, чтобы истребить всех членов экипажа!
-ghost-role-information-xeno-rules = Вы [color={ role-type-team-antagonist-color }][bold]{ role-type-team-antagonist-name }[/bold][/color], в команде с другими ксено.
+ghost-role-information-xeno-name = Эксо
+ghost-role-information-xeno-description = Вы эксо. Скооперируйтесь со своим ульем, чтобы истребить всех членов экипажа!
+ghost-role-information-xeno-rules = Вы [color={ role-type-team-antagonist-color }][bold]{ role-type-team-antagonist-name }[/bold][/color], в команде с другими эксо.
 ghost-role-information-revenant-name = Ревенант
 ghost-role-information-revenant-description = Вы Ревенант. Используйте свои силы, чтобы собирать души и наводить страх на команду. С помощью собранной эссенции открывайте новые способности.
 ghost-role-information-kangaroo-name = Кенгуру
