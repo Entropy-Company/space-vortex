@@ -1,4 +1,4 @@
 ent-hydroponicsSoil = почва
     .desc = { "" }
-ent-FungalSoil = fungal soil
-    .desc = A mix of organic matter and fungal root creating a soil to grow your plant in space. Seems to be dry.
+ent-FungalSoil = грибная почва
+    .desc = Смесь органики и грибных корней, создающая почву для выращивания растений в космосе. Кажется, суховата.
