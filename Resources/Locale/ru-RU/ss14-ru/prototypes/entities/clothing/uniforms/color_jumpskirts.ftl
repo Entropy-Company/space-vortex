@@ -30,5 +30,5 @@ ent-ClothingUniformJumpskirtColorBrown = коричневая юбка-комб�
     .desc = Обычная коричневая юбка-комбинезон без знаков различия.
 ent-ClothingUniformJumpskirtColorMaroon = бордовая юбка-комбинезон
     .desc = Обычная бордовая юбка-комбинезон без знаков различия.
-ent-ClothingUniformJumpskirtColorRainbow = rainbow jumpskirt
-    .desc = A multi-colored jumpskirt!
+ent-ClothingUniformJumpskirtColorRainbow = радужный комбинизон-юбка
+    .desc = Много-цветный комбинезон!

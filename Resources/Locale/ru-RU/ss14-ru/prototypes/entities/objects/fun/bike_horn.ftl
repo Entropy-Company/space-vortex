@@ -6,5 +6,5 @@ ent-GoldenBikeHorn = золотой клаксон
     .desc = Сюрприз из Хэппи Хонка. Для награды помолитесь богам.
 ent-BananiumHorn = бананиумовый клаксон
     .desc = Клаксон, сделанный из бананиума.
-ent-PushHorn = push horn
-    .desc = This powerful bikehorn is sure to blast frowns away.
+ent-PushHorn = толкающий клаксон
+    .desc = Этот мощный велосипедный клаксон точно прогонит все хмурые лица.

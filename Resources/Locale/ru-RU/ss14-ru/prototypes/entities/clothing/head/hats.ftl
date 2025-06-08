@@ -170,5 +170,5 @@ ent-ClothingHeadHatStrawHat = соломенная шляпа
     .desc = Модная шляпа для жарких деньков! Не рекомендуется носить около источников огня.
 ent-ClothingHeadHatBeretMedic = берет врача
     .desc = Белый берет, призывающий вас к чистоте.
-ent-ClothingHeadHatSolidHeadband = solid headband
-    .desc = You'll feel like you're Invisible while wearing this! (DISCLAIMER: DOES NOT ACTUALLY MAKE THE WEARER INVISIBLE)
+ent-ClothingHeadHatSolidHeadband = плотная повязка на голову
+    .desc = Ты почувствуешь себя невидимым, когда носишь это! (ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ: НА САМОМ ДЕЛЕ НЕ ДЕЛАЕТ НОСИТЕЛЯ НЕВИДИМЫМ)

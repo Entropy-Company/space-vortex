@@ -160,5 +160,5 @@ ent-MobReindeerBuck = северный олень-самец
     .desc = Думаете, он может тянуть сани?
 ent-MobReindeerDoe = северный олень-самка
     .desc = Думаете, она может тянуть сани?
-ent-MobCorgiSmart = smart corgi
-    .desc = An unusually smart dog.
+ent-MobCorgiSmart = умный корги
+    .desc = Необычайно умный корги.
