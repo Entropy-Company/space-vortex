@@ -21,6 +21,8 @@
     - Vulpkanin # Corvax-MRP
     - Resomi #Corvax-Next
     - Tajaran
+    #Corvax-Species-End
+    - Felinid
 
 - type: loadoutEffectGroup
   id: EffectSpeciesVox
