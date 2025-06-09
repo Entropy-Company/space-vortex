@@ -1,13 +1,13 @@
-salvage-job-rank-title-0 = [color=gray]Scavenger[/color]
-salvage-job-rank-title-1 = [color=white]Scrapper[/color]
-salvage-job-rank-title-2 = [color=yellow]Specialist[/color]
-salvage-job-rank-title-MAX = [color=gold]Supreme Salvager[/color]
-job-board-radio-announce = Salvager rank increased to [bold]{ $rank }[/bold]! New orders can be purchased from Cargo.
-job-board-ui-window-title = Job Board
-job-board-ui-label-rank = [bold]Rank:[/bold]
-job-board-ui-label-items = Target: [color=red]{ $item }[/color]
-job-board-label-text = [head=2]Salvage Job Shipment[/head]
-    { "[italic]For use only on official off-station salvage shipments.[/italic]" }
+salvage-job-rank-title-0 = [color=gray]Мусорщик[/color]
+salvage-job-rank-title-1 = [color=white]Диггер[/color]
+salvage-job-rank-title-2 = [color=yellow]Специалист[/color]
+salvage-job-rank-title-MAX = [color=gold]Великий утилизаторо[/color]
+job-board-radio-announce = Ранг Утилизатора повышен до [bold]{ $rank }[/bold]! Новые заказы можно приобрести в отделе Карго.
+job-board-ui-window-title = Доска заданий
+job-board-ui-label-rank = [bold]Ранг:[/bold]
+job-board-ui-label-items = Цель: [color=red]{ $item }[/color]
+job-board-label-text = [head=2]Этикетка задания утилизаторов[/head]
+    { "[italic]Используется только для официальных внестанционных утилизаторских отправлений.[/italic]" }
     
     { "[bold]Target:[/bold]" } { $target }
     { "[bold]Reward:[/bold]" } ${ $reward }
@@ -28,7 +28,7 @@ salv-job-board-name-BountySalvageDiamond = Алмаз
 bounty-description-tooth-space-carp = Нам нужно получить образец зубов космических карпов. Вы можете найти этих удивительных хищников на всевозможных обломках. Только будьте осторожны их зубы острые.
 bounty-description-salvage-scrap = Мы исследуем влияние глубокого космоса на материалы станций и нуждаемся в образцах. Найдите какой-нибудь старый мусор на обломках и доставьте его нам.
 bounty-description-salvage-ore-gold = Мы проводим экспериментальный процесс производства электроники. Доставьте нам побольше золотой руды. Она может быть любого происхождения.
-bounty-description-salvage-ore-silver = Мы изучаем свойства серебра в зависимости от методов его переработки. Отправьте нам побольшое серебряной руды. Она может быть любого происхождения.
+bounty-description-salvage-ore-silver = Мы изучаем свойства серебра в зависимости от методов его переработки. Отправьте нам побольше серебряной руды. Она может быть любого происхождения.
 bounty-description-tooth-sharkminnow = Нам нужен образец зубов карпо-акулы. Эти рыбки намного опаснее, чем карпы, к которым вы привыкли. Постарайтесь не дать им укусить вас: они будут высасывать вашу кровь и затягивать раны свои.
 bounty-description-salvage-ore-plasma = Нам нужна партия плазменной руды для отправки на исследовательскую станцию. Пожалуйста, доставьте её нам, чтобы мы могли продолжить наши эксперименты. Она может быть любого происхождения.
 bounty-description-salvage-ore-uranium = Нам нужен образец урановой руды для наших текущих экспериментов с ядерными устройствами. Имейте в виду, что уран слегка светится, но, вероятно, не причинит вам вреда. Он может быть любого происхождения.
