@@ -43,3 +43,5 @@ trait-spanish-name = Испанский акцент
 trait-spanish-desc = Hola señor, как пройти в la biblioteca.
 trait-painnumbness-name = Невосприимчивость к боли
 trait-painnumbness-desc = Вы не чувствуете боли и не осознаёте, насколько вы ранены.
+trait-monochromancy-name = Монохромазия
+trait-monochromancy-desc = Вы полностью дальтоник, все, что вы воспринимаете, варьируется от черного до белого.
