@@ -13,26 +13,26 @@ job-board-label-text = [head=2]Salvage Job Shipment[/head]
     { "[bold]Reward:[/bold]" } ${ $reward }
     
     
-    { "[italic]Shipments are subject to inspection by the Donk corporation[/italic]" }
-salv-job-board-name-BountyTeethSpaceCarp = Space Carp
-salv-job-board-name-BountySalvageScrap = Deep-Space Debris
-salv-job-board-name-BountySalvageOreGold = Gold (Ore)
-salv-job-board-name-BountySalvageOreSilver = Silver (Ore)
-salv-job-board-name-BountySalvageOreUranium = Uranium (Ore)
-salv-job-board-name-BountySalvageOrePlasma = Plasma (Ore)
-salv-job-board-name-BountySalvageOreBananium = Bananium (Ore)
-salv-job-board-name-BountyTeethSharkminnow = Sharkminnow
-salv-job-board-name-BountyGoliathPlates = Goliath
-salv-job-board-name-BountyHivelordRemains = Hivelord
-salv-job-board-name-BountySalvageDiamond = Diamond
-bounty-description-tooth-space-carp = We need you to get a sample of some space carp teeth. You can find these guys on all kinds of salvage debris. Just be careful about their bite.
-bounty-description-salvage-scrap = We are researching the effects of deep space on station materials, and we need some samples. Find some old junk off of debris and bring it to us.
-bounty-description-salvage-ore-gold = We are engaging in an experimental new electronics manufacturing process. Deliver us a large sum of unrefined gold ore. It can come from any source.
-bounty-description-salvage-ore-silver = We are studying the material effects of silver based on the refining methods. Send us a large amount of unrefined silver ore. It can come from any source.
-bounty-description-tooth-sharkminnow = We need you to get a sample of some Sharkminnow teeth. These guys are a fair bit nastier than the smaller carp you're familiar with. Take care to not let them bite you: they'll suck out your blood and heal.
-bounty-description-salvage-ore-plasma = We need a shipment of plasma ore to send over to the research station. Please provide us with some so that we can continue our testing. It can come from any source.
-bounty-description-salvage-ore-uranium = We need a sample of uranium ore for our ongoing experiments on nuclear devices. Be aware that while the uranium does glow slightly, it will probably not harm you. It can come from any source.
-bounty-description-salvage-ore-bananium = We have an ongoing project to decode the mystifying clown genomic sequence. We believe a sample of raw bananium will help us achieve this. Note that this only comes from the rarest of deep-space asteroids.
-bounty-description-remains = We need you to get a sample of a few Hivelord cores. Be aware that Hivelords can replicate infinitely if the core is not destroyed. Take care not to get overwhelmed.
-bounty-description-plates = We need you to get a couple sheets of Goliath hide. These guys are pretty slow, but be careful about the tentacles: they'll grab you and pull you to the ground. You don't want to know what happens next.
-bounty-description-diamond = We need you to acquire a few diamonds for some advanced fabrication. These can either be found in the mining asteroid nearby or cut out of the basilisk creature. Whichever way you want to do it, get us some.
+    { "[italic]Все отправления подлежат проверке корпорацией Donk.[/italic]" }
+salv-job-board-name-BountyTeethSpaceCarp = Космо карпики
+salv-job-board-name-BountySalvageScrap = Обломки глубокого космоса
+salv-job-board-name-BountySalvageOreGold = Золото (Руда)
+salv-job-board-name-BountySalvageOreSilver = Серебро (Руда)
+salv-job-board-name-BountySalvageOreUranium = Уран (Руда)
+salv-job-board-name-BountySalvageOrePlasma = Плазма (Руда)
+salv-job-board-name-BountySalvageOreBananium = Бананиум (Руда)
+salv-job-board-name-BountyTeethSharkminnow = Зубная фея для акул
+salv-job-board-name-BountyGoliathPlates = Голиаф
+salv-job-board-name-BountyHivelordRemains = Повелитель роя
+salv-job-board-name-BountySalvageDiamond = Алмаз
+bounty-description-tooth-space-carp = Нам нужно получить образец зубов космических карпов. Вы можете найти этих удивительных хищников на всевозможных обломках. Только будьте осторожны их зубы острые.
+bounty-description-salvage-scrap = Мы исследуем влияние глубокого космоса на материалы станций и нуждаемся в образцах. Найдите какой-нибудь старый мусор на обломках и доставьте его нам.
+bounty-description-salvage-ore-gold = Мы проводим экспериментальный процесс производства электроники. Доставьте нам побольше золотой руды. Она может быть любого происхождения.
+bounty-description-salvage-ore-silver = Мы изучаем свойства серебра в зависимости от методов его переработки. Отправьте нам побольшое серебряной руды. Она может быть любого происхождения.
+bounty-description-tooth-sharkminnow = Нам нужен образец зубов карпо-акулы. Эти рыбки намного опаснее, чем карпы, к которым вы привыкли. Постарайтесь не дать им укусить вас: они будут высасывать вашу кровь и затягивать раны свои.
+bounty-description-salvage-ore-plasma = Нам нужна партия плазменной руды для отправки на исследовательскую станцию. Пожалуйста, доставьте её нам, чтобы мы могли продолжить наши эксперименты. Она может быть любого происхождения.
+bounty-description-salvage-ore-uranium = Нам нужен образец урановой руды для наших текущих экспериментов с ядерными устройствами. Имейте в виду, что уран слегка светится, но, вероятно, не причинит вам вреда. Он может быть любого происхождения.
+bounty-description-salvage-ore-bananium = У нас есть проект по расшифровке загадочной геномной последовательности клоуна. Мы считаем, что образец сырого бананиума поможет нам в этом. Учтите, что он встречается только в редчайших астероидах глубокого космоса.
+bounty-description-remains = Нам нужно получить образец нескольких ядер повелителей роя. Учтите, что ноги могут размножаться бесконечно, если ядро не будет уничтожено. Будьте осторожны, чтобы вас не окружили.
+bounty-description-plates = Нам нужно несколько листов панциря Голиафа. Эти существа довольно медлительны, но будьте осторожны с их щупальцами: они схватят вас и потянут на землю. Вы не хотите узнать, что будет дальше.
+bounty-description-diamond = Нам нужно несколько алмазов для передовой обработки. Их можно добыть в ближайшем астероиде или вырезать из существа-базилиска. Каким бы способом вы ни выбрали, доставьте их нам.
