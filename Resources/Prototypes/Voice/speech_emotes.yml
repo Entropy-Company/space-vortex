@@ -1,3 +1,113 @@
+- type: emote
+  id: Meow
+  name: emote-name-meow
+  category: Vocal
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  available: false
+  icon: _Stories/Interface/Emotes/meow_2.png
+  chatMessages: ["emote-meow"]
+  chatTriggers:
+  - meow
+  - meows
+  - meowing
+  - meowed
+  - miau
+  - miaus
+  - nya
+  - nyas
+  - мяукает
+  - мявкает
+  - мяу
+  - нья
+  - ня
+
+- type: emote
+  id: Mew
+  name: emote-name-mew
+  category: Vocal
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  available: false
+  icon: _Stories/Interface/Emotes/meow_1.png
+  chatMessages: ["emote-mew"]
+  chatTriggers:
+  - mew
+  - mews
+  - mewing
+  - mewed
+
+- type: emote
+  id: Purr
+  name: emote-name-purr
+  category: Vocal
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  available: false
+  icon: _Stories/Interface/Emotes/love.png
+  chatMessages: ["emote-purr"]
+  chatTriggers:
+  - purr
+  - purrs
+  - purring
+  - purred
+  - мурлыкает
+  - мурлык
+  - мурчит
+
+- type: emote
+  id: Growl
+  name: emote-name-growl
+  category: Vocal
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  available: false
+  icon: _Stories/Interface/Emotes/raw.png
+  chatMessages: ["emote-growls"]
+  chatTriggers:
+  - growl
+  - growled
+  - growling
+  - growled
+  - рычание
+  - рычит
+
+- type: emote
+  id: Hiss
+  name: emote-name-hiss
+  category: Vocal
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  available: false
+  icon: _Stories/Interface/Emotes/shhh.png
+  chatMessages: ["emote-hiss"]
+  chatTriggers:
+  - hiss
+  - hissed
+  - hissing
+  - шипение
+  - шипит
+
 # vocal emotes
 - type: emote
   id: Scream
