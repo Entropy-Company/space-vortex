@@ -581,12 +581,12 @@ namespace Content.Server.Administration.Systems
             var round = _gameTicker.RunLevel switch
             {
                 GameRunLevel.PreRoundLobby => _gameTicker.RoundId == 0
-                    ? "pre-round lobby after server restart" // first round after server restart has ID == 0
-                    : $"pre-round lobby for round {_gameTicker.RoundId + 1}",
-                GameRunLevel.InRound => $"round {_gameTicker.RoundId}",
-                GameRunLevel.PostRound => $"post-round {_gameTicker.RoundId}",
+                    ? "лобби перед раундом после перезапуска сервера" // first round after server restart has ID == 0
+                    : $"лобби перед раундом {_gameTicker.RoundId + 1}",
+                GameRunLevel.InRound => $"раунд {_gameTicker.RoundId}",
+                GameRunLevel.PostRound => $"пост-раунд {_gameTicker.RoundId}",
                 _ => throw new ArgumentOutOfRangeException(nameof(_gameTicker.RunLevel),
-                    $"{_gameTicker.RunLevel} was not matched."),
+                    $"{_gameTicker.RunLevel} не было сопоставлено."),
             };
 
             return new WebhookPayload
