@@ -36,15 +36,6 @@
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
-  - !type:AddComponentSpecial
-    components:
-      - type: Skills # Corvax-Next-Skills
-        skills:
-        - ShuttleControl
-        - Shooting
-        - Surgery
-        - MedicalEquipment
-      - type: CanChokeGrab
 
 - type: startingGear
   id: ADTBlueShieldOfficerGear
