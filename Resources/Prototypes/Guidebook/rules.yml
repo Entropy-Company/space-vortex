@@ -9,6 +9,92 @@
   text: "/ServerInfo/Guidebook/ServerRules/DefaultRules.xml"
 
 - type: guideEntry
+  id: EntropyRules
+  name: guide-entry-rules-core
+  ruleEntry: true
+  priority: 10
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/DefaultRules.xml"
+  children:
+  - EntropyRule0
+  - EntropyRule1
+  - EntropyRule2
+  - EntropyRule3
+  - EntropyRule4
+  - EntropyRule5
+  - EntropyRule6
+  - EntropyRule7
+  - EntropyRule8
+  - EntropyRule9
+  - EntropyRule10
+
+- type: guideEntry
+  id: EntropyRule0
+  name: Не будь мудаком.
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/EntropyRule0.xml"
+
+- type: guideEntry
+  id: EntropyRule1
+  name: Гриферство
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/EntropyRule1.xml"
+
+- type: guideEntry
+  id: EntropyRule2
+  name: Убийство
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/EntropyRule2.xml"
+  
+- type: guideEntry
+  id: EntropyRule3
+  name: Нарушение игровой атмосферы.
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/EntropyRule3.xml"
+  
+- type: guideEntry
+  id: EntropyRule4
+  name: Логика персонажей
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/EntropyRule4.xml"
+ 
+- type: guideEntry
+  id: EntropyRule5
+  name: Ответственная игра за антагониста
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/EntropyRule5.xml"
+
+- type: guideEntry
+  id: EntropyRule6
+  name: Самоантагонизм
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/EntropyRule6.xml"
+
+- type: guideEntry
+  id: EntropyRule7
+  name: Валидхант
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/EntropyRule7.xml"
+
+- type: guideEntry
+  id: EntropyRule8
+  name: ERP
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/EntropyRule8.xml"
+
+- type: guideEntry
+  id: EntropyRule9
+  name: Нечестная игра
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/EntropyRule9.xml"
+
+- type: guideEntry
+  id: EntropyRule10
+  name: Обман администрации
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/EntropyRules/EntropyRule10.xml"
+
+
+- type: guideEntry
   id: CoreRuleset
   name: guide-entry-rules-core-only
   ruleEntry: true
