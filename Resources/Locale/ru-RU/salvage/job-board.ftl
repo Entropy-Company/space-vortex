@@ -1,7 +1,7 @@
 salvage-job-rank-title-0 = [color=gray]Мусорщик[/color]
 salvage-job-rank-title-1 = [color=white]Диггер[/color]
 salvage-job-rank-title-2 = [color=yellow]Специалист[/color]
-salvage-job-rank-title-MAX = [color=gold]Великий утилизаторо[/color]
+salvage-job-rank-title-MAX = [color=gold]Высший утилизатор[/color]
 job-board-radio-announce = Ранг Утилизатора повышен до [bold]{ $rank }[/bold]! Новые заказы можно приобрести в отделе Карго.
 job-board-ui-window-title = Доска заданий
 job-board-ui-label-rank = [bold]Ранг:[/bold]
