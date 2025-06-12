@@ -69,6 +69,9 @@
           Quantity: 9
         - ReagentId: Carbon
           Quantity: 1
+  - type: FloorTile
+    outputs:
+    - Plating
 
 - type: entity
   parent: SheetSteel
