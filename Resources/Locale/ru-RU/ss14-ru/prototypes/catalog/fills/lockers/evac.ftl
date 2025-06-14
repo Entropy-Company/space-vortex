@@ -1,10 +1,10 @@
-ent-LockerEvacRepair = шкафчик для ремонта эвака
+ent-LockerEvacRepair = шкаф для ремонта эвака
     .desc = { ent-ClosetBase.desc }
-ent-LockerEvacRepairFilled = шкафчик для ремонта эвака
+ent-LockerEvacRepairFilled = шкаф для ремонта эвака
     .desc = { ent-ClosetBase.desc }
     .suffix = Заполненный
-ent-LockerWallEvacRepair = настенный шкафчик для ремонта эвака
+ent-LockerWallEvacRepair = настенный шкаф для ремонта эвака
     .desc = { ent-ClosetBase.desc }
-ent-LockerWallEvacRepairFilled = настенный шкафчик для ремонта эвака
+ent-LockerWallEvacRepairFilled = настенный шкаф для ремонта эвака
     .desc = { ent-ClosetBase.desc }
     .suffix = Заполненный
