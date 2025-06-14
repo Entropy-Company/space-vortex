@@ -3,3 +3,12 @@
   name: Urist McIpc
   parent: [BaseMobIpc, BaseMob]
   id: MobIpc
+  components:
+  - type: Skills # Corvax-Next-Skills
+    skills:
+    - ShuttleControl
+    - Shooting
+    - AdvancedBuilding
+    - Surgery
+    - MedicalEquipment
+    - Butchering

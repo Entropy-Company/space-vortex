@@ -3,3 +3,12 @@
   name: Urist McVulp
   parent: [BaseMobVulpkanin, BaseMob]
   id: MobVulpkanin
+  components:
+  - type: Skills # Corvax-Next-Skills
+    skills:
+    - ShuttleControl
+    - Shooting
+    - AdvancedBuilding
+    - Surgery
+    - MedicalEquipment
+    - Butchering

@@ -3,3 +3,12 @@
   name: Urist McTajar
   parent: [BaseMobTajaran, BaseMob]
   id: MobTajaran
+  components:
+  - type: Skills # Corvax-Next-Skills
+    skills:
+    - ShuttleControl
+    - Shooting
+    - AdvancedBuilding
+    - Surgery
+    - MedicalEquipment
+    - Butchering
