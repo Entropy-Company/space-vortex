@@ -3,6 +3,15 @@
   name: Urist McHands
   parent: BaseMobHuman
   id: MobHuman
+  components:
+  - type: Skills
+    skills:
+    - ShuttleControl
+    - Shooting
+    - AdvancedBuilding
+    - Surgery
+    - MedicalEquipment
+    - Butchering
 
 #Syndie
 - type: entity
