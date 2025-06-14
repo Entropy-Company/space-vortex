@@ -3,3 +3,12 @@
   name: Uristititi McVox
   parent: BaseMobVox
   id: MobVox
+  components:
+  - type: Skills # Corvax-Next-Skills
+    skills:
+    - ShuttleControl
+    - Shooting
+    - AdvancedBuilding
+    - Surgery
+    - MedicalEquipment
+    - Butchering

@@ -3,3 +3,12 @@
   name: Urist McFluff
   parent: BaseMobMoth
   id: MobMoth
+  components:
+  - type: Skills # Corvax-Next-Skills
+    skills:
+    - ShuttleControl
+    - Shooting
+    - AdvancedBuilding
+    - Surgery
+    - MedicalEquipment
+    - Butchering

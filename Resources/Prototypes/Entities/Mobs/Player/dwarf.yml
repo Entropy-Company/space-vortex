@@ -3,3 +3,12 @@
   name: Urist McHands The Dwarf
   parent: BaseMobDwarf
   id: MobDwarf
+  components:
+  - type: Skills # Corvax-Next-Skills
+    skills:
+    - ShuttleControl
+    - Shooting
+    - AdvancedBuilding
+    - Surgery
+    - MedicalEquipment
+    - Butchering

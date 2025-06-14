@@ -11,7 +11,15 @@
       damageRecovery:
         types:
           Asphyxiation: -1.0
-
+    - type: Skills # Corvax-Next-Skills
+      skills:
+      - ShuttleControl
+      - Shooting
+      - AdvancedBuilding
+      - Surgery
+      - MedicalEquipment
+      - Butchering
+    
 # Reformed Diona
 - type: entity
   parent: MobDiona
@@ -21,3 +29,11 @@
   components:
     - type: IsDeadIC
     - type: RandomHumanoidAppearance 
+    - type: Skills # Corvax-Next-Skills
+      skills:
+      - ShuttleControl
+      - Shooting
+      - AdvancedBuilding
+      - Surgery
+      - MedicalEquipment
+      - Butchering

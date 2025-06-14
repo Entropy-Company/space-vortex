@@ -11,3 +11,11 @@
     damageRecovery:
       types:
         Asphyxiation: -0.5
+  - type: Skills # Corvax-Next-Skills
+    skills:
+    - ShuttleControl
+    - Shooting
+    - AdvancedBuilding
+    - Surgery
+    - MedicalEquipment
+    - Butchering

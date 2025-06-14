@@ -11,6 +11,14 @@
     layers:
     - state: narsie
       shader: unshaded
+  - type: Skills # Corvax-Next-Skills
+    skills:
+    - ShuttleControl
+    - Shooting
+    - AdvancedBuilding
+    - Surgery
+    - MedicalEquipment
+    - Butchering
 
 # spawn animation, spawns actual narsie when it ends
 - type: entity
