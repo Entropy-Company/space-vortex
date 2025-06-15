@@ -17,6 +17,7 @@
   - type: Thirst
   - type: Sprite
     drawdepth: Mobs
+    scale: 0.9, 0.9
   - type: Vocal
     sounds:
       Male: MaleFelinid
