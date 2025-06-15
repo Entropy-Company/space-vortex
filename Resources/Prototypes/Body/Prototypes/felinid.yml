@@ -13,7 +13,6 @@
     torso:
       part: TorsoHuman
       connections:
-      - right_arm
       - right arm
       - left arm
       - right leg
