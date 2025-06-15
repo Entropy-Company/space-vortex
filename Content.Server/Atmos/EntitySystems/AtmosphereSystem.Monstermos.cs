@@ -655,32 +655,45 @@ namespace Content.Server.Atmos.EntitySystems
             }
         }
 
-        private void AdjustEqMovement(TileAtmosphere tile, AtmosDirection direction, float amount)
-        {
-            DebugTools.AssertNotNull(tile);
-            DebugTools.Assert(tile.AdjacentBits.IsFlagSet(direction));
-            DebugTools.Assert(tile.AdjacentTiles[direction.ToIndex()] != null);
-            // Every call to this method already ensures that the adjacent tile won't be null.
+		private void AdjustEqMovement(TileAtmosphere tile, AtmosDirection direction, float amount)
+		{
+			// Проверяем, чтобы tile не был null.
+			if (tile == null)
+			{
+				Log.Error($"Encountered null tile in {nameof(AdjustEqMovement)}. Direction: {direction}. Trace: {Environment.StackTrace}");
+				return;
+			}
 
-            // Turns out: no they don't. Temporary debug checks to figure out which caller is causing problems:
-            if (tile == null)
-            {
-                Log.Error($"Encountered null-tile in {nameof(AdjustEqMovement)}. Trace: {Environment.StackTrace}");
-                return;
-            }
+			var idx = direction.ToIndex();
 
-            var idx = direction.ToIndex();
-            var adj = tile.AdjacentTiles[idx];
-            if (adj == null)
-            {
-                var nonNull = tile.AdjacentTiles.Where(x => x != null).Count();
-                Log.Error($"Encountered null adjacent tile in {nameof(AdjustEqMovement)}. Dir: {direction}, Tile: ({tile.GridIndex}, {tile.GridIndices}), non-null adj count: {nonNull}, Trace: {Environment.StackTrace}");
-                return;
-            }
+			// Проверяем, чтобы направление было корректно задано.
+			if (!tile.AdjacentBits.IsFlagSet(direction))
+			{
+				Log.Error($"Invalid direction in {nameof(AdjustEqMovement)}. Direction: {direction}, Tile: ({tile.GridIndex}, {tile.GridIndices}). Trace: {Environment.StackTrace}");
+				return;
+			}
 
-            tile.MonstermosInfo[direction] += amount;
-            adj.MonstermosInfo[idx.ToOppositeDir()] -= amount;
-        }
+			// Получаем соседний тайл.
+			var adj = tile.AdjacentTiles[idx];
+			if (adj == null)
+			{
+				var nonNull = tile.AdjacentTiles.Count(x => x != null);
+				Log.Error($"Encountered null adjacent tile in {nameof(AdjustEqMovement)}. Dir: {direction}, Tile: ({tile.GridIndex}, {tile.GridIndices}), non-null adj count: {nonNull}. Trace: {Environment.StackTrace}");
+				return;
+			}
+
+			// Выполняем корректировку давления.
+			try
+			{
+				tile.MonstermosInfo[direction] += amount;
+				adj.MonstermosInfo[idx.ToOppositeDir()] -= amount;
+			}
+			catch (Exception ex)
+			{
+				Log.Error($"Error adjusting EQ movement in {nameof(AdjustEqMovement)}. Direction: {direction}, Amount: {amount}, Tile: ({tile.GridIndex}, {tile.GridIndices}). Exception: {ex.Message}. Trace: {ex.StackTrace}");
+			}
+		}
+
 
         private void HandleDecompressionFloorRip(Entity<MapGridComponent> mapGrid, TileAtmosphere tile, float sum)
         {
