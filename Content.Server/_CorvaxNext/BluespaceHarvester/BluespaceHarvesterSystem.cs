@@ -211,9 +211,9 @@ public sealed class BluespaceHarvesterSystem : EntitySystem
             return;
 
         if (Emagged(uid))
-            _appearance.SetData(uid, BluespaceHarvesterVisualLayers.Base, (int) harvester.RedspaceTap);
+            _appearance.SetData(uid, BluespaceHarvesterVisualLayers.Base, (int)harvester.RedspaceTap);
         else
-            _appearance.SetData(uid, BluespaceHarvesterVisualLayers.Base, (int) max.Visual);
+            _appearance.SetData(uid, BluespaceHarvesterVisualLayers.Base, (int)max.Visual);
 
         _appearance.SetData(uid, BluespaceHarvesterVisualLayers.Effects, level != 0);
     }
@@ -290,7 +290,7 @@ public sealed class BluespaceHarvesterSystem : EntitySystem
             var randVector = _random.NextVector2(harvester.SpawnRadius);
             newCoords = coords.Offset(randVector);
 
-            if (!_lookup.GetEntitiesIntersecting(newCoords.ToMap(EntityManager, _transform), LookupFlags.Static).Any())
+            if (!_lookup.GetEntitiesIntersecting(newCoords.ToMap(EntityManager,_transform), LookupFlags.Static).Any())
                 break;
         }
 
@@ -390,7 +390,7 @@ public sealed class BluespaceHarvesterSystem : EntitySystem
             if (entity == null)
                 continue;
 
-            EnsureComp<BluespaceHarvesterRiftComponent>((EntityUid) entity).Danger = currentDanger / count;
+            EnsureComp<BluespaceHarvesterRiftComponent>((EntityUid)entity).Danger = currentDanger / count;
         }
 
         // We gave all the danger to the rifts.

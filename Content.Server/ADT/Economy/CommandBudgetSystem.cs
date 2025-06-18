@@ -2,6 +2,7 @@ using Content.Shared.Cargo.Components;
 using Content.Server.Paper;
 using Content.Shared.Paper;
 using Content.Server.Station.Systems;
+using Content.Shared.Cargo.Components;
 
 namespace Content.Server.ADT.Economy;
 
@@ -22,8 +23,7 @@ public sealed class CommandBudgetSystem : EntitySystem
         if (!TryComp(_station.GetOwningStation(uid), out Content.Shared.Cargo.Components.StationBankAccountComponent? account))
             return;
 
-        // TODO: The shared StationBankAccountComponent does not have BankAccount.AccountPin. Replace with correct PIN retrieval logic if available.
-var pin = "0000"; // Placeholder or retrieve from account.Accounts if structure allows.
-        _paper.SetContent(uid,Loc. GetString("command-budget-pin-message", ("pin", pin)));
+        var pin = account.BankAccount.AccountPin;
+        _paper.SetContent((uid, EnsureComp<PaperComponent>(uid)), Loc.GetString("command-budget-pin-message", ("pin", pin)));
     }
 }

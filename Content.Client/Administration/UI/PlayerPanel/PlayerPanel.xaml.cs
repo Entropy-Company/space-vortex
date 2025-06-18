@@ -37,24 +37,24 @@ public sealed partial class PlayerPanel : FancyWindow
         RobustXamlLoader.Load(this);
         _adminManager = adminManager;
 
-        UsernameCopyButton.OnPressed += _ => OnUsernameCopy?.Invoke(TargetUsername ?? "");
-        BanButton.OnPressed += _ => OnOpenBanPanel?.Invoke(TargetPlayer);
-        KickButton.OnPressed += _ => OnKick?.Invoke(TargetUsername);
-        CameraButton.OnPressed += _ => OnCamera?.Invoke(TargetUsername);
-        NotesButton.OnPressed += _ => OnOpenNotes?.Invoke(TargetPlayer);
-        ShowBansButton.OnPressed += _ => OnOpenBans?.Invoke(TargetPlayer);
-        AhelpButton.OnPressed += _ => OnAhelp?.Invoke(TargetPlayer);
-        WhitelistToggle.OnPressed += _ =>
-        {
-            OnWhitelistToggle?.Invoke(TargetPlayer, _isWhitelisted);
-            SetWhitelisted(!_isWhitelisted);
-        };
-        FollowButton.OnPressed += _ => OnFollow?.Invoke();
-        FreezeButton.OnPressed += _ => OnFreeze?.Invoke();
-        FreezeAndMuteToggleButton.OnPressed += _ => OnFreezeAndMuteToggle?.Invoke();
-        LogsButton.OnPressed += _ => OnLogs?.Invoke();
-        DeleteButton.OnPressed += _ => OnDelete?.Invoke();
-        RejuvenateButton.OnPressed += _ => OnRejuvenate?.Invoke();
+            UsernameCopyButton.OnPressed += _ => OnUsernameCopy?.Invoke(TargetUsername ?? "");
+            BanButton.OnPressed += _ => OnOpenBanPanel?.Invoke(TargetPlayer);
+            KickButton.OnPressed += _ => OnKick?.Invoke(TargetUsername);
+            CameraButton.OnPressed += _ => OnCamera?.Invoke(TargetUsername);
+            NotesButton.OnPressed += _ => OnOpenNotes?.Invoke(TargetPlayer);
+            ShowBansButton.OnPressed += _ => OnOpenBans?.Invoke(TargetPlayer);
+            AhelpButton.OnPressed += _ => OnAhelp?.Invoke(TargetPlayer);
+            WhitelistToggle.OnPressed += _ =>
+            {
+                OnWhitelistToggle?.Invoke(TargetPlayer, _isWhitelisted);
+                SetWhitelisted(!_isWhitelisted);
+            };
+            FollowButton.OnPressed += _ => OnFollow?.Invoke();
+            FreezeButton.OnPressed += _ => OnFreeze?.Invoke();
+            FreezeAndMuteToggleButton.OnPressed += _ => OnFreezeAndMuteToggle?.Invoke();
+            LogsButton.OnPressed += _ => OnLogs?.Invoke();
+            DeleteButton.OnPressed += _ => OnDelete?.Invoke();
+            RejuvenateButton.OnPressed += _ => OnRejuvenate?.Invoke();
     }
 
     public void SetUsername(string player)
