@@ -1,6 +1,6 @@
 - type: entity
   parent: [BaseWeaponEnergyTurret, ConstructibleMachine]
-  id: WeaponEnergyTurretStation
+  id: WeaponEnergyTurretSecurity
   name: security turret
   description: A high-tech autonomous weapons system designed to keep unauthorized personnel out of sensitive areas.
   components:
@@ -141,12 +141,12 @@
     unlockOnClick: false
   - type: LockedWiresPanel
   - type: Machine
-    board: WeaponEnergyTurretStationMachineCircuitboard
+    board: WeaponEnergyTurretSecurityMachineCircuitboard
   - type: UseDelay
     delay: 1.2
 
 - type: entity
-  parent: WeaponEnergyTurretStation
+  parent: WeaponEnergyTurretSecurity
   id: WeaponEnergyTurretAI
   suffix: AI, Silicon
   components:
