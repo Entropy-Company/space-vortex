@@ -147,7 +147,7 @@
     delay: 1.2
 
 - type: entity
-  parent: WeaponEnergyTurretStationBase
+  parent: WeaponEnergyTurretStation
   id: WeaponEnergyTurretAI
   suffix: AI, Silicon
   components:
