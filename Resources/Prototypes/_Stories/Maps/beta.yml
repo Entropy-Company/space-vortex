@@ -1,9 +1,9 @@
 - type: gameMap
   id: StoriesBeta
-  mapName: 'StoriesBeta'
+  mapName: 'NTVG Бета'
   mapPath: /Maps/_Stories/beta.yml
-  minPlayers: 30
-  maxPlayers: 60
+  minPlayers: 2
+  maxPlayers: 55
   stations:
     Beta:
       stationProto: StandardNanotrasenStation
