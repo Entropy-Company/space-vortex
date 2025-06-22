@@ -2,7 +2,7 @@
   id: StoriesBeta
   mapName: 'NTVG Бета'
   mapPath: /Maps/_Stories/beta.yml
-  minPlayers: 2
+  minPlayers: 0
   maxPlayers: 55
   stations:
     Beta:
@@ -14,7 +14,7 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: StationEmergencyShuttle
-          emergencyShuttlePath: /Maps/_Stories/Shuttles/emergency_beta.yml
+          emergencyShuttlePath: /Maps/Next/Shuttles/Box/emergency_nextBox.yml
         - type: StationJobs
           availableJobs:
             #service
