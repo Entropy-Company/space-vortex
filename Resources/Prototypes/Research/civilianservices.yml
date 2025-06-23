@@ -108,6 +108,7 @@
     - FauxTileAstroIce
     - FauxTileAstroSnow
     - FauxTileAstroAsteroidSand
+    - TileItemBluespace # Corvax-Next-BluespaceTile
   position: 3, 0
   requiredTech:
     - AdvancedEntertainment
