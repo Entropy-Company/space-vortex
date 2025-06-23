@@ -14,7 +14,7 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: StationEmergencyShuttle
-          emergencyShuttlePath: /Maps/Next/Shuttles/Box/emergency_nextBox.yml
+          emergencyShuttlePath: /Maps/Shuttles/emergency_box.yml 
         - type: StationJobs
           availableJobs:
             #service
