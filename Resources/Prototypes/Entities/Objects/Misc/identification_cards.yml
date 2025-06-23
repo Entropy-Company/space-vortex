@@ -888,6 +888,7 @@
     - SyndicateAgent
     - Wizard
     - Xenoborg
+    - BlueShield
   - type: NanoChatCard # Corvax-Next-PDAChat
     notificationsMuted: true
   - type: Tag #  Ignore Chameleon tags
