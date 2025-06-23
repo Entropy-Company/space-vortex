@@ -54,6 +54,7 @@ public sealed class FoodSystem : EntitySystem
     [Dependency] private readonly UtensilSystem _utensil = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
 
+
     public const float MaxFeedDistance = 1.0f;
 
     public override void Initialize()
@@ -319,53 +320,50 @@ public sealed class FoodSystem : EntitySystem
         DeleteAndSpawnTrash(entity.Comp, entity.Owner, args.User);
     }
 
-    public void DeleteAndSpawnTrash(FoodComponent component, EntityUid food, EntityUid user)
-    {
-        var ev = new BeforeFullyEatenEvent
-        {
-            User = user
-        };
-        RaiseLocalEvent(food, ev);
-        if (ev.Cancelled)
-            return;
+	public void DeleteAndSpawnTrash(FoodComponent component, EntityUid food, EntityUid user)
+	{
+		var ev = new BeforeFullyEatenEvent
+		{
+			User = user
+		};
+		RaiseLocalEvent(food, ev);
+		if (ev.Cancelled)
+			return;
 
-        var attemptEv = new DestructionAttemptEvent();
-        RaiseLocalEvent(food, attemptEv);
-        if (attemptEv.Cancelled)
-            return;
+		var attemptEv = new DestructionAttemptEvent();
+		RaiseLocalEvent(food, attemptEv);
+		if (attemptEv.Cancelled)
+			return;
 
-        var afterEvent = new AfterFullyEatenEvent(user);
-        RaiseLocalEvent(food, ref afterEvent);
+		var afterEvent = new AfterFullyEatenEvent(user);
+		RaiseLocalEvent(food, ref afterEvent);
 
-        var dev = new DestructionEventArgs();
-        RaiseLocalEvent(food, dev);
+		var dev = new DestructionEventArgs();
+		RaiseLocalEvent(food, dev);
 
-        if (component.Trash.Count == 0)
-        {
-            QueueDel(food);
-            return;
-        }
+		if (component.Trash.Count == 0)
+		{
+			QueueDel(food);
+			return;
+		}
 
-        //We're empty. Become trash.
-        //cache some data as we remove food, before spawning trash and passing it to the hand.
+		var position = _transform.GetMapCoordinates(food);
+		var trashes = component.Trash;
+		var tryPickup = _hands.IsHolding(user, food, out _);
 
-        var position = _transform.GetMapCoordinates(food);
-        var trashes = component.Trash;
-        var tryPickup = _hands.IsHolding(user, food, out _);
+		QueueDel(food);  // <-- Используем QueueDel вместо Del
 
-        Del(food);
-        foreach (var trash in trashes)
-        {
-            var spawnedTrash = Spawn(trash, position);
+		foreach (var trash in trashes)
+		{
+			var spawnedTrash = Spawn(trash, position);
 
-            // If the user is holding the item
-            if (tryPickup)
-            {
-                // Put the trash in the user's hand
-                _hands.TryPickupAnyHand(user, spawnedTrash);
-            }
-        }
-    }
+			if (tryPickup)
+			{
+				_hands.TryPickupAnyHand(user, spawnedTrash);
+			}
+		}
+	}
+
 
     private void AddEatVerb(Entity<FoodComponent> entity, ref GetVerbsEvent<AlternativeVerb> ev)
     {
