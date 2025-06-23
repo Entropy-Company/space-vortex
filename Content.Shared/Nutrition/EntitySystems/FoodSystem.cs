@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
+using Robust.Shared.Network;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.EntitySystems;
@@ -53,6 +54,7 @@ public sealed class FoodSystem : EntitySystem
     [Dependency] private readonly StomachSystem _stomach = default!;
     [Dependency] private readonly UtensilSystem _utensil = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private readonly INetManager _netManager = default!;
 
 
     public const float MaxFeedDistance = 1.0f;
@@ -320,49 +322,53 @@ public sealed class FoodSystem : EntitySystem
         DeleteAndSpawnTrash(entity.Comp, entity.Owner, args.User);
     }
 
-	public void DeleteAndSpawnTrash(FoodComponent component, EntityUid food, EntityUid user)
-	{
-		var ev = new BeforeFullyEatenEvent
-		{
-			User = user
-		};
-		RaiseLocalEvent(food, ev);
-		if (ev.Cancelled)
-			return;
+    public void DeleteAndSpawnTrash(FoodComponent component, EntityUid food, EntityUid user)
+    {
+        var ev = new BeforeFullyEatenEvent
+        {
+            User = user
+        };
+        RaiseLocalEvent(food, ev);
+        if (ev.Cancelled)
+            return;
 
-		var attemptEv = new DestructionAttemptEvent();
-		RaiseLocalEvent(food, attemptEv);
-		if (attemptEv.Cancelled)
-			return;
+        var attemptEv = new DestructionAttemptEvent();
+        RaiseLocalEvent(food, attemptEv);
+        if (attemptEv.Cancelled)
+            return;
 
-		var afterEvent = new AfterFullyEatenEvent(user);
-		RaiseLocalEvent(food, ref afterEvent);
+        var afterEvent = new AfterFullyEatenEvent(user);
+        RaiseLocalEvent(food, ref afterEvent);
 
-		var dev = new DestructionEventArgs();
-		RaiseLocalEvent(food, dev);
+        var dev = new DestructionEventArgs();
+        RaiseLocalEvent(food, dev);
 
-		if (component.Trash.Count == 0)
-		{
-			QueueDel(food);
-			return;
-		}
+        if (!_netManager.IsServer)
+            return;
 
-		var position = _transform.GetMapCoordinates(food);
-		var trashes = component.Trash;
-		var tryPickup = _hands.IsHolding(user, food, out _);
+        if (component.Trash.Count == 0)
+        {
+            QueueDel(food);
+            return;
+        }
 
-		QueueDel(food);  // <-- Используем QueueDel вместо Del
+        var position = _transform.GetMapCoordinates(food);
+        var trashes = component.Trash;
+        var tryPickup = _hands.IsHolding(user, food, out _);
 
-		foreach (var trash in trashes)
-		{
-			var spawnedTrash = Spawn(trash, position);
+        QueueDel(food);
 
-			if (tryPickup)
-			{
-				_hands.TryPickupAnyHand(user, spawnedTrash);
-			}
-		}
-	}
+        foreach (var trash in trashes)
+        {
+            var spawnedTrash = Spawn(trash, position);
+
+            if (tryPickup)
+            {
+                _hands.TryPickupAnyHand(user, spawnedTrash);
+            }
+        }
+    }
+
 
 
     private void AddEatVerb(Entity<FoodComponent> entity, ref GetVerbsEvent<AlternativeVerb> ev)
