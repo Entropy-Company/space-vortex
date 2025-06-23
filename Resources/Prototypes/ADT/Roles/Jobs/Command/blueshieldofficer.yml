@@ -43,6 +43,7 @@
     eyes: ADTClothingEyesGlassesBlueshield
     ears: ADTClothingHeadsetBlueshield
     shoes: ClothingShoesBootsCombatFilled
+    outerClothing: ADTBlueshieldSuit
     belt: ClothingBeltSheathBS
     gloves: ClothingHandsGlovesCombat
     id: ADTBlueshieldOfficerPDA
