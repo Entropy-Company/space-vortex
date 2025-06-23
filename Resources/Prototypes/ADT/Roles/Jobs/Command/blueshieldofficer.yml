@@ -40,17 +40,13 @@
 - type: startingGear
   id: ADTBlueShieldOfficerGear
   equipment:
-    head: ADTClothingHeadHatBeretBlueshieldBlack
     eyes: ADTClothingEyesGlassesBlueshield
     ears: ADTClothingHeadsetBlueshield
     shoes: ClothingShoesBootsCombatFilled
-    outerClothing: ADTBlueshieldSuit
     belt: ClothingBeltSheathBS
     gloves: ClothingHandsGlovesCombat
     id: ADTBlueshieldOfficerPDA
     pocket1: WeaponX2DualphaseEnergyLaserGun
     pocket2: Handcuffs
-    satchel: ADTClothingBackpackSatchelBlueshield
-    neck: ADTClothingNeckCloakBlueshield
   inhand:
   - ADTBaseWeaponCaseNTBS
