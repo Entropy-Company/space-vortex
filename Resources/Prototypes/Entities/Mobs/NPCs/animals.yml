@@ -71,7 +71,7 @@
     - trigger:
         !type:DamageTypeTrigger
         damageType: Blunt
-        damage: 120
+        damage: 1000
       behaviors:
       - !type:GibBehavior
         recursive: false
@@ -159,7 +159,7 @@
     - trigger:
         !type:DamageTypeTrigger
         damageType: Blunt
-        damage: 20
+        damage: 1000
       behaviors:
       - !type:GibBehavior
         recursive: false
@@ -422,7 +422,7 @@
     - trigger:
         !type:DamageTypeTrigger
         damageType: Blunt
-        damage: 10
+        damage: 1000
       behaviors:
       - !type:GibBehavior
         recursive: false
@@ -593,7 +593,7 @@
     - trigger:
         !type:DamageTypeTrigger
         damageType: Blunt
-        damage: 60
+        damage: 1000
       behaviors:
       - !type:GibBehavior
         recursive: false
@@ -846,7 +846,7 @@
     - trigger:
         !type:DamageTypeTrigger
         damageType: Blunt
-        damage: 20
+        damage: 1000
       behaviors:
       - !type:GibBehavior
         recursive: false
@@ -1907,7 +1907,7 @@
     - trigger:
         !type:DamageTypeTrigger
         damageType: Blunt
-        damage: 60
+        damage: 1000
       behaviors:
       - !type:GibBehavior
         recursive: false
@@ -2196,7 +2196,7 @@
     - trigger:
         !type:DamageTypeTrigger
         damageType: Blunt
-        damage: 60
+        damage: 1000
       behaviors:
       - !type:GibBehavior
         recursive: false
@@ -2415,7 +2415,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 50
+        damage: 1000
       behaviors:
       - !type:ExplodeBehavior
 
@@ -3546,7 +3546,7 @@
     - trigger:
         !type:DamageTypeTrigger
         damageType: Blunt
-        damage: 120
+        damage: 1000
       behaviors:
       - !type:GibBehavior
         recursive: false
