@@ -16745,19 +16745,6 @@ entities:
           priority: 0
           component: ClothingSpeedModifier
         title: null
-- proto: BoxPrinter
-  entities:
-  - uid: 1138
-    components:
-    - type: Transform
-      pos: 51.301598,-13.311479
-      parent: 2
-  - uid: 1139
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 46.564583,-34.505817
-      parent: 2
 - proto: BoxShotgunUranium
   entities:
   - uid: 1140
@@ -16842,13 +16829,6 @@ entities:
     components:
     - type: Transform
       pos: 26.316938,-53.677643
-      parent: 2
-- proto: BriefcaseSteel
-  entities:
-  - uid: 1155
-    components:
-    - type: Transform
-      pos: 42.51532,8.865734
       parent: 2
 - proto: BrigTimer
   entities:
@@ -50127,15 +50107,6 @@ entities:
       inSlot: head
     - type: Physics
       canCollide: False
-- proto: ClothingHeadHatFedoraSpecialGrey
-  entities:
-  - uid: 7574
-    components:
-    - type: Transform
-      parent: 7571
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: ClothingHeadHatOutlawHat
   entities:
   - uid: 7559
@@ -50415,13 +50386,6 @@ entities:
       inSlot: neck
     - type: Physics
       canCollide: False
-- proto: ClothingNeckDecbadge
-  entities:
-  - uid: 7644
-    components:
-    - type: Transform
-      pos: 20.491953,-23.634714
-      parent: 2
 - proto: ClothingNeckScarfStripedBlue
   entities:
   - uid: 7645
@@ -50638,15 +50602,6 @@ entities:
     components:
     - type: Transform
       parent: 1024
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-- proto: ClothingUniformJumpsuitDetectiveSpecialGrey
-  entities:
-  - uid: 7576
-    components:
-    - type: Transform
-      parent: 7571
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -91214,7 +91169,7 @@ entities:
         - 0
         - 0
         - 0
-- proto: LockerGuardianNtFilled
+- proto: ADTLockerBlueshieldFilled
   entities:
   - uid: 13327
     components:
@@ -92848,13 +92803,6 @@ entities:
     components:
     - type: Transform
       pos: 3.5875611,-26.40324
-      parent: 2
-- proto: MusicalVendingMachine
-  entities:
-  - uid: 13553
-    components:
-    - type: Transform
-      pos: 20.5,-33.5
       parent: 2
 - proto: NewtonCradle
   entities:
@@ -97861,7 +97809,7 @@ entities:
       parent: 13573
     - type: Physics
       canCollide: False
-- proto: PrintedPaper
+- proto: Paper
   entities:
   - uid: 13580
     components:
@@ -106267,13 +106215,6 @@ entities:
     - type: Transform
       pos: 15.5,-22.5
       parent: 2
-- proto: SpawnPointGuardianNt
-  entities:
-  - uid: 15795
-    components:
-    - type: Transform
-      pos: 57.5,15.5
-      parent: 2
 - proto: SpawnPointHeadOfPersonnel
   entities:
   - uid: 15796
@@ -106628,13 +106569,6 @@ entities:
     components:
     - type: Transform
       pos: 12.5,-6.5
-      parent: 2
-- proto: SpawnSpaceKoi
-  entities:
-  - uid: 15857
-    components:
-    - type: Transform
-      pos: 53.5,-18.5
       parent: 2
 - proto: SpectralLocatorEmpty
   entities:
@@ -107156,20 +107090,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -0.5,-15.5
       parent: 2
-- proto: STCardDeckBoxFilledUSSP
-  entities:
-  - uid: 15945
-    components:
-    - type: Transform
-      pos: -7.241001,-65.17715
-      parent: 2
-- proto: STCardRandom
-  entities:
-  - uid: 15946
-    components:
-    - type: Transform
-      pos: 10.695931,-39.599804
-      parent: 2
 - proto: SteelBench
   entities:
   - uid: 15947
@@ -107240,55 +107160,6 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 49.5,-56.5
-      parent: 2
-- proto: STFaxMachineCaptains
-  entities:
-  - uid: 8954
-    components:
-    - type: Transform
-      pos: 11.5,14.5
-      parent: 2
-- proto: STFaxMachineCargo
-  entities:
-  - uid: 8953
-    components:
-    - type: Transform
-      pos: 46.5,-39.5
-      parent: 2
-- proto: STFaxMachineEngeneering
-  entities:
-  - uid: 8940
-    components:
-    - type: Transform
-      pos: -23.5,8.5
-      parent: 2
-- proto: STFaxMachineHop
-  entities:
-  - uid: 8938
-    components:
-    - type: Transform
-      pos: 1.5,16.5
-      parent: 2
-- proto: STFaxMachineMedical
-  entities:
-  - uid: 8951
-    components:
-    - type: Transform
-      pos: 14.5,-50.5
-      parent: 2
-- proto: STFaxMachineScientist
-  entities:
-  - uid: 19583
-    components:
-    - type: Transform
-      pos: 40.5,-10.5
-      parent: 2
-- proto: STFaxMachineSecurity
-  entities:
-  - uid: 8936
-    components:
-    - type: Transform
-      pos: 12.5,-14.5
       parent: 2
 - proto: StoolBar
   entities:
@@ -107459,32 +107330,6 @@ entities:
     - type: Transform
       pos: 43.221962,15.895788
       parent: 2
-- proto: STSpawnPointIAA
-  entities:
-  - uid: 15990
-    components:
-    - type: Transform
-      pos: 42.5,11.5
-      parent: 2
-- proto: STToolboxAncient
-  entities:
-  - uid: 15991
-    components:
-    - type: Transform
-      pos: 24.746906,-66.33982
-      parent: 2
-    - type: Storage
-      storedItems:
-        15992:
-          position: 3,0
-          _rotation: South
-    - type: ContainerContainer
-      containers:
-        storagebase: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 15992
 - proto: SubstationBasic
   entities:
   - uid: 15993
