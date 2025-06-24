@@ -12,6 +12,11 @@ using Robust.Shared.Audio.Systems;
 using static Content.Shared.Paper.PaperComponent;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Content.Shared.Hands.Components;
+using Content.Shared.IdentityManagement;
+using Robust.Shared.Timing;
+using Robust.Shared.Maths;
+using Content.Shared._Eternal.Paper;
 
 namespace Content.Shared.Paper;
 
@@ -27,11 +32,14 @@ public sealed class PaperSystem : EntitySystem
     [Dependency] private readonly SharedUserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     private static readonly ProtoId<TagPrototype> WriteIgnoreStampsTag = "WriteIgnoreStamps";
+    private static readonly ProtoId<TagPrototype> WriteIgnoreSignsTag = "WriteIgnoreSigns";
     private static readonly ProtoId<TagPrototype> WriteTag = "Write";
 
     private EntityQuery<PaperComponent> _paperQuery;
+    private Dictionary<EntityUid, TimeSpan> _penCooldowns = new();
 
     public override void Initialize()
     {
@@ -119,7 +127,161 @@ public sealed class PaperSystem : EntitySystem
     private void OnInteractUsing(Entity<PaperComponent> entity, ref InteractUsingEvent args)
     {
         // only allow editing if there are no stamps or when using a cyberpen
-        var editable = entity.Comp.StampedBy.Count == 0 || _tagSystem.HasTag(args.Used, WriteIgnoreStampsTag);
+        var hasWriteIgnoreStamps = _tagSystem.HasTag(args.Used, WriteIgnoreStampsTag);
+        var hasWriteIgnoreSigns = _tagSystem.HasTag(args.Used, WriteIgnoreSignsTag);
+        var editable = (hasWriteIgnoreStamps || entity.Comp.StampedBy.Count == 0) &&
+                      (hasWriteIgnoreSigns || entity.Comp.SingBy.Count == 0);
+
+        // Проверяем обычную ручку
+        if (TryComp<PenModeComponent>(args.Used, out var penMode))
+        {
+            if (penMode.Mode == PenMode.Write)
+            {
+                if (_tagSystem.HasTag(args.Used, WriteTag))
+                {
+                    if (editable)
+                    {
+                        if (entity.Comp.EditingDisabled)
+                        {
+                            var paperEditingDisabledMessage = Loc.GetString("paper-tamper-proof-modified-message");
+                            _popupSystem.PopupClient(paperEditingDisabledMessage, entity, args.User);
+                            args.Handled = true;
+                            return;
+                        }
+                        var ev = new PaperWriteAttemptEvent(entity.Owner);
+                        RaiseLocalEvent(args.User, ref ev);
+                        if (ev.Cancelled)
+                        {
+                            if (ev.FailReason is not null)
+                            {
+                                var fileWriteMessage = Loc.GetString(ev.FailReason);
+                                _popupSystem.PopupClient(fileWriteMessage, entity.Owner, args.User);
+                            }
+                            args.Handled = true;
+                            return;
+                        }
+                        var writeEvent = new PaperWriteEvent(args.User, entity);
+                        RaiseLocalEvent(args.Used, ref writeEvent);
+                        entity.Comp.Mode = PaperAction.Write;
+                        _uiSystem.OpenUi(entity.Owner, PaperUiKey.Key, args.User);
+                        UpdateUserInterface(entity);
+                    }
+                    args.Handled = true;
+                    return;
+                }
+            }
+            else if (penMode.Mode == PenMode.Sign)
+            {
+                var now = _timing.CurTime;
+                if (_penCooldowns.TryGetValue(args.Used, out var lastTime))
+                {
+                    if (now < lastTime + TimeSpan.FromSeconds(1))
+                    {
+                        args.Handled = true;
+                        return;
+                    }
+                }
+                _penCooldowns[args.Used] = now;
+                var owner = GetPenHolder(args.Used);
+                var ownerName = owner != null ? Identity.Name(owner.Value, EntityManager) : Loc.GetString("pen-signature-unknown");
+                var info = new StampDisplayInfo
+                {
+                    StampedName = ownerName,
+                    StampedColor = penMode.SignatureColor
+                };
+                if (!entity.Comp.SingBy.Contains(info))
+                {
+                    entity.Comp.SingBy.Add(info);
+                    args.Handled = true;
+                    _popupSystem.PopupEntity(Loc.GetString("pen-signature-success", ("name", ownerName)), entity.Owner, args.User);
+                    UpdateUserInterface(entity);
+                }
+                return;
+            }
+        }
+
+        // Проверяем хамелеон-ручку
+        if (TryComp<ChameleonPenComponent>(args.Used, out var chameleonPen))
+        {
+            if (chameleonPen.Mode == ChameleonPenMode.Write)
+            {
+                if (_tagSystem.HasTag(args.Used, WriteTag))
+                {
+                    if (editable)
+                    {
+                        if (entity.Comp.EditingDisabled)
+                        {
+                            var paperEditingDisabledMessage = Loc.GetString("paper-tamper-proof-modified-message");
+                            _popupSystem.PopupClient(paperEditingDisabledMessage, entity, args.User);
+                            args.Handled = true;
+                            return;
+                        }
+                        var ev = new PaperWriteAttemptEvent(entity.Owner);
+                        RaiseLocalEvent(args.User, ref ev);
+                        if (ev.Cancelled)
+                        {
+                            if (ev.FailReason is not null)
+                            {
+                                var fileWriteMessage = Loc.GetString(ev.FailReason);
+                                _popupSystem.PopupClient(fileWriteMessage, entity.Owner, args.User);
+                            }
+                            args.Handled = true;
+                            return;
+                        }
+                        var writeEvent = new PaperWriteEvent(args.User, entity);
+                        RaiseLocalEvent(args.Used, ref writeEvent);
+                        entity.Comp.Mode = PaperAction.Write;
+                        _uiSystem.OpenUi(entity.Owner, PaperUiKey.Key, args.User);
+                        UpdateUserInterface(entity);
+                    }
+                    args.Handled = true;
+                    return;
+                }
+            }
+            else if (chameleonPen.Mode == ChameleonPenMode.Sign)
+            {
+                var now = _timing.CurTime;
+                if (_penCooldowns.TryGetValue(args.Used, out var lastTime))
+                {
+                    if (now < lastTime + TimeSpan.FromSeconds(1))
+                    {
+                        args.Handled = true;
+                        return;
+                    }
+                }
+                _penCooldowns[args.Used] = now;
+                var owner = GetPenHolder(args.Used);
+
+                // Используем поддельную подпись, если она настроена
+                string ownerName;
+                Color signatureColor;
+                if (!string.IsNullOrEmpty(chameleonPen.ForgedSignatureText))
+                {
+                    ownerName = chameleonPen.ForgedSignatureText;
+                    signatureColor = chameleonPen.ForgedSignatureColor ?? chameleonPen.SignatureColor;
+                }
+                else
+                {
+                    ownerName = owner != null ? Identity.Name(owner.Value, EntityManager) : Loc.GetString("pen-signature-unknown");
+                    signatureColor = chameleonPen.SignatureColor;
+                }
+
+                var info = new StampDisplayInfo
+                {
+                    StampedName = ownerName,
+                    StampedColor = signatureColor
+                };
+                if (!entity.Comp.SingBy.Contains(info))
+                {
+                    entity.Comp.SingBy.Add(info);
+                    args.Handled = true;
+                    _popupSystem.PopupEntity(Loc.GetString("pen-signature-success", ("name", ownerName)), entity.Owner, args.User);
+                    UpdateUserInterface(entity);
+                }
+                return;
+            }
+        }
+
         if (_tagSystem.HasTag(args.Used, WriteTag))
         {
             if (editable)
@@ -128,11 +290,9 @@ public sealed class PaperSystem : EntitySystem
                 {
                     var paperEditingDisabledMessage = Loc.GetString("paper-tamper-proof-modified-message");
                     _popupSystem.PopupClient(paperEditingDisabledMessage, entity, args.User);
-
                     args.Handled = true;
                     return;
                 }
-
                 var ev = new PaperWriteAttemptEvent(entity.Owner);
                 RaiseLocalEvent(args.User, ref ev);
                 if (ev.Cancelled)
@@ -142,14 +302,11 @@ public sealed class PaperSystem : EntitySystem
                         var fileWriteMessage = Loc.GetString(ev.FailReason);
                         _popupSystem.PopupClient(fileWriteMessage, entity.Owner, args.User);
                     }
-
                     args.Handled = true;
                     return;
                 }
-
                 var writeEvent = new PaperWriteEvent(args.User, entity);
                 RaiseLocalEvent(args.Used, ref writeEvent);
-
                 entity.Comp.Mode = PaperAction.Write;
                 _uiSystem.OpenUi(entity.Owner, PaperUiKey.Key, args.User);
                 UpdateUserInterface(entity);
@@ -176,6 +333,8 @@ public sealed class PaperSystem : EntitySystem
             _audio.PlayPredicted(stampComp.Sound, entity, args.User);
 
             UpdateUserInterface(entity);
+            args.Handled = true;
+            return;
         }
     }
 
@@ -311,7 +470,18 @@ public sealed class PaperSystem : EntitySystem
 
     private void UpdateUserInterface(Entity<PaperComponent> entity)
     {
-        _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.Mode));
+        _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.SingBy, entity.Comp.Mode));
+    }
+
+    // В PaperSystem добавить метод для поиска владельца ручки
+    private EntityUid? GetPenHolder(EntityUid pen)
+    {
+        foreach (var hand in EntityManager.EntityQuery<HandsComponent>())
+        {
+            if (hand.Hands.Any(h => h.Value.HeldEntity == pen))
+                return hand.Owner;
+        }
+        return null;
     }
 }
 

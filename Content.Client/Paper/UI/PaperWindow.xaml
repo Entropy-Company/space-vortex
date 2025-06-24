@@ -14,11 +14,11 @@
                         <TextureButton Name="HeaderImage" HorizontalAlignment="Center" VerticalAlignment="Top" MouseFilter="Ignore"/>
                         <Control Name="TextAlignmentPadding" VerticalAlignment="Top"/>
                         <RichTextLabel Name="BlankPaperIndicator" StyleClasses="LabelSecondaryColor" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-                        <RichTextLabel StyleClasses="PaperWrittenText" Name="WrittenTextLabel" VerticalAlignment="Top"/>
+                        <RichTextLabel StyleClasses="PaperWrittenText" Name="WrittenTextLabel" VerticalAlignment="Top" VerticalExpand="False"/>
+                        <BoxContainer Name="SignatureContainer" Orientation="Vertical" VerticalAlignment="Top" VerticalExpand="False" Visible="False"/>
                         <BoxContainer Name="InputContainer" Orientation="Vertical" VerticalExpand="True" VerticalAlignment="Stretch">
-                            <PanelContainer StyleClasses="TransparentBorderedWindowPanel" MinHeight="100"
-                                VerticalAlignment="Stretch" VerticalExpand="True" HorizontalExpand="True">
-                                <TextEdit Name="Input" StyleClasses="PaperLineEdit" Access="Public" />
+                            <PanelContainer StyleClasses="TransparentBorderedWindowPanel" MinHeight="100" VerticalAlignment="Stretch" VerticalExpand="True" HorizontalExpand="True">
+                                <TextEdit Name="Input" StyleClasses="PaperLineEdit" Access="Public" VerticalExpand="True" HorizontalExpand="True"/>
                             </PanelContainer>
                             <Label Name="FillStatus" StyleClasses="LabelSecondaryColor"/>
                         </BoxContainer>

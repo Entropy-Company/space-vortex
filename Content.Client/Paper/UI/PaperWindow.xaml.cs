@@ -11,6 +11,10 @@ using Robust.Shared.Utility;
 using Robust.Client.UserInterface.RichText;
 using Content.Client.UserInterface.RichText;
 using Robust.Shared.Input;
+using System.Linq;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Content.Client.Paper.UI
 {
@@ -45,7 +49,8 @@ namespace Content.Client.Paper.UI
             typeof(ColorTag),
             typeof(HeadingTag),
             typeof(ItalicTag),
-            typeof(MonoTag)
+            typeof(MonoTag),
+            typeof(SignTag)
         };
 
         public event Action<string>? OnSaved;
@@ -260,27 +265,31 @@ namespace Content.Client.Paper.UI
             EditButtons.Visible = isEditing;
 
             var msg = new FormattedMessage();
-            msg.AddMarkupPermissive(state.Text);
+            // --- ВСТАВКА ПОДПИСЕЙ ---
+            var processedText = PaperSignatureHelper.InsertSignatures(state.Text, state.SingBy);
+            // Удаляем тег sign_visible из отображаемого текста
+            processedText = PaperSignatureHelper.RemoveSignVisibleTag(processedText);
+            msg.AddMarkupPermissive(processedText);
+            // --- КОНЕЦ ВСТАВКИ ---
 
-            // For premade documents, we want to be able to edit them rather than
-            // replace them.
             var shouldCopyText = 0 == Input.TextLength && 0 != state.Text.Length;
             if (!wasEditing || shouldCopyText)
             {
-                // We can get repeated messages with state.Mode == Write if another
-                // player opens the UI for reading. In this case, don't update the
-                // text input, as this player is currently writing new text and we
-                // don't want to lose any text they already input.
                 Input.TextRope = Rope.Leaf.Empty;
                 Input.CursorPosition = new TextEdit.CursorPos();
                 Input.InsertAtCursor(state.Text);
             }
 
-            for (var i = 0; i <= state.StampedBy.Count * 3 + 1; i++)
+            for (var i = 0; i <= state.SingBy.Count * 3 + 1; i++)
             {
                 msg.AddMarkupPermissive("\r\n");
             }
-            WrittenTextLabel.SetMessage(msg, _allowedTags, DefaultTextColor);
+
+            // --- Кастомные подписи ---
+            SignTag.CurrentSignatures = state.SingBy;
+            WrittenTextLabel.SetMessage(msg, _allowedTags.Concat(new[] { typeof(SignTag) }).ToArray(), DefaultTextColor);
+            SignTag.CurrentSignatures = null;
+            // ---
 
             WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0;
             BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0;
@@ -291,6 +300,40 @@ namespace Content.Client.Paper.UI
             {
                 StampDisplay.AddStamp(new StampWidget{ StampInfo = stamper });
             }
+
+            SignatureContainer.RemoveAllChildren();
+
+            bool signaturesVisible = PaperSignatureHelper.AreSignaturesVisible(state.Text);
+
+            var usedSignatures = new HashSet<int>();
+            int pos = 0;
+            while (true)
+            {
+                int start = state.Text.IndexOf("<sign=", pos);
+                if (start == -1) break;
+                int idxStart = start + 6;
+                int idxEnd = state.Text.IndexOf('>', idxStart);
+                if (idxEnd == -1) break;
+                if (int.TryParse(state.Text.Substring(idxStart, idxEnd - idxStart), out int idx) && idx > 0 && idx <= state.SingBy.Count)
+                    usedSignatures.Add(idx - 1);
+                pos = idxEnd + 1;
+            }
+            for (int s = 0; s < state.SingBy.Count; s++)
+            {
+                if (!usedSignatures.Contains(s))
+                {
+                    var signature = state.SingBy[s];
+                    var label = new Label
+                    {
+                        Text = signature.StampedName.Split('|')[0],
+                        FontColorOverride = signature.StampedColor,
+                        Margin = new Thickness(8, 2, 8, 2),
+                    };
+                    SignatureContainer.AddChild(label);
+                }
+            }
+            // Скрываем SignatureContainer, если нет подписей для отображения
+            SignatureContainer.Visible = !isEditing && signaturesVisible && SignatureContainer.ChildCount > 0;
         }
 
         /// <summary>
@@ -353,6 +396,39 @@ namespace Content.Client.Paper.UI
             {
                 FillStatus.Text = "";
                 SaveButton.Disabled = false;
+            }
+        }
+
+        public static class PaperSignatureHelper
+        {
+            public static string InsertSignatures(string text, IReadOnlyList<StampDisplayInfo> signatures)
+            {
+                return Regex.Replace(text, @"<sign=(\d+)>", match =>
+                {
+                    var index = int.Parse(match.Groups[1].Value) - 1;
+                    if (index >= 0 && index < signatures.Count)
+                    {
+                        var sig = signatures[index];
+                        var colorHex = sig.StampedColor.ToHexNoAlpha();
+                        return $"[color={colorHex}][italic]{sig.StampedName}[/italic]";
+                    }
+                    return "[color=gray][bold]___________[/bold]";
+                });
+            }
+
+            public static bool AreSignaturesVisible(string text)
+            {
+                var match = Regex.Match(text, @"<sign_visible\s*=\s*(true|false)>", RegexOptions.IgnoreCase);
+                if (match.Success)
+                {
+                    return bool.Parse(match.Groups[1].Value.ToLower());
+                }
+                return true;
+            }
+
+            public static string RemoveSignVisibleTag(string text)
+            {
+                return Regex.Replace(text, @"<sign_visible\s*=\s*(true|false)>", "", RegexOptions.IgnoreCase);
             }
         }
     }
