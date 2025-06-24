@@ -1,5 +1,6 @@
 using Robust.Shared.Serialization;
 using Robust.Shared.Audio;
+using Robust.Shared.Maths;
 
 namespace Content.Shared.Paper;
 
@@ -22,7 +23,7 @@ public partial struct StampDisplayInfo
 
     [DataField("stampedColor")]
     public Color StampedColor;
-};
+}
 
 [RegisterComponent]
 public sealed partial class StampComponent : Component

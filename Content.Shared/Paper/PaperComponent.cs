@@ -37,17 +37,22 @@ public sealed partial class PaperComponent : Component
     public string? Sender;
     // Corvax-Next-FaxMark-End
 
+    [DataField("singBy")]
+    public List<StampDisplayInfo> SingBy { get; set; } = new();
+
     [Serializable, NetSerializable]
     public sealed class PaperBoundUserInterfaceState : BoundUserInterfaceState
     {
         public readonly string Text;
         public readonly List<StampDisplayInfo> StampedBy;
+        public readonly List<StampDisplayInfo> SingBy;
         public readonly PaperAction Mode;
 
-        public PaperBoundUserInterfaceState(string text, List<StampDisplayInfo> stampedBy, PaperAction mode = PaperAction.Read)
+        public PaperBoundUserInterfaceState(string text, List<StampDisplayInfo> stampedBy, List<StampDisplayInfo> singBy, PaperAction mode = PaperAction.Read)
         {
             Text = text;
             StampedBy = stampedBy;
+            SingBy = singBy;
             Mode = mode;
         }
     }

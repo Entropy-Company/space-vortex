@@ -1,0 +1,15 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="Подделка почерка"
+               MinSize="320 220"
+               Resizable="false">
+    <BoxContainer Orientation="Vertical">
+        <Label Text="Выбор цвета подписи:"/>
+        <ColorSelectorSliders Name="ColorSelector"/>
+        <Label Text="Текст подписи:"/>
+        <LineEdit Name="SignatureTextEdit"/>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+            <Button Name="SaveButton" Text="Сохранить"/>
+            <Button Name="CancelButton" Text="Закрыть"/>
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

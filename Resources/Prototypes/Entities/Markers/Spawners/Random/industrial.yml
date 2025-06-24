@@ -13,6 +13,7 @@
       rarePrototypes:
         - CheapLighter
         - Pen
+        - ChameleonPen
         - Cigar
         - CigarSpent
         - Cigarette
