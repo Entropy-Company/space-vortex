@@ -267,10 +267,17 @@ namespace Content.Client.Paper.UI
             var msg = new FormattedMessage();
             // --- ВСТАВКА ПОДПИСЕЙ ---
             var processedText = PaperSignatureHelper.InsertSignatures(state.Text, state.SingBy);
-            // Удаляем тег sign_visible из отображаемого текста
             processedText = PaperSignatureHelper.RemoveSignVisibleTag(processedText);
             msg.AddMarkupPermissive(processedText);
             // --- КОНЕЦ ВСТАВКИ ---
+
+            msg.AddMarkupPermissive("\r\n");
+
+            // --- Кастомные подписи ---
+            SignTag.CurrentSignatures = state.SingBy;
+            WrittenTextLabel.SetMessage(msg, _allowedTags.Concat(new[] { typeof(SignTag) }).ToArray(), DefaultTextColor);
+            SignTag.CurrentSignatures = null;
+            // ---
 
             var shouldCopyText = 0 == Input.TextLength && 0 != state.Text.Length;
             if (!wasEditing || shouldCopyText)
@@ -279,17 +286,6 @@ namespace Content.Client.Paper.UI
                 Input.CursorPosition = new TextEdit.CursorPos();
                 Input.InsertAtCursor(state.Text);
             }
-
-            for (var i = 0; i <= state.SingBy.Count * 3 + 1; i++)
-            {
-                msg.AddMarkupPermissive("\r\n");
-            }
-
-            // --- Кастомные подписи ---
-            SignTag.CurrentSignatures = state.SingBy;
-            WrittenTextLabel.SetMessage(msg, _allowedTags.Concat(new[] { typeof(SignTag) }).ToArray(), DefaultTextColor);
-            SignTag.CurrentSignatures = null;
-            // ---
 
             WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0;
             BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0;
@@ -332,7 +328,6 @@ namespace Content.Client.Paper.UI
                     SignatureContainer.AddChild(label);
                 }
             }
-            // Скрываем SignatureContainer, если нет подписей для отображения
             SignatureContainer.Visible = !isEditing && signaturesVisible && SignatureContainer.ChildCount > 0;
         }
 
