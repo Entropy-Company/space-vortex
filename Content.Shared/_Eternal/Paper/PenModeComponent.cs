@@ -19,4 +19,4 @@ public sealed partial class PenModeComponent : Component
 
     [DataField, AutoNetworkedField]
     public string StampState = "paper_stamp-trader";
-} 
+}

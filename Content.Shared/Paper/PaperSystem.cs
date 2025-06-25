@@ -17,6 +17,7 @@ using Content.Shared.IdentityManagement;
 using Robust.Shared.Timing;
 using Robust.Shared.Maths;
 using Content.Shared._Eternal.Paper;
+using Robust.Shared.Audio;
 
 namespace Content.Shared.Paper;
 
@@ -132,7 +133,6 @@ public sealed class PaperSystem : EntitySystem
         var editable = (hasWriteIgnoreStamps || entity.Comp.StampedBy.Count == 0) &&
                       (hasWriteIgnoreSigns || entity.Comp.SingBy.Count == 0);
 
-        // Проверяем обычную ручку
         if (TryComp<PenModeComponent>(args.Used, out var penMode))
         {
             if (penMode.Mode == PenMode.Write)
@@ -172,16 +172,7 @@ public sealed class PaperSystem : EntitySystem
             }
             else if (penMode.Mode == PenMode.Sign)
             {
-                var now = _timing.CurTime;
-                if (_penCooldowns.TryGetValue(args.Used, out var lastTime))
-                {
-                    if (now < lastTime + TimeSpan.FromSeconds(1))
-                    {
-                        args.Handled = true;
-                        return;
-                    }
-                }
-                _penCooldowns[args.Used] = now;
+                args.Handled = true;
                 var owner = GetPenHolder(args.Used);
                 var ownerName = owner != null ? Identity.Name(owner.Value, EntityManager) : Loc.GetString("pen-signature-unknown");
                 var info = new StampDisplayInfo
@@ -189,18 +180,23 @@ public sealed class PaperSystem : EntitySystem
                     StampedName = ownerName,
                     StampedColor = penMode.SignatureColor
                 };
-                if (!entity.Comp.SingBy.Contains(info))
+                if (entity.Comp.SingBy.Contains(info))
+                    return;
+                var now = _timing.CurTime;
+                if (_penCooldowns.TryGetValue(args.Used, out var lastTime))
                 {
-                    entity.Comp.SingBy.Add(info);
-                    args.Handled = true;
-                    _popupSystem.PopupEntity(Loc.GetString("pen-signature-success", ("name", ownerName)), entity.Owner, args.User);
-                    UpdateUserInterface(entity);
+                    if (now < lastTime + TimeSpan.FromSeconds(1))
+                        return;
                 }
+                _penCooldowns[args.Used] = now;
+                entity.Comp.SingBy.Add(info);
+                _popupSystem.PopupEntity(Loc.GetString("pen-signature-success", ("name", ownerName)), entity.Owner, args.User);
+                UpdateUserInterface(entity);
+                _audio.PlayPvs(new SoundCollectionSpecifier("PaperScribbles"), entity.Owner);
                 return;
             }
         }
 
-        // Проверяем хамелеон-ручку
         if (TryComp<ChameleonPenComponent>(args.Used, out var chameleonPen))
         {
             if (chameleonPen.Mode == ChameleonPenMode.Write)
@@ -240,44 +236,38 @@ public sealed class PaperSystem : EntitySystem
             }
             else if (chameleonPen.Mode == ChameleonPenMode.Sign)
             {
-                var now = _timing.CurTime;
-                if (_penCooldowns.TryGetValue(args.Used, out var lastTime))
-                {
-                    if (now < lastTime + TimeSpan.FromSeconds(1))
-                    {
-                        args.Handled = true;
-                        return;
-                    }
-                }
-                _penCooldowns[args.Used] = now;
+                args.Handled = true;
                 var owner = GetPenHolder(args.Used);
-
-                // Используем поддельную подпись, если она настроена
                 string ownerName;
                 Color signatureColor;
                 if (!string.IsNullOrEmpty(chameleonPen.ForgedSignatureText))
                 {
                     ownerName = chameleonPen.ForgedSignatureText;
-                    signatureColor = chameleonPen.ForgedSignatureColor ?? chameleonPen.SignatureColor;
+                    signatureColor = chameleonPen.ForgedSignatureColor ?? Color.FromHex("#3166f5");
                 }
                 else
                 {
                     ownerName = owner != null ? Identity.Name(owner.Value, EntityManager) : Loc.GetString("pen-signature-unknown");
-                    signatureColor = chameleonPen.SignatureColor;
+                    signatureColor = chameleonPen.ForgedSignatureColor ?? Color.FromHex("#3166f5");
                 }
-
                 var info = new StampDisplayInfo
                 {
                     StampedName = ownerName,
                     StampedColor = signatureColor
                 };
-                if (!entity.Comp.SingBy.Contains(info))
+                if (entity.Comp.SingBy.Contains(info))
+                    return;
+                var now = _timing.CurTime;
+                if (_penCooldowns.TryGetValue(args.Used, out var lastTime))
                 {
-                    entity.Comp.SingBy.Add(info);
-                    args.Handled = true;
-                    _popupSystem.PopupEntity(Loc.GetString("pen-signature-success", ("name", ownerName)), entity.Owner, args.User);
-                    UpdateUserInterface(entity);
+                    if (now < lastTime + TimeSpan.FromSeconds(1))
+                        return;
                 }
+                _penCooldowns[args.Used] = now;
+                entity.Comp.SingBy.Add(info);
+                _popupSystem.PopupEntity(Loc.GetString("pen-signature-success", ("name", ownerName)), entity.Owner, args.User);
+                UpdateUserInterface(entity);
+                _audio.PlayPvs(new SoundCollectionSpecifier("PaperScribbles"), entity.Owner);
                 return;
             }
         }
