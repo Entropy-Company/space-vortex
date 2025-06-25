@@ -7,6 +7,7 @@ namespace Content.Shared.Paper;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class PaperComponent : Component
 {
+    [AutoNetworkedField]
     public PaperAction Mode;
     [DataField("content"), AutoNetworkedField]
     public string Content { get; set; } = "";
@@ -37,7 +38,7 @@ public sealed partial class PaperComponent : Component
     public string? Sender;
     // Corvax-Next-FaxMark-End
 
-    [DataField("singBy")]
+    [DataField("singBy"), AutoNetworkedField]
     public List<StampDisplayInfo> SingBy { get; set; } = new();
 
     [Serializable, NetSerializable]

@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Maths;
 
 namespace Content.Shared._Eternal.Paper;
 

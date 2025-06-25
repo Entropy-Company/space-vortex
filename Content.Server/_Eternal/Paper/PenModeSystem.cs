@@ -1,6 +1,3 @@
-// Этот файл больше не нужен, функционал перенесён в ChameleonPenSystem
-// Удалите этот файл или оставьте пустым
-
 using Content.Shared.Paper;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
