@@ -125,6 +125,15 @@ public sealed class PaperSystem : EntitySystem
         }
     }
 
+    private static StampDisplayInfo GetStampInfo(StampComponent stamp)
+    {
+        return new StampDisplayInfo
+        {
+            StampedName = stamp.StampedName,
+            StampedColor = stamp.StampedColor
+        };
+    }
+
     private void OnInteractUsing(Entity<PaperComponent> entity, ref InteractUsingEvent args)
     {
         // only allow editing if there are no stamps or when using a cyberpen
@@ -133,6 +142,7 @@ public sealed class PaperSystem : EntitySystem
         var editable = (hasWriteIgnoreStamps || entity.Comp.StampedBy.Count == 0) &&
                       (hasWriteIgnoreSigns || entity.Comp.SingBy.Count == 0);
 
+        // PenModeComponent (обычная ручка)
         if (TryComp<PenModeComponent>(args.Used, out var penMode))
         {
             if (penMode.Mode == PenMode.Write)
@@ -190,13 +200,19 @@ public sealed class PaperSystem : EntitySystem
                 }
                 _penCooldowns[args.Used] = now;
                 entity.Comp.SingBy.Add(info);
-                _popupSystem.PopupEntity(Loc.GetString("pen-signature-success", ("name", ownerName)), entity.Owner, args.User);
+                Dirty(entity);
+                _popupSystem.PopupEntity(
+                    Loc.GetString("pen-signature-success", ("name", ownerName)),
+                    entity.Owner,
+                    Filter.PvsExcept(args.User, entityManager: EntityManager),
+                    false);
                 UpdateUserInterface(entity);
                 _audio.PlayPvs(new SoundCollectionSpecifier("PaperScribbles"), entity.Owner);
                 return;
             }
         }
 
+        // ChameleonPenComponent (хамелеон-ручка)
         if (TryComp<ChameleonPenComponent>(args.Used, out var chameleonPen))
         {
             if (chameleonPen.Mode == ChameleonPenMode.Write)
@@ -265,13 +281,19 @@ public sealed class PaperSystem : EntitySystem
                 }
                 _penCooldowns[args.Used] = now;
                 entity.Comp.SingBy.Add(info);
-                _popupSystem.PopupEntity(Loc.GetString("pen-signature-success", ("name", ownerName)), entity.Owner, args.User);
+                Dirty(entity);
+                _popupSystem.PopupEntity(
+                    Loc.GetString("pen-signature-success", ("name", ownerName)),
+                    entity.Owner,
+                    Filter.PvsExcept(args.User, entityManager: EntityManager),
+                    false);
                 UpdateUserInterface(entity);
                 _audio.PlayPvs(new SoundCollectionSpecifier("PaperScribbles"), entity.Owner);
                 return;
             }
         }
 
+        // Обычные пишущие инструменты
         if (_tagSystem.HasTag(args.Used, WriteTag))
         {
             if (editable)
@@ -305,10 +327,10 @@ public sealed class PaperSystem : EntitySystem
             return;
         }
 
-        // If a stamp, attempt to stamp paper
+        // Штампы
         if (TryComp<StampComponent>(args.Used, out var stampComp) && TryStamp(entity, GetStampInfo(stampComp), stampComp.StampState))
         {
-            // successfully stamped, play popup
+            // успешно поставлен штамп
             var stampPaperOtherMessage = Loc.GetString("paper-component-action-stamp-paper-other",
                     ("user", args.User),
                     ("target", args.Target),
@@ -326,15 +348,6 @@ public sealed class PaperSystem : EntitySystem
             args.Handled = true;
             return;
         }
-    }
-
-    private static StampDisplayInfo GetStampInfo(StampComponent stamp)
-    {
-        return new StampDisplayInfo
-        {
-            StampedName = stamp.StampedName,
-            StampedColor = stamp.StampedColor
-        };
     }
 
     private void OnInputTextMessage(Entity<PaperComponent> entity, ref PaperInputTextMessage args)

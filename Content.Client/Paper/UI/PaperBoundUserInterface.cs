@@ -4,6 +4,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Utility;
 using Content.Shared.Paper;
 using static Content.Shared.Paper.PaperComponent;
+using Robust.Client.GameObjects;
 
 namespace Content.Client.Paper.UI;
 
