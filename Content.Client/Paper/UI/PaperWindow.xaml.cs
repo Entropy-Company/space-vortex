@@ -70,7 +70,8 @@ namespace Content.Client.Paper.UI
         }
 
         // Default signature limit per person (name + color combination)
-        private int _signLimit = 1;
+        private int _signRepeatLimit = 1;
+        private int _signLimit = -1; // -1 means no limit
 
         public PaperWindow()
         {
@@ -285,7 +286,22 @@ namespace Content.Client.Paper.UI
                 };
             }
 
-            // Check for signature limit tag
+            // Check for signature repeat limit tag (old sign_limit functionality)
+            var signRepeatLimitMatch = Regex.Match(processedText, @"<sign_repeat_limit\s*=\s*(\d+)>", RegexOptions.IgnoreCase);
+            if (signRepeatLimitMatch.Success)
+            {
+                if (int.TryParse(signRepeatLimitMatch.Groups[1].Value, out int limit) && limit > 0)
+                {
+                    _signRepeatLimit = limit;
+                }
+                processedText = Regex.Replace(processedText, @"<sign_repeat_limit\s*=\s*(\d+)>", "", RegexOptions.IgnoreCase);
+            }
+            else
+            {
+                _signRepeatLimit = 1; // Reset to default if no tag found
+            }
+
+            // Check for total signature limit tag
             var signLimitMatch = Regex.Match(processedText, @"<sign_limit\s*=\s*(\d+)>", RegexOptions.IgnoreCase);
             if (signLimitMatch.Success)
             {
@@ -297,7 +313,7 @@ namespace Content.Client.Paper.UI
             }
             else
             {
-                _signLimit = 1; // Reset to default if no tag found
+                _signLimit = -1; // Reset to no limit if no tag found
             }
 
             // Remove old sign_visible tag
@@ -352,7 +368,7 @@ namespace Content.Client.Paper.UI
             // Process signatures
             SignatureContainer.RemoveAllChildren();
 
-            // Count signatures by name and color to respect the limit
+            // Count signatures by name and color to respect the repeat limit
             var signatureCounts = new Dictionary<string, int>();
             for (int s = 0; s < state.SingBy.Count; s++)
             {
@@ -360,11 +376,18 @@ namespace Content.Client.Paper.UI
                 var key = $"{signature.StampedName}|{signature.StampedColor.ToHexNoAlpha()}";
                 var currentCount = signatureCounts.GetValueOrDefault(key, 0);
 
-                // Only count if we haven't reached the limit for this signature type
-                if (currentCount < _signLimit)
+                // Only count if we haven't reached the repeat limit for this signature type
+                if (currentCount < _signRepeatLimit)
                 {
                     signatureCounts[key] = currentCount + 1;
                 }
+            }
+
+            // Check total signature limit
+            var totalSignatures = 0;
+            if (_signLimit > 0)
+            {
+                totalSignatures = state.SingBy.Count;
             }
 
             switch (signatureStyle)
@@ -376,7 +399,7 @@ namespace Content.Client.Paper.UI
                         var key = $"{signature.StampedName}|{signature.StampedColor.ToHexNoAlpha()}";
                         var currentCount = signatureCounts.GetValueOrDefault(key, 0);
 
-                        // Only show if we haven't reached the limit for this signature type
+                        // Only show if we haven't reached the repeat limit for this signature type
                         if (currentCount > 0)
                         {
                             StampDisplay.AddStamp(new StampWidget { StampInfo = signature });
@@ -391,7 +414,7 @@ namespace Content.Client.Paper.UI
                         var key = $"{signature.StampedName}|{signature.StampedColor.ToHexNoAlpha()}";
                         var currentCount = signatureCounts.GetValueOrDefault(key, 0);
 
-                        // Only show if we haven't reached the limit for this signature type
+                        // Only show if we haven't reached the repeat limit for this signature type
                         if (currentCount > 0)
                         {
                             var label = new Label

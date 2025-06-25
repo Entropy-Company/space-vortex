@@ -18,6 +18,7 @@ using Robust.Shared.Timing;
 using Robust.Shared.Maths;
 using Content.Shared._Eternal.Paper;
 using Robust.Shared.Audio;
+using System.Text.RegularExpressions;
 
 namespace Content.Shared.Paper;
 
@@ -202,10 +203,12 @@ public sealed class PaperSystem : EntitySystem
                     StampedColor = penMode.SignatureColor
                 };
 
-                // Check signature limit
+                // Check signature limits
+                var signRepeatLimit = GetSignatureRepeatLimit(entity.Comp.Content);
                 var signLimit = GetSignatureLimit(entity.Comp.Content);
-                var existingCount = CountExistingSignatures(entity, ownerName, penMode.SignatureColor);
-                if (existingCount >= signLimit)
+
+                // First check total signature limit
+                if (signLimit > 0 && entity.Comp.SingBy.Count >= signLimit)
                 {
                     // Check error cooldown to prevent spam
                     var now = _timing.CurTime;
@@ -217,7 +220,26 @@ public sealed class PaperSystem : EntitySystem
                     _errorCooldowns[args.User] = now;
 
                     _popupSystem.PopupEntity(
-                        Loc.GetString("pen-signature-limit-reached", ("name", ownerName), ("limit", signLimit)),
+                        Loc.GetString("pen-signature-total-limit-reached", ("limit", signLimit)),
+                        entity.Owner);
+                    return;
+                }
+
+                // Then check repeat limit for this specific signature
+                var existingCount = CountExistingSignatures(entity, ownerName, penMode.SignatureColor);
+                if (existingCount >= signRepeatLimit)
+                {
+                    // Check error cooldown to prevent spam
+                    var now = _timing.CurTime;
+                    if (_errorCooldowns.TryGetValue(args.User, out var lastErrorTime))
+                    {
+                        if (now < lastErrorTime + TimeSpan.FromSeconds(2))
+                            return;
+                    }
+                    _errorCooldowns[args.User] = now;
+
+                    _popupSystem.PopupEntity(
+                        Loc.GetString("pen-signature-repeat-limit-reached", ("name", ownerName), ("limit", signRepeatLimit)),
                         entity.Owner);
                     return;
                 }
@@ -302,10 +324,12 @@ public sealed class PaperSystem : EntitySystem
                     StampedColor = signatureColor
                 };
 
-                // Check signature limit
+                // Check signature limits
+                var signRepeatLimit = GetSignatureRepeatLimit(entity.Comp.Content);
                 var signLimit = GetSignatureLimit(entity.Comp.Content);
-                var existingCount = CountExistingSignatures(entity, ownerName, signatureColor);
-                if (existingCount >= signLimit)
+
+                // First check total signature limit
+                if (signLimit > 0 && entity.Comp.SingBy.Count >= signLimit)
                 {
                     // Check error cooldown to prevent spam
                     var now = _timing.CurTime;
@@ -317,7 +341,26 @@ public sealed class PaperSystem : EntitySystem
                     _errorCooldowns[args.User] = now;
 
                     _popupSystem.PopupEntity(
-                        Loc.GetString("pen-signature-limit-reached", ("name", ownerName), ("limit", signLimit)),
+                        Loc.GetString("pen-signature-total-limit-reached", ("limit", signLimit)),
+                        entity.Owner);
+                    return;
+                }
+
+                // Then check repeat limit for this specific signature
+                var existingCount = CountExistingSignatures(entity, ownerName, signatureColor);
+                if (existingCount >= signRepeatLimit)
+                {
+                    // Check error cooldown to prevent spam
+                    var now = _timing.CurTime;
+                    if (_errorCooldowns.TryGetValue(args.User, out var lastErrorTime))
+                    {
+                        if (now < lastErrorTime + TimeSpan.FromSeconds(2))
+                            return;
+                    }
+                    _errorCooldowns[args.User] = now;
+
+                    _popupSystem.PopupEntity(
+                        Loc.GetString("pen-signature-repeat-limit-reached", ("name", ownerName), ("limit", signRepeatLimit)),
                         entity.Owner);
                     return;
                 }
@@ -526,19 +569,32 @@ public sealed class PaperSystem : EntitySystem
         _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.SingBy, entity.Comp.Mode));
     }
 
-
     /// <summary>
-    /// Parses the sign_limit tag from paper content and returns the limit value.
+    /// Parses the sign_repeat_limit tag from paper content and returns the limit value.
     /// Default is 1 if no tag is found or invalid value.
     /// </summary>
-    private int GetSignatureLimit(string content)
+    private int GetSignatureRepeatLimit(string content)
     {
-        var signLimitMatch = System.Text.RegularExpressions.Regex.Match(content, @"<sign_limit\s*=\s*(\d+)>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-        if (signLimitMatch.Success && int.TryParse(signLimitMatch.Groups[1].Value, out int limit) && limit > 0)
+        var match = Regex.Match(content, @"<sign_repeat_limit\s*=\s*(\d+)>", RegexOptions.IgnoreCase);
+        if (match.Success && int.TryParse(match.Groups[1].Value, out int limit) && limit > 0)
         {
             return limit;
         }
         return 1; // Default limit
+    }
+
+    /// <summary>
+    /// Parses the sign_limit tag from paper content and returns the limit value.
+    /// Default is -1 if no tag is found or invalid value.
+    /// </summary>
+    private int GetSignatureLimit(string content)
+    {
+        var match = Regex.Match(content, @"<sign_limit\s*=\s*(\d+)>", RegexOptions.IgnoreCase);
+        if (match.Success && int.TryParse(match.Groups[1].Value, out int limit) && limit > 0)
+        {
+            return limit;
+        }
+        return -1; // No limit
     }
 
     /// <summary>
