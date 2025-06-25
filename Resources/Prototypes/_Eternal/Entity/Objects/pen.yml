@@ -32,7 +32,7 @@
   - type: ChameleonPen
     signatureColor: "#3166f5"
     stampState: "paper_stamp-trader"
-    forgedSignatureColor: "#ff0000"
+    forgedSignatureColor: "#121115"
     forgedSignatureText: "Неизвестно"
   - type: UserInterface
     interfaces:

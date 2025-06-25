@@ -27,7 +27,7 @@
   - type: UseDelay
     delay: 1.5
   - type: PenMode
-    signatureColor: "#3166f5"
+    signatureColor: "#121115"
     stampState: "paper_stamp-trader"
 
 - type: entity
@@ -65,6 +65,8 @@
     state: luxury_pen
   - type: Item
     heldPrefix: luxury_pen
+  - type: PenMode
+    signatureColor: "#f3bd27"
 
 - type: entity
   id: BaseAdvancedPen
@@ -103,6 +105,9 @@
     heldPrefix: overpriced_pen
   - type: StaticPrice
     price: 500
+  - type: PenMode
+    signatureColor: "#260202"  
+  
 - type: entity
   name: CentComm pen
   parent: [BaseAdvancedPen, BaseCentcommContraband]
@@ -113,6 +118,8 @@
     state: pen_centcom
   - type: Item
     heldPrefix: pen_centcom
+  - type: PenMode
+    signatureColor: "#1d7a1d"
 
 - type: entity
   name: captain's fountain pen
@@ -128,6 +135,8 @@
     - Pen
     - Write
     - WriteIgnoreSigns
+  - type: PenMode
+    signatureColor: "#3166f5"
 
 - type: entity
   name: hop's fountain pen
@@ -143,6 +152,8 @@
     - Pen
     - Write
     - WriteIgnoreSigns
+  - type: PenMode
+    signatureColor: "#319cf5"
 
 - type: entity
   name: wizard's magical pen
@@ -158,3 +169,5 @@
     - Pen
     - Write
     - WriteIgnoreSigns
+  - type: PenMode
+    signatureColor: "#7f53e6"
