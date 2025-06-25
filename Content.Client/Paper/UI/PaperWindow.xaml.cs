@@ -69,6 +69,9 @@ namespace Content.Client.Paper.UI
             }
         }
 
+        // Default signature limit per person (name + color combination)
+        private int _signLimit = 1;
+
         public PaperWindow()
         {
             IoCManager.InjectDependencies(this);
@@ -282,6 +285,21 @@ namespace Content.Client.Paper.UI
                 };
             }
 
+            // Check for signature limit tag
+            var signLimitMatch = Regex.Match(processedText, @"<sign_limit\s*=\s*(\d+)>", RegexOptions.IgnoreCase);
+            if (signLimitMatch.Success)
+            {
+                if (int.TryParse(signLimitMatch.Groups[1].Value, out int limit) && limit > 0)
+                {
+                    _signLimit = limit;
+                }
+                processedText = Regex.Replace(processedText, @"<sign_limit\s*=\s*(\d+)>", "", RegexOptions.IgnoreCase);
+            }
+            else
+            {
+                _signLimit = 1; // Reset to default if no tag found
+            }
+
             // Remove old sign_visible tag
             processedText = Regex.Replace(processedText, @"<sign_visible\s*=\s*(true|false)>", "", RegexOptions.IgnoreCase);
 
@@ -289,11 +307,11 @@ namespace Content.Client.Paper.UI
             processedText = Regex.Replace(processedText, @"<sign=(\d+)>", match =>
             {
                 if (!int.TryParse(match.Groups[1].Value, out int index))
-                    return "[color=gray][bold]___________[/bold]";
+                    return "[color=black][bold]___________[/bold][/color]";
 
                 index--; // Convert to 0-based index
                 if (index < 0 || index >= state.SingBy.Count)
-                    return "[color=gray][bold]___________[/bold]";
+                    return "[color=black][bold]___________[/bold][/color]";
 
                 var sig = state.SingBy[index];
                 var colorHex = sig.StampedColor.ToHexNoAlpha();
@@ -334,23 +352,19 @@ namespace Content.Client.Paper.UI
             // Process signatures
             SignatureContainer.RemoveAllChildren();
 
-            var usedSignatures = new HashSet<int>();
-            int pos = 0;
-            while (true)
+            // Count signatures by name and color to respect the limit
+            var signatureCounts = new Dictionary<string, int>();
+            for (int s = 0; s < state.SingBy.Count; s++)
             {
-                int start = state.Text.IndexOf("<sign=", pos);
-                if (start == -1) break;
+                var signature = state.SingBy[s];
+                var key = $"{signature.StampedName}|{signature.StampedColor.ToHexNoAlpha()}";
+                var currentCount = signatureCounts.GetValueOrDefault(key, 0);
 
-                int idxStart = start + 6;
-                int idxEnd = state.Text.IndexOf('>', idxStart);
-                if (idxEnd == -1) break;
-
-                if (int.TryParse(state.Text.Substring(idxStart, idxEnd - idxStart), out int idx) &&
-                    idx > 0 && idx <= state.SingBy.Count)
+                // Only count if we haven't reached the limit for this signature type
+                if (currentCount < _signLimit)
                 {
-                    usedSignatures.Add(idx - 1);
+                    signatureCounts[key] = currentCount + 1;
                 }
-                pos = idxEnd + 1;
             }
 
             switch (signatureStyle)
@@ -358,19 +372,28 @@ namespace Content.Client.Paper.UI
                 case SignatureDisplayStyle.Classic:
                     for (int s = 0; s < state.SingBy.Count; s++)
                     {
-                        if (!usedSignatures.Contains(s))
+                        var signature = state.SingBy[s];
+                        var key = $"{signature.StampedName}|{signature.StampedColor.ToHexNoAlpha()}";
+                        var currentCount = signatureCounts.GetValueOrDefault(key, 0);
+
+                        // Only show if we haven't reached the limit for this signature type
+                        if (currentCount > 0)
                         {
-                            var signature = state.SingBy[s];
                             StampDisplay.AddStamp(new StampWidget { StampInfo = signature });
+                            signatureCounts[key] = currentCount - 1;
                         }
                     }
                     break;
                 case SignatureDisplayStyle.List:
                     for (int s = 0; s < state.SingBy.Count; s++)
                     {
-                        if (!usedSignatures.Contains(s))
+                        var signature = state.SingBy[s];
+                        var key = $"{signature.StampedName}|{signature.StampedColor.ToHexNoAlpha()}";
+                        var currentCount = signatureCounts.GetValueOrDefault(key, 0);
+
+                        // Only show if we haven't reached the limit for this signature type
+                        if (currentCount > 0)
                         {
-                            var signature = state.SingBy[s];
                             var label = new Label
                             {
                                 Text = signature.StampedName.Split('|')[0],
@@ -378,6 +401,7 @@ namespace Content.Client.Paper.UI
                                 Margin = new Thickness(8, 2, 8, 2),
                             };
                             SignatureContainer.AddChild(label);
+                            signatureCounts[key] = currentCount - 1;
                         }
                     }
                     break;
