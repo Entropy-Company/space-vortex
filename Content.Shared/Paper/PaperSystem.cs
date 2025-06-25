@@ -41,6 +41,7 @@ public sealed class PaperSystem : EntitySystem
 
     private EntityQuery<PaperComponent> _paperQuery;
     private Dictionary<EntityUid, TimeSpan> _penCooldowns = new();
+    private Dictionary<EntityUid, TimeSpan> _errorCooldowns = new();
 
     public override void Initialize()
     {
@@ -58,6 +59,17 @@ public sealed class PaperSystem : EntitySystem
         SubscribeLocalEvent<ActivateOnPaperOpenedComponent, PaperWriteEvent>(OnPaperWrite);
 
         _paperQuery = GetEntityQuery<PaperComponent>();
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        // Clean up old cooldown entries every 30 seconds
+        if (_timing.CurTime.TotalSeconds % 30 < frameTime)
+        {
+            CleanupCooldowns();
+        }
     }
 
     private void OnMapInit(Entity<PaperComponent> entity, ref MapInitEvent args)
@@ -183,29 +195,48 @@ public sealed class PaperSystem : EntitySystem
             else if (penMode.Mode == PenMode.Sign)
             {
                 args.Handled = true;
-                var owner = GetPenHolder(args.Used);
-                var ownerName = owner != null ? Identity.Name(owner.Value, EntityManager) : Loc.GetString("pen-signature-unknown");
+                var ownerName = Identity.Name(args.User, EntityManager);
                 var info = new StampDisplayInfo
                 {
                     StampedName = ownerName,
                     StampedColor = penMode.SignatureColor
                 };
-                if (entity.Comp.SingBy.Contains(info))
+
+                // Check signature limit
+                var signLimit = GetSignatureLimit(entity.Comp.Content);
+                var existingCount = CountExistingSignatures(entity, ownerName, penMode.SignatureColor);
+                if (existingCount >= signLimit)
+                {
+                    // Check error cooldown to prevent spam
+                    var now = _timing.CurTime;
+                    if (_errorCooldowns.TryGetValue(args.User, out var lastErrorTime))
+                    {
+                        if (now < lastErrorTime + TimeSpan.FromSeconds(2))
+                            return;
+                    }
+                    _errorCooldowns[args.User] = now;
+
+                    _popupSystem.PopupEntity(
+                        Loc.GetString("pen-signature-limit-reached", ("name", ownerName), ("limit", signLimit)),
+                        entity.Owner);
                     return;
-                var now = _timing.CurTime;
+                }
+
+                var now2 = _timing.CurTime;
                 if (_penCooldowns.TryGetValue(args.Used, out var lastTime))
                 {
-                    if (now < lastTime + TimeSpan.FromSeconds(1))
+                    if (now2 < lastTime + TimeSpan.FromSeconds(1))
                         return;
                 }
-                _penCooldowns[args.Used] = now;
+                _penCooldowns[args.Used] = now2;
                 entity.Comp.SingBy.Add(info);
                 Dirty(entity);
+
+                // Show success message to everyone (including the signer)
                 _popupSystem.PopupEntity(
                     Loc.GetString("pen-signature-success", ("name", ownerName)),
-                    entity.Owner,
-                    Filter.PvsExcept(args.User, entityManager: EntityManager),
-                    false);
+                    entity.Owner);
+
                 UpdateUserInterface(entity);
                 _audio.PlayPvs(new SoundCollectionSpecifier("PaperScribbles"), entity.Owner);
                 return;
@@ -253,7 +284,6 @@ public sealed class PaperSystem : EntitySystem
             else if (chameleonPen.Mode == ChameleonPenMode.Sign)
             {
                 args.Handled = true;
-                var owner = GetPenHolder(args.Used);
                 string ownerName;
                 Color signatureColor;
                 if (!string.IsNullOrEmpty(chameleonPen.ForgedSignatureText))
@@ -263,7 +293,7 @@ public sealed class PaperSystem : EntitySystem
                 }
                 else
                 {
-                    ownerName = owner != null ? Identity.Name(owner.Value, EntityManager) : Loc.GetString("pen-signature-unknown");
+                    ownerName = Identity.Name(args.User, EntityManager);
                     signatureColor = chameleonPen.ForgedSignatureColor ?? Color.FromHex("#3166f5");
                 }
                 var info = new StampDisplayInfo
@@ -271,22 +301,42 @@ public sealed class PaperSystem : EntitySystem
                     StampedName = ownerName,
                     StampedColor = signatureColor
                 };
-                if (entity.Comp.SingBy.Contains(info))
+
+                // Check signature limit
+                var signLimit = GetSignatureLimit(entity.Comp.Content);
+                var existingCount = CountExistingSignatures(entity, ownerName, signatureColor);
+                if (existingCount >= signLimit)
+                {
+                    // Check error cooldown to prevent spam
+                    var now = _timing.CurTime;
+                    if (_errorCooldowns.TryGetValue(args.User, out var lastErrorTime))
+                    {
+                        if (now < lastErrorTime + TimeSpan.FromSeconds(2))
+                            return;
+                    }
+                    _errorCooldowns[args.User] = now;
+
+                    _popupSystem.PopupEntity(
+                        Loc.GetString("pen-signature-limit-reached", ("name", ownerName), ("limit", signLimit)),
+                        entity.Owner);
                     return;
-                var now = _timing.CurTime;
+                }
+
+                var now2 = _timing.CurTime;
                 if (_penCooldowns.TryGetValue(args.Used, out var lastTime))
                 {
-                    if (now < lastTime + TimeSpan.FromSeconds(1))
+                    if (now2 < lastTime + TimeSpan.FromSeconds(1))
                         return;
                 }
-                _penCooldowns[args.Used] = now;
+                _penCooldowns[args.Used] = now2;
                 entity.Comp.SingBy.Add(info);
                 Dirty(entity);
+
+                // Show success message to everyone (including the signer)
                 _popupSystem.PopupEntity(
                     Loc.GetString("pen-signature-success", ("name", ownerName)),
-                    entity.Owner,
-                    Filter.PvsExcept(args.User, entityManager: EntityManager),
-                    false);
+                    entity.Owner);
+
                 UpdateUserInterface(entity);
                 _audio.PlayPvs(new SoundCollectionSpecifier("PaperScribbles"), entity.Owner);
                 return;
@@ -476,15 +526,51 @@ public sealed class PaperSystem : EntitySystem
         _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.SingBy, entity.Comp.Mode));
     }
 
-    // В PaperSystem добавить метод для поиска владельца ручки
-    private EntityUid? GetPenHolder(EntityUid pen)
+
+    /// <summary>
+    /// Parses the sign_limit tag from paper content and returns the limit value.
+    /// Default is 1 if no tag is found or invalid value.
+    /// </summary>
+    private int GetSignatureLimit(string content)
     {
-        foreach (var hand in EntityManager.EntityQuery<HandsComponent>())
+        var signLimitMatch = System.Text.RegularExpressions.Regex.Match(content, @"<sign_limit\s*=\s*(\d+)>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        if (signLimitMatch.Success && int.TryParse(signLimitMatch.Groups[1].Value, out int limit) && limit > 0)
         {
-            if (hand.Hands.Any(h => h.Value.HeldEntity == pen))
-                return hand.Owner;
+            return limit;
         }
-        return null;
+        return 1; // Default limit
+    }
+
+    /// <summary>
+    /// Counts how many signatures with the same name and color already exist on the paper.
+    /// </summary>
+    private int CountExistingSignatures(Entity<PaperComponent> entity, string signatureName, Color signatureColor)
+    {
+        var key = $"{signatureName}|{signatureColor.ToHexNoAlpha()}";
+        return entity.Comp.SingBy.Count(sig => $"{sig.StampedName}|{sig.StampedColor.ToHexNoAlpha()}" == key);
+    }
+
+    /// <summary>
+    /// Cleans up old cooldown entries to prevent memory leaks.
+    /// </summary>
+    private void CleanupCooldowns()
+    {
+        var now = _timing.CurTime;
+        var cutoffTime = now - TimeSpan.FromMinutes(5);
+
+        // Clean up pen cooldowns
+        var expiredPenCooldowns = _penCooldowns.Where(kvp => kvp.Value < cutoffTime).ToList();
+        foreach (var kvp in expiredPenCooldowns)
+        {
+            _penCooldowns.Remove(kvp.Key);
+        }
+
+        // Clean up error cooldowns
+        var expiredErrorCooldowns = _errorCooldowns.Where(kvp => kvp.Value < cutoffTime).ToList();
+        foreach (var kvp in expiredErrorCooldowns)
+        {
+            _errorCooldowns.Remove(kvp.Key);
+        }
     }
 }
 
