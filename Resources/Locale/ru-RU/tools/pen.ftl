@@ -6,6 +6,6 @@ pen-signature-success = { $name } поставил подпись.
 
 chameleon-pen-verb-forge = Подделать подпись
 
-ent-ChameleonPen = Ручка
+ent-ChameleonPen = ручка
     .desc = Ручка с чёрными чернилами.
-    .suffix = Хамелион
+    .suffix = Хамелеон

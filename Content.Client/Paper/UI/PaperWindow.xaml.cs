@@ -268,9 +268,9 @@ namespace Content.Client.Paper.UI
             // --- ВСТАВКА ПОДПИСЕЙ ---
             var processedText = PaperSignatureHelper.InsertSignatures(state.Text, state.SingBy);
             processedText = PaperSignatureHelper.RemoveSignVisibleTag(processedText);
+            var signatureStyle = PaperSignatureHelper.GetSignatureDisplayStyle(ref processedText);
             msg.AddMarkupPermissive(processedText);
             // --- КОНЕЦ ВСТАВКИ ---
-
             msg.AddMarkupPermissive("\r\n");
 
             // --- Кастомные подписи ---
@@ -299,8 +299,7 @@ namespace Content.Client.Paper.UI
 
             SignatureContainer.RemoveAllChildren();
 
-            bool signaturesVisible = PaperSignatureHelper.AreSignaturesVisible(state.Text);
-
+            // --- Новый стиль отображения подписей без <sign=index> ---
             var usedSignatures = new HashSet<int>();
             int pos = 0;
             while (true)
@@ -314,21 +313,43 @@ namespace Content.Client.Paper.UI
                     usedSignatures.Add(idx - 1);
                 pos = idxEnd + 1;
             }
-            for (int s = 0; s < state.SingBy.Count; s++)
+
+            switch (signatureStyle)
             {
-                if (!usedSignatures.Contains(s))
-                {
-                    var signature = state.SingBy[s];
-                    var label = new Label
+                case PaperSignatureHelper.SignatureDisplayStyle.Classic:
+                    // Неиспользованные подписи отображаем как печати (StampWidget) в StampDisplay
+                    for (int s = 0; s < state.SingBy.Count; s++)
                     {
-                        Text = signature.StampedName.Split('|')[0],
-                        FontColorOverride = signature.StampedColor,
-                        Margin = new Thickness(8, 2, 8, 2),
-                    };
-                    SignatureContainer.AddChild(label);
-                }
+                        if (!usedSignatures.Contains(s))
+                        {
+                            var signature = state.SingBy[s];
+                            StampDisplay.AddStamp(new StampWidget { StampInfo = signature });
+                        }
+                    }
+                    break;
+                case PaperSignatureHelper.SignatureDisplayStyle.List:
+                    // Неиспользованные подписи отображаем списком (Label) в SignatureContainer
+                    for (int s = 0; s < state.SingBy.Count; s++)
+                    {
+                        if (!usedSignatures.Contains(s))
+                        {
+                            var signature = state.SingBy[s];
+                            var label = new Label
+                            {
+                                Text = signature.StampedName.Split('|')[0],
+                                FontColorOverride = signature.StampedColor,
+                                Margin = new Thickness(8, 2, 8, 2),
+                            };
+                            SignatureContainer.AddChild(label);
+                        }
+                    }
+                    break;
+                case PaperSignatureHelper.SignatureDisplayStyle.Disable:
+                    // Не отображаем подписи вовсе
+                    break;
             }
-            SignatureContainer.Visible = !isEditing && signaturesVisible && SignatureContainer.ChildCount > 0;
+            // SignatureContainer.Visible только если стиль List и есть подписи
+            SignatureContainer.Visible = !isEditing && signatureStyle == PaperSignatureHelper.SignatureDisplayStyle.List && SignatureContainer.ChildCount > 0;
         }
 
         /// <summary>
@@ -396,6 +417,32 @@ namespace Content.Client.Paper.UI
 
         public static class PaperSignatureHelper
         {
+            public enum SignatureDisplayStyle
+            {
+                Classic,
+                List,
+                Disable
+            }
+
+            public static SignatureDisplayStyle GetSignatureDisplayStyle(ref string text)
+            {
+                var match = Regex.Match(text, @"<sign_style\s*=\s*(classic|list|disable)>", RegexOptions.IgnoreCase);
+                if (match.Success)
+                {
+                    var style = match.Groups[1].Value.ToLower();
+                    text = Regex.Replace(text, @"<sign_style\s*=\s*(classic|list|disable)>", "", RegexOptions.IgnoreCase);
+                    return style switch
+                    {
+                        "list" => SignatureDisplayStyle.List,
+                        "disable" => SignatureDisplayStyle.Disable,
+                        _ => SignatureDisplayStyle.Classic
+                    };
+                }
+                // Удаляем старый тег sign_visible, если он есть
+                text = Regex.Replace(text, @"<sign_visible\s*=\s*(true|false)>", "", RegexOptions.IgnoreCase);
+                return SignatureDisplayStyle.Classic;
+            }
+
             public static string InsertSignatures(string text, IReadOnlyList<StampDisplayInfo> signatures)
             {
                 return Regex.Replace(text, @"<sign=(\d+)>", match =>
