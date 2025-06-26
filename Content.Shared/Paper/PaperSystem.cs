@@ -131,14 +131,15 @@ public sealed class PaperSystem : EntitySystem
                 );
             }
 
-            // Выводим подписи (SingBy)
             if (entity.Comp.SingBy.Count > 0)
             {
                 if (!EntityManager.TryGetComponent(entity.Owner, out MetaDataComponent? meta))
                     return;
                 var paperName = Loc.GetString(meta.EntityName);
-                var names = entity.Comp.SingBy.Select(s => Loc.GetString(s.StampedName));
-                var commaSeparated = string.Join(", ", names);
+                var grouped = entity.Comp.SingBy
+                    .GroupBy(s => (Loc.GetString(s.StampedName), s.StampedColor.ToHexNoAlpha()))
+                    .Select(g => g.Count() > 1 ? $"{g.Key.Item1} x{g.Count()}" : g.Key.Item1);
+                var commaSeparated = string.Join(", ", grouped);
                 args.PushMarkup($"На {paperName} имеются следующие подписи: {commaSeparated}");
             }
 

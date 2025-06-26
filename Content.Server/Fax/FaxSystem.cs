@@ -301,8 +301,9 @@ public sealed class FaxSystem : EntitySystem
                     args.Data.TryGetValue(FaxConstants.FaxPaperPrototypeData, out string? prototypeId);
                     args.Data.TryGetValue(FaxConstants.FaxPaperLockedData, out bool? locked);
                     args.Data.TryGetValue(FaxConstants.FaxPaperSenderData, out string? sender);
+                    args.Data.TryGetValue("fax_data_sing_by", out List<StampDisplayInfo>? singBy);
 
-                    var printout = new FaxPrintout(content, name, label, prototypeId, stampState, stampedBy, locked ?? false, sender);
+                    var printout = new FaxPrintout(content, name, label, prototypeId, stampState, stampedBy, locked ?? false, sender, singBy);
                     Receive(uid, printout, args.SenderAddress);
 
                     break;
@@ -475,7 +476,9 @@ public sealed class FaxSystem : EntitySystem
                                        metadata.EntityPrototype?.ID ?? component.PrintPaperId,
                                        paper.StampState,
                                        paper.StampedBy,
-                                       paper.EditingDisabled);
+                                       paper.EditingDisabled,
+                                       null,
+                                       paper.SingBy);
 
         component.PrintingQueue.Enqueue(printout);
         component.SendTimeoutRemaining += component.SendTimeout;
@@ -546,6 +549,10 @@ public sealed class FaxSystem : EntitySystem
             payload[FaxConstants.FaxPaperStampStateData] = paper.StampState;
             payload[FaxConstants.FaxPaperStampedByData] = paper.StampedBy;
         }
+        if (paper.SingBy != null && paper.SingBy.Count > 0)
+        {
+            payload["fax_data_sing_by"] = paper.SingBy;
+        }
 
         _deviceNetworkSystem.QueuePacket(uid, component.DestinationFaxAddress, payload);
 
@@ -609,7 +616,11 @@ public sealed class FaxSystem : EntitySystem
                     _paperSystem.TryStamp((printed, paper), stamp, printout.StampState);
                 }
             }
-
+            // Apply signatures
+            if (printout.SingBy != null && printout.SingBy.Count > 0)
+            {
+                paper.SingBy = new List<StampDisplayInfo>(printout.SingBy);
+            }
             paper.EditingDisabled = printout.Locked;
             paper.Sender = printout.Sender; // Corvax-Next-FaxMark
         }
