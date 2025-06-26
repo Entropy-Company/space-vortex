@@ -126,5 +126,10 @@
   kind: source
   path: "/Textures/Shaders/phasing.swsl"
   params:
-    phaseColor: 0.5,0.8,1.0
+    bandMin: 3.0
+    bandMax: 8.0
+    animationSpeed: 1.1
     distortionStrength: 1.0
+    glitchFrequency: 0.7
+    bandSplitStrength: 0.3
+    bandSplitFrequency: 0.85

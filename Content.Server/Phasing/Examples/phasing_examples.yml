@@ -1,0 +1,61 @@
+# Примеры использования PhasingComponent с различными настройками
+
+# Легкий эффект фазирования
+- type: entity
+  id: PhasingLight
+  name: "Light Phasing Effect"
+  components:
+    - type: Phasing
+      enabled: true
+      animationSpeed: 0.5
+      distortionStrength: 0.5
+      bandMin: 2.0
+      bandMax: 4.0
+      glitchFrequency: 0.3
+      bandSplitStrength: 0.1
+      bandSplitFrequency: 0.6
+
+# Сильный эффект фазирования
+- type: entity
+  id: PhasingStrong
+  name: "Strong Phasing Effect"
+  components:
+    - type: Phasing
+      enabled: true
+      animationSpeed: 2.0
+      distortionStrength: 2.0
+      bandMin: 5.0
+      bandMax: 12.0
+      glitchFrequency: 0.9
+      bandSplitStrength: 0.8
+      bandSplitFrequency: 0.95
+
+# Быстрый хаотичный эффект
+- type: entity
+  id: PhasingChaotic
+  name: "Chaotic Phasing Effect"
+  components:
+    - type: Phasing
+      enabled: true
+      animationSpeed: 3.0
+      distortionStrength: 1.5
+      bandMin: 8.0
+      bandMax: 15.0
+      glitchFrequency: 0.8
+      bandSplitStrength: 0.6
+      bandSplitFrequency: 0.9
+
+# Медленный стабильный эффект
+- type: entity
+  id: PhasingStable
+  name: "Stable Phasing Effect"
+  components:
+    - type: Phasing
+      enabled: true
+      animationSpeed: 0.3
+      distortionStrength: 0.8
+      bandMin: 3.0
+      bandMax: 6.0
+      glitchFrequency: 0.4
+      bandSplitStrength: 0.2
+      bandSplitFrequency: 0.7
