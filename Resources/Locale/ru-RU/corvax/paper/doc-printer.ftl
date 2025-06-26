@@ -22,8 +22,11 @@ doc-text-printer-report-station =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-report-on-elimination-of-violations =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -47,8 +50,11 @@ doc-text-printer-report-on-elimination-of-violations =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-report-department =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -72,8 +78,11 @@ doc-text-printer-report-department =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-report-employee-performance =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -93,8 +102,11 @@ doc-text-printer-report-employee-performance =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-report-on-the-chapters-meeting =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -123,8 +135,11 @@ doc-text-printer-report-on-the-chapters-meeting =
      Решение Собрания Глав:
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-internal-affairs-agents-report =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -145,8 +160,11 @@ doc-text-printer-internal-affairs-agents-report =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-condition-report =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -170,8 +188,11 @@ doc-text-printer-condition-report =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-Report-study-object =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -193,8 +214,11 @@ doc-text-printer-Report-study-object =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-experiment-report =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -224,8 +248,11 @@ doc-text-printer-experiment-report =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-disposal-report =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -245,8 +272,11 @@ doc-text-printer-disposal-report =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-application-appointment-interim =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -267,8 +297,11 @@ doc-text-printer-application-appointment-interim =
     По прибытии Главы отдела/Капитана с Центрального Командования обязуюсь сдать повышенный доступ, особо ценные предметы и снаряжение.
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-application-employment =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -287,8 +320,11 @@ doc-text-printer-application-employment =
     Обязуюсь следовать Стандартным Рабочим Процедурам отдела. Обязуюсь сдать рабочее снаряжение и экипировку отдела при переводе.
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-letter-resignation =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -307,8 +343,11 @@ doc-text-printer-letter-resignation =
     Обязуюсь заплатить штраф, установленный условиями расторжения срочного/бессрочного контракта, на станции Центрального Командования.
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-application-access =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -329,8 +368,11 @@ doc-text-printer-application-access =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-application-equipment =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -351,8 +393,11 @@ doc-text-printer-application-equipment =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-appeal =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -374,8 +419,11 @@ doc-text-printer-appeal =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-evacuation-shuttle-request =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -395,8 +443,11 @@ doc-text-printer-evacuation-shuttle-request =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-shuttle-registration-request =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -422,8 +473,11 @@ doc-text-printer-shuttle-registration-request =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-request-call-members-central-committee-dso =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -444,8 +498,11 @@ doc-text-printer-request-call-members-central-committee-dso =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-request-to-establish-threat-level =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -466,8 +523,11 @@ doc-text-printer-request-to-establish-threat-level =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-request-change-salary =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -487,8 +547,11 @@ doc-text-printer-request-change-salary =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-request-for-non-listed-employment =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -516,8 +579,11 @@ doc-text-printer-request-for-non-listed-employment =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-request-for-promotion =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -541,8 +607,11 @@ doc-text-printer-request-for-promotion =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-request-documents =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -561,8 +630,11 @@ doc-text-printer-request-documents =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-request-euthanasia =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -581,8 +653,11 @@ doc-text-printer-request-euthanasia =
     По окончании процедуры прошу утилизировать тело путём (способ утилизации) при наличии на это возможности.
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-request-construction-work =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -602,8 +677,11 @@ doc-text-printer-request-construction-work =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-request-modernization =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -623,8 +701,11 @@ doc-text-printer-request-modernization =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-complaint-violation-labor-rules =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -644,8 +725,11 @@ doc-text-printer-complaint-violation-labor-rules =
     Прошу провести внутреннюю проверку по данным фактам нарушений.
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-complaint-offense =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -665,8 +749,11 @@ doc-text-printer-complaint-offense =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-permission-equipment =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -685,8 +772,11 @@ doc-text-printer-permission-equipment =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-permission-to-travel-in-case-of-threat =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -708,8 +798,11 @@ doc-text-printer-permission-to-travel-in-case-of-threat =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-search-permission =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -729,8 +822,11 @@ doc-text-printer-search-permission =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-permission-to-carry-weapons =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -754,8 +850,11 @@ doc-text-printer-permission-to-carry-weapons =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-prescription-drug-authorization =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -777,8 +876,11 @@ doc-text-printer-prescription-drug-authorization =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-permission-dispose-body =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -798,8 +900,11 @@ doc-text-printer-permission-dispose-body =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-construction-permit =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -819,8 +924,11 @@ doc-text-printer-construction-permit =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-permission-to-extend-marriage =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -845,8 +953,11 @@ doc-text-printer-permission-to-extend-marriage =
     (ФИО), в должности (полное наименование должности)
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-order-dismissal =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -865,8 +976,11 @@ doc-text-printer-order-dismissal =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-order-deprivation-access =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -885,8 +999,11 @@ doc-text-printer-order-deprivation-access =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-order-encouragement =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -905,8 +1022,11 @@ doc-text-printer-order-encouragement =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-order-parole-prisoner =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -925,8 +1045,11 @@ doc-text-printer-order-parole-prisoner =
     Выдаваемая профессия:
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-order-recognizing-rentience-creature =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -949,8 +1072,11 @@ doc-text-printer-order-recognizing-rentience-creature =
     Существо принято/не принято в качестве пассажира станции до окончания смены.
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-order-medical-intervention =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -970,8 +1096,11 @@ doc-text-printer-order-medical-intervention =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-product-manufacturing-order =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -993,8 +1122,11 @@ doc-text-printer-product-manufacturing-order =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-order-purchase-resources-equipment =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1017,8 +1149,11 @@ doc-text-printer-order-purchase-resources-equipment =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-ordering-special-equipment =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1040,8 +1175,11 @@ doc-text-printer-ordering-special-equipment =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-order-purchase-weapons =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1061,8 +1199,11 @@ doc-text-printer-order-purchase-weapons =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-certificate =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1081,8 +1222,11 @@ doc-text-printer-certificate =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-certificate-advanced-training =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1100,8 +1244,11 @@ doc-text-printer-certificate-advanced-training =
     Я, (ФИО), в должности главы отдела (полное наименование отдела), свидетельствую, что сотрудник (ФИО) в должности (должность сотрудника), успешно завершил образовательный курс "(название курса)" и был аттестован.
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-certificate-offense =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1128,8 +1275,11 @@ doc-text-printer-certificate-offense =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-death-certificate =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1153,8 +1303,11 @@ doc-text-printer-death-certificate =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-marriage-certificate =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1177,8 +1330,11 @@ doc-text-printer-marriage-certificate =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-divorce-certificate =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1203,8 +1359,11 @@ doc-text-printer-divorce-certificate =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-closing-indictment =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1228,8 +1387,11 @@ doc-text-printer-closing-indictment =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-sentence =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1254,8 +1416,11 @@ doc-text-printer-sentence =
     Срок заключения под стражу отсчитывается с: (время начала заключения)
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-judgment =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1289,8 +1454,11 @@ doc-text-printer-judgment =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-statement-health =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1318,8 +1486,11 @@ doc-text-printer-statement-health =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-decision-to-start-trial =
     ⠀[color=#b8972d]███[/color][color=#1b487e]░███░░░░██░░░░[/color]
     ⠀[color=#1b487e]░██░████░░░██░░░░[/color]           [color=#1b487e][head=1]NanoTrasen[/head][/color]
@@ -1339,8 +1510,11 @@ doc-text-printer-decision-to-start-trial =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-error-loading-form-header =
     ⠀[color=#B50F1D] ███░██████░███[/color]
     ⠀[color=#B50F1D] █░░░██░░░░░░░█[/color]    [head=3]Бланк документа[/head]
@@ -1356,8 +1530,11 @@ doc-text-printer-error-loading-form-header =
     Полное содержание документа со всей необходимой информацией и описанием
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-notice-of-liquidation =
     ⠀[color=#B50F1D] ███░██████░███[/color]
     ⠀[color=#B50F1D] █░░░██░░░░░░░█[/color]    [head=3]Бланк документа[/head]
@@ -1375,8 +1552,11 @@ doc-text-printer-notice-of-liquidation =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-business-deal =
     ⠀[color=#B50F1D] ███░██████░███[/color]
     ⠀[color=#B50F1D] █░░░██░░░░░░░█[/color]    [head=3]Бланк документа[/head]
@@ -1395,8 +1575,11 @@ doc-text-printer-business-deal =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-note-beginning-military-actions =
     ⠀[color=#B50F1D] ███░██████░███[/color]
     ⠀[color=#B50F1D] █░░░██░░░░░░░█[/color]    [head=3]Бланк документа[/head]
@@ -1414,8 +1597,11 @@ doc-text-printer-note-beginning-military-actions =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
 doc-text-printer-report-accomplishment-goals =
     ⠀[color=#B50F1D] ███░██████░███[/color]
     ⠀[color=#B50F1D] █░░░██░░░░░░░█[/color]    [head=3]Бланк документа[/head]
@@ -1433,5 +1619,8 @@ doc-text-printer-report-accomplishment-goals =
     
      =============================================
      Подпись:<sign=1>
-     
+    
+    
                                  ⠀[italic]Место для печатей[/italic]
+    
+    
