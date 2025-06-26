@@ -34,10 +34,14 @@
   - !type:AddComponentSpecial
     components:
       - type: CanChokeGrab # Corvax-Next-Grab
-      - type: Skills # Corvax-Next-Skills
+      - type: Skills
         skills:
-        - Shooting
         - ShuttleControl
+        - Shooting
+        - AdvancedBuilding
+        - Surgery
+        - MedicalEquipment
+        - Butchering
 
 - type: startingGear
   id: WardenGear

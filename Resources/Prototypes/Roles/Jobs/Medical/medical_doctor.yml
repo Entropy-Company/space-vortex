@@ -22,10 +22,14 @@
     #- type: CPRTraining
     - type: SurgerySpeedModifier
       speedModifier: 1.75
-    - type: Skills # Corvax-Next-Skills
+    - type: Skills
       skills:
+      - ShuttleControl
+      - Shooting
+      - AdvancedBuilding
       - Surgery
       - MedicalEquipment
+      - Butchering
     #end-_CorvaxNext: surgery
   - !type:GiveItemOnHolidaySpecial
     holiday: DoctorDay

@@ -3,3 +3,12 @@
   name: Urist McRaptor
   parent: BaseMobResomi
   id: MobResomi
+  components:
+  - type: Skills # Corvax-Next-Skills
+    skills:
+    - ShuttleControl
+    - Shooting
+    - AdvancedBuilding
+    - Surgery
+    - MedicalEquipment
+    - Butchering

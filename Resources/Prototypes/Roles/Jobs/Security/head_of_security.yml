@@ -41,10 +41,14 @@
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
-      - type: Skills # Corvax-Next-Skills
+      - type: Skills
         skills:
         - ShuttleControl
         - Shooting
+        - AdvancedBuilding
+        - Surgery
+        - MedicalEquipment
+        - Butchering
       - type: CanChokeGrab
 
 - type: startingGear
