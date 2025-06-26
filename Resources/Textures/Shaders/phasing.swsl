@@ -1,0 +1,29 @@
+light_mode unshaded;
+
+uniform highp float bandMin;
+uniform highp float bandMax;
+
+// Псевдослучайная функция на основе координат и времени
+highp float hash(highp vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+
+void fragment() {
+    highp vec2 uv = UV;
+    highp float t = TIME * 1.1; // Медленнее
+    // Количество полос фиксировано для всего спрайта, не для каждой строки
+    highp float bandCount = bandMin + floor(hash(vec2(floor(t), 0.0)) * (bandMax - bandMin + 1.0));
+    highp float band = floor(uv.y * bandCount);
+    // Для каждой полосы — отдельный сдвиг
+    highp float bandHash = hash(vec2(band, floor(t)));
+    // Рваное движение: иногда сильно, иногда почти нет
+    highp float glitch = step(0.7, fract(bandHash + sin(t + band * 2.0))) * bandHash;
+    highp float offset = (glitch - 0.5) * 0.18; // уменьшено на 0.4
+    // Иногда "рвём" полосу на две части
+    if (fract(bandHash * 3.0 + t) > 0.85) {
+        offset += (fract(bandHash * 7.0 + t * 2.0) - 0.5) * 0.3; // уменьшено на 0.4
+    }
+    uv.x += offset;
+    highp vec4 sprite = zTexture(uv);
+    COLOR = sprite;
+}
