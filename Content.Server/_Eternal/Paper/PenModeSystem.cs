@@ -34,7 +34,7 @@ public sealed class PenModeSystem : EntitySystem
         var verb = new InteractionVerb
         {
             Act = () => ToggleMode(uid, comp, args.User),
-            Priority = 2,
+            Priority = 10,
             Text = Loc.GetString(comp.Mode == PenMode.Write ? "pen-verb-sign" : "pen-verb-write"),
             Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Objects/Misc/pens.rsi/pen.png"))
         };
@@ -46,23 +46,21 @@ public sealed class PenModeSystem : EntitySystem
         if (!args.CanAccess || !args.CanInteract)
             return;
 
-        // Глагол для переключения режима
         var modeVerb = new InteractionVerb
         {
             Act = () => ToggleChameleonMode(uid, comp, args.User),
-            Priority = 2,
+            Priority = 10,
             Text = Loc.GetString(comp.Mode == ChameleonPenMode.Write ? "pen-verb-sign" : "pen-verb-write"),
             Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Objects/Misc/pens.rsi/pen.png"))
         };
         args.Verbs.Add(modeVerb);
 
-        // Глагол для подделки подписи
         var forgeVerb = new InteractionVerb
         {
             Act = () => OpenChameleonPenUi(uid, args.User),
             Text = Loc.GetString("chameleon-pen-verb-forge"),
             Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Objects/Misc/pens.rsi/pen.png")),
-            Priority = 3
+            Priority = 10
         };
         args.Verbs.Add(forgeVerb);
     }
