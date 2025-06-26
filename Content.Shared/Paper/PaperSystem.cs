@@ -131,6 +131,17 @@ public sealed class PaperSystem : EntitySystem
                 );
             }
 
+            // Выводим подписи (SingBy)
+            if (entity.Comp.SingBy.Count > 0)
+            {
+                if (!EntityManager.TryGetComponent(entity.Owner, out MetaDataComponent? meta))
+                    return;
+                var paperName = Loc.GetString(meta.EntityName);
+                var names = entity.Comp.SingBy.Select(s => Loc.GetString(s.StampedName));
+                var commaSeparated = string.Join(", ", names);
+                args.PushMarkup($"На {paperName} имеются следующие подписи: {commaSeparated}");
+            }
+
             // Corvax-Next-FaxMark-Start
             if (entity.Comp.Sender is not null)
                 args.PushMarkup(Loc.GetString("paper-component-examine-detail-sender", ("fax", entity.Comp.Sender)));
