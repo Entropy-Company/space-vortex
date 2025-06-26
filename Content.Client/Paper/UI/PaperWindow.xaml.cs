@@ -122,6 +122,7 @@ namespace Content.Client.Paper.UI
             // Randomize the placement of any stamps based on the entity UID
             // so that there's some variety in different papers.
             StampDisplay.PlacementSeed = (int)entity;
+            SignDisplay.PlacementSeed = (int)entity;
 
             // Initialize the background:
             PaperBackground.ModulateSelfOverride = visuals.BackgroundModulate;
@@ -373,6 +374,8 @@ namespace Content.Client.Paper.UI
             }
 
             // Process signatures
+            SignDisplay.RemoveAllChildren();
+            SignDisplay.RemoveSigns();
             SignatureContainer.RemoveAllChildren();
 
             // Count signatures by name and color to respect the repeat limit
@@ -409,7 +412,14 @@ namespace Content.Client.Paper.UI
                         var currentCount = signatureCounts.GetValueOrDefault(key, 0);
                         if (currentCount > 0)
                         {
-                            StampDisplay.AddStamp(new StampWidget { StampInfo = signature });
+                            SignDisplay.AddSign(new SignWidget
+                            {
+                                SignInfo = new SignDisplayInfo
+                                {
+                                    StampedName = signature.StampedName,
+                                    StampedColor = signature.StampedColor
+                                }
+                            });
                             signatureCounts[key] = currentCount - 1;
                         }
                     }
