@@ -180,11 +180,14 @@ public sealed partial class FaxPrintout
     public string? Sender { get; private set; }
     // Corvax-Next-FaxMark-End
 
+    [DataField("singBy")]
+    public List<StampDisplayInfo> SingBy { get; private set; } = new();
+
     private FaxPrintout()
     {
     }
 
-    public FaxPrintout(string content, string name, string? label = null, string? prototypeId = null, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, bool locked = false, string? sender = null) // Corvax-Next-FaxMark
+    public FaxPrintout(string content, string name, string? label = null, string? prototypeId = null, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, bool locked = false, string? sender = null, List<StampDisplayInfo>? singBy = null)
     {
         Content = content;
         Name = name;
@@ -193,6 +196,7 @@ public sealed partial class FaxPrintout
         StampState = stampState;
         StampedBy = stampedBy ?? new List<StampDisplayInfo>();
         Locked = locked;
-        Sender = sender; // Corvax-Next-FaxMark
+        Sender = sender;
+        SingBy = singBy ?? new List<StampDisplayInfo>();
     }
 }
