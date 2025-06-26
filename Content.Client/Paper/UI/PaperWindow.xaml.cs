@@ -319,16 +319,22 @@ namespace Content.Client.Paper.UI
             // Remove old sign_visible tag
             processedText = Regex.Replace(processedText, @"<sign_visible\s*=\s*(true|false)>", "", RegexOptions.IgnoreCase);
 
-            // Insert signatures into text
+            // Собираем индексы подписей, которые уже вставлены через <sign=...>
+            var usedSignatureIndices = new HashSet<int>();
+            foreach (Match match in Regex.Matches(processedText, @"<sign=(\d+)>"))
+            {
+                if (int.TryParse(match.Groups[1].Value, out int idx))
+                    usedSignatureIndices.Add(idx - 1); // индексы в теге с 1, а в списке с 0
+            }
+
+            // Заменяем <sign=N> на подпись, если есть, иначе на прочерк
             processedText = Regex.Replace(processedText, @"<sign=(\d+)>", match =>
             {
                 if (!int.TryParse(match.Groups[1].Value, out int index))
                     return "[color=black][bold]___________[/bold][/color]";
-
                 index--; // Convert to 0-based index
                 if (index < 0 || index >= state.SingBy.Count)
                     return "[color=black][bold]___________[/bold][/color]";
-
                 var sig = state.SingBy[index];
                 var colorHex = sig.StampedColor.ToHexNoAlpha();
                 return $"[color={colorHex}][italic]{sig.StampedName}[/italic][/color]";
@@ -395,11 +401,11 @@ namespace Content.Client.Paper.UI
                 case SignatureDisplayStyle.Classic:
                     for (int s = 0; s < state.SingBy.Count; s++)
                     {
+                        if (usedSignatureIndices.Contains(s))
+                            continue; // Не показываем подпись, если она уже вставлена через тег
                         var signature = state.SingBy[s];
                         var key = $"{signature.StampedName}|{signature.StampedColor.ToHexNoAlpha()}";
                         var currentCount = signatureCounts.GetValueOrDefault(key, 0);
-
-                        // Only show if we haven't reached the repeat limit for this signature type
                         if (currentCount > 0)
                         {
                             StampDisplay.AddStamp(new StampWidget { StampInfo = signature });
@@ -410,11 +416,11 @@ namespace Content.Client.Paper.UI
                 case SignatureDisplayStyle.List:
                     for (int s = 0; s < state.SingBy.Count; s++)
                     {
+                        if (usedSignatureIndices.Contains(s))
+                            continue; // Не показываем подпись, если она уже вставлена через тег
                         var signature = state.SingBy[s];
                         var key = $"{signature.StampedName}|{signature.StampedColor.ToHexNoAlpha()}";
                         var currentCount = signatureCounts.GetValueOrDefault(key, 0);
-
-                        // Only show if we haven't reached the repeat limit for this signature type
                         if (currentCount > 0)
                         {
                             var label = new Label
