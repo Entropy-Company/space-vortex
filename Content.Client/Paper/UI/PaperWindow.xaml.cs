@@ -47,6 +47,7 @@ namespace Content.Client.Paper.UI
             typeof(BoldTag),
             typeof(BulletTag),
             typeof(ColorTag),
+            typeof(FontTag),
             typeof(HeadingTag),
             typeof(ItalicTag),
             typeof(MonoTag),
@@ -337,7 +338,7 @@ namespace Content.Client.Paper.UI
                     return "[color=black][bold]___________[/bold][/color]";
                 var sig = state.SingBy[index];
                 var colorHex = sig.StampedColor.ToHexNoAlpha();
-                return $"[color={colorHex}][italic]{sig.StampedName}[/italic][/color]";
+                return $"[font=\"Sign\" size=15][color={colorHex}]{sig.StampedName}[/color][/font]";
             });
 
             var msg = new FormattedMessage();
