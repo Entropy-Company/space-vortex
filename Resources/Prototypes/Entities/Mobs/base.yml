@@ -49,6 +49,14 @@
     penetrateDamage: 15 # Kill million mices
     damagePenalty: 0.05 
   - type: AnimatedEmotes # Corvax-Next-AutoAnimate
+  - type: Skills
+    skills:
+    - ShuttleControl
+    - Shooting
+    - AdvancedBuilding
+    - Surgery
+    - MedicalEquipment
+    - Butchering
 
 - type: entity
   save: false

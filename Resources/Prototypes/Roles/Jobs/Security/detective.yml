@@ -28,9 +28,15 @@
     implants: [ MindShieldImplant ]
   - !type:AddComponentSpecial
     components:
-      - type: Skills # Corvax-Next-Skills
+      - type: Skills
         skills:
+        - ShuttleControl
         - Shooting
+        - AdvancedBuilding
+        - Surgery
+        - MedicalEquipment
+        - Butchering
+
 
 - type: startingGear
   id: DetectiveGear
