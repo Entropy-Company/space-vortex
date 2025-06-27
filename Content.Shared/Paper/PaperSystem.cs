@@ -99,7 +99,22 @@ public sealed class PaperSystem : EntitySystem
     private void BeforeUIOpen(Entity<PaperComponent> entity, ref BeforeActivatableUIOpenEvent args)
     {
         entity.Comp.Mode = PaperAction.Read;
-        UpdateUserInterface(entity);
+
+        // Проверяем, держит ли игрок УФ фонарик в любой руке
+        var isUltravioletMode = false;
+        if (TryComp<HandsComponent>(args.User, out var hands))
+        {
+            foreach (var hand in hands.Hands.Values)
+            {
+                if (hand.HeldEntity != null && HasComp<UltravioletFlashlightComponent>(hand.HeldEntity.Value))
+                {
+                    isUltravioletMode = true;
+                    break;
+                }
+            }
+        }
+
+        UpdateUserInterface(entity, isUltravioletMode);
     }
 
     private void OnExamined(Entity<PaperComponent> entity, ref ExaminedEvent args)
@@ -137,10 +152,12 @@ public sealed class PaperSystem : EntitySystem
                     return;
                 var paperName = Loc.GetString(meta.EntityName);
                 var grouped = entity.Comp.SingBy
+                    .Where(s => s.SignatureType != SignatureType.Invisible)
                     .GroupBy(s => (Loc.GetString(s.StampedName), s.StampedColor.ToHexNoAlpha()))
                     .Select(g => g.Count() > 1 ? $"{g.Key.Item1} x{g.Count()}" : g.Key.Item1);
                 var commaSeparated = string.Join(", ", grouped);
-                args.PushMarkup($"На {paperName} имеются следующие подписи: {commaSeparated}");
+                if (!string.IsNullOrEmpty(commaSeparated))
+                    args.PushMarkup($"На {paperName} имеются следующие подписи: {commaSeparated}");
             }
 
             // Corvax-Next-FaxMark-Start
@@ -155,17 +172,45 @@ public sealed class PaperSystem : EntitySystem
         return new StampDisplayInfo
         {
             StampedName = stamp.StampedName,
-            StampedColor = stamp.StampedColor
+            StampedColor = stamp.StampedColor,
+            SignatureType = SignatureType.Normal
         };
     }
 
     private void OnInteractUsing(Entity<PaperComponent> entity, ref InteractUsingEvent args)
     {
+        // Проверяем, держит ли игрок УФ фонарик в любой руке
+        var isUltravioletMode = false;
+        if (TryComp<HandsComponent>(args.User, out var hands))
+        {
+            foreach (var hand in hands.Hands.Values)
+            {
+                if (hand.HeldEntity != null && HasComp<UltravioletFlashlightComponent>(hand.HeldEntity.Value))
+                {
+                    isUltravioletMode = true;
+                    break;
+                }
+            }
+        }
+
+        // Проверяем, используется ли ультрафиолетовый фонарик (конкретно предмет взаимодействия)
+        var isUltravioletFlashlight = HasComp<UltravioletFlashlightComponent>(args.Used);
+
         // only allow editing if there are no stamps or when using a cyberpen
         var hasWriteIgnoreStamps = _tagSystem.HasTag(args.Used, WriteIgnoreStampsTag);
         var hasWriteIgnoreSigns = _tagSystem.HasTag(args.Used, WriteIgnoreSignsTag);
         var editable = (hasWriteIgnoreStamps || entity.Comp.StampedBy.Count == 0) &&
                       (hasWriteIgnoreSigns || entity.Comp.SingBy.Count == 0);
+
+        // Если используется ультрафиолетовый фонарик, открываем бумагу в режиме просмотра с УФ-освещением
+        if (isUltravioletFlashlight)
+        {
+            args.Handled = true;
+            entity.Comp.Mode = PaperAction.Read;
+            _uiSystem.OpenUi(entity.Owner, PaperUiKey.Key, args.User);
+            UpdateUserInterface(entity, true);
+            return;
+        }
 
         // PenModeComponent (обычная ручка)
         if (TryComp<PenModeComponent>(args.Used, out var penMode))
@@ -199,7 +244,7 @@ public sealed class PaperSystem : EntitySystem
                         RaiseLocalEvent(args.Used, ref writeEvent);
                         entity.Comp.Mode = PaperAction.Write;
                         _uiSystem.OpenUi(entity.Owner, PaperUiKey.Key, args.User);
-                        UpdateUserInterface(entity);
+                        UpdateUserInterface(entity, isUltravioletMode);
                     }
                     args.Handled = true;
                     return;
@@ -212,7 +257,8 @@ public sealed class PaperSystem : EntitySystem
                 var info = new StampDisplayInfo
                 {
                     StampedName = ownerName,
-                    StampedColor = penMode.SignatureColor
+                    StampedColor = penMode.SignatureColor,
+                    SignatureType = penMode.SignatureType
                 };
 
                 // Check signature limits
@@ -271,7 +317,7 @@ public sealed class PaperSystem : EntitySystem
                     Loc.GetString("pen-signature-success", ("name", ownerName)),
                     entity.Owner);
 
-                UpdateUserInterface(entity);
+                UpdateUserInterface(entity, isUltravioletMode);
                 _audio.PlayPvs(new SoundCollectionSpecifier("PaperScribbles"), entity.Owner);
                 return;
             }
@@ -309,7 +355,7 @@ public sealed class PaperSystem : EntitySystem
                         RaiseLocalEvent(args.Used, ref writeEvent);
                         entity.Comp.Mode = PaperAction.Write;
                         _uiSystem.OpenUi(entity.Owner, PaperUiKey.Key, args.User);
-                        UpdateUserInterface(entity);
+                        UpdateUserInterface(entity, isUltravioletMode);
                     }
                     args.Handled = true;
                     return;
@@ -333,7 +379,8 @@ public sealed class PaperSystem : EntitySystem
                 var info = new StampDisplayInfo
                 {
                     StampedName = ownerName,
-                    StampedColor = signatureColor
+                    StampedColor = signatureColor,
+                    SignatureType = chameleonPen.SignatureType
                 };
 
                 // Check signature limits
@@ -392,7 +439,7 @@ public sealed class PaperSystem : EntitySystem
                     Loc.GetString("pen-signature-success", ("name", ownerName)),
                     entity.Owner);
 
-                UpdateUserInterface(entity);
+                UpdateUserInterface(entity, isUltravioletMode);
                 _audio.PlayPvs(new SoundCollectionSpecifier("PaperScribbles"), entity.Owner);
                 return;
             }
@@ -426,9 +473,84 @@ public sealed class PaperSystem : EntitySystem
                 RaiseLocalEvent(args.Used, ref writeEvent);
                 entity.Comp.Mode = PaperAction.Write;
                 _uiSystem.OpenUi(entity.Owner, PaperUiKey.Key, args.User);
-                UpdateUserInterface(entity);
+                UpdateUserInterface(entity, isUltravioletMode);
             }
             args.Handled = true;
+            return;
+        }
+
+        // Обычные ручки для подписи (без PenModeComponent или ChameleonPenComponent)
+        if (_tagSystem.HasTag(args.Used, "Pen") &&
+            !HasComp<PenModeComponent>(args.Used) &&
+            !HasComp<ChameleonPenComponent>(args.Used))
+        {
+            args.Handled = true;
+            var ownerName = Identity.Name(args.User, EntityManager);
+            var info = new StampDisplayInfo
+            {
+                StampedName = ownerName,
+                StampedColor = Color.FromHex("#000000"), // Обычные черные чернила
+                SignatureType = SignatureType.Normal
+            };
+
+            // Check signature limits
+            var signRepeatLimit = GetSignatureRepeatLimit(entity.Comp.Content);
+            var signLimit = GetSignatureLimit(entity.Comp.Content);
+
+            // First check total signature limit
+            if (signLimit > 0 && entity.Comp.SingBy.Count >= signLimit)
+            {
+                // Check error cooldown to prevent spam
+                var now = _timing.CurTime;
+                if (_errorCooldowns.TryGetValue(args.User, out var lastErrorTime))
+                {
+                    if (now < lastErrorTime + TimeSpan.FromSeconds(2))
+                        return;
+                }
+                _errorCooldowns[args.User] = now;
+
+                _popupSystem.PopupEntity(
+                    Loc.GetString("pen-signature-total-limit-reached", ("limit", signLimit)),
+                    entity.Owner);
+                return;
+            }
+
+            // Then check repeat limit for this specific signature
+            var existingCount = CountExistingSignatures(entity, ownerName, info.StampedColor);
+            if (existingCount >= signRepeatLimit)
+            {
+                // Check error cooldown to prevent spam
+                var now = _timing.CurTime;
+                if (_errorCooldowns.TryGetValue(args.User, out var lastErrorTime))
+                {
+                    if (now < lastErrorTime + TimeSpan.FromSeconds(2))
+                        return;
+                }
+                _errorCooldowns[args.User] = now;
+
+                _popupSystem.PopupEntity(
+                    Loc.GetString("pen-signature-repeat-limit-reached", ("name", ownerName), ("limit", signRepeatLimit)),
+                    entity.Owner);
+                return;
+            }
+
+            var now2 = _timing.CurTime;
+            if (_penCooldowns.TryGetValue(args.Used, out var lastTime))
+            {
+                if (now2 < lastTime + TimeSpan.FromSeconds(1))
+                    return;
+            }
+            _penCooldowns[args.Used] = now2;
+            entity.Comp.SingBy.Add(info);
+            Dirty(entity);
+
+            // Show success message to everyone (including the signer)
+            _popupSystem.PopupEntity(
+                Loc.GetString("pen-signature-success", ("name", ownerName)),
+                entity.Owner);
+
+            UpdateUserInterface(entity, isUltravioletMode);
+            _audio.PlayPvs(new SoundCollectionSpecifier("PaperScribbles"), entity.Owner);
             return;
         }
 
@@ -449,7 +571,7 @@ public sealed class PaperSystem : EntitySystem
 
             _audio.PlayPredicted(stampComp.Sound, entity, args.User);
 
-            UpdateUserInterface(entity);
+            UpdateUserInterface(entity, isUltravioletMode);
             args.Handled = true;
             return;
         }
@@ -578,7 +700,21 @@ public sealed class PaperSystem : EntitySystem
 
     private void UpdateUserInterface(Entity<PaperComponent> entity)
     {
-        _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.SingBy, entity.Comp.Mode));
+        // Проверяем, используется ли ультрафиолетовый фонарик
+        var isUltravioletMode = false;
+
+        // Здесь можно добавить логику для определения УФ режима
+        // Пока что это будет определяться на клиенте
+
+        _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.SingBy, entity.Comp.Mode, isUltravioletMode));
+    }
+
+    /// <summary>
+    /// Обновляет UI с указанием ультрафиолетового режима
+    /// </summary>
+    public void UpdateUserInterface(Entity<PaperComponent> entity, bool isUltravioletMode)
+    {
+        _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.SingBy, entity.Comp.Mode, isUltravioletMode));
     }
 
     /// <summary>

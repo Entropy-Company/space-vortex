@@ -1,40 +1,54 @@
 - type: entity
-  name: penAdd commentMore actions
-  id: ChameleonPen
-  suffix: Chameleon
+  name: normal flashlight
+  id: NormalFlashlight
   parent: BaseItem
-  description: A mysterious pen that can forge signatures and change its appearance. Perfect for... creative documentation.
+  description: A standard flashlight with white light.
   components:
   - type: Sprite
-    sprite: Objects/Misc/pens.rsi
-    state: pen
+    sprite: Objects/Misc/flashlight.rsi
+    state: flashlight
   - type: Item
-    sprite: Objects/Misc/pens.rsi
-    heldPrefix: chameleon_pen
+    sprite: Objects/Misc/flashlight.rsi
+    heldPrefix: flashlight
     size: Tiny
   - type: Tag
     tags:
-    - Pickaxe
-    - Pen
-    - Write
-    - WriteIgnoreSigns
+    - Flashlight
   - type: PhysicalComposition
     materialComposition:
-      Steel: 25
-  - type: EmitSoundOnUse
-    sound:
-      path: /Audio/Items/pen_click.ogg
-      params:
-        volume: -4
-        maxDistance: 2
+      Steel: 30
+      Glass: 10
+  - type: PointLight
+    color: "#ffffff"
+    radius: 3
+    energy: 1
   - type: UseDelay
-    delay: 1.5
-  - type: ChameleonPen
-    signatureColor: "#3166f5"
-    stampState: "paper_stamp-trader"
-    forgedSignatureColor: "#121115"
-    forgedSignatureText: "Неизвестно"
-  - type: UserInterface
-    interfaces:
-      enum.ChameleonPenUiKey.Key:
-        type: ChameleonPenBui
+    delay: 0.5
+
+- type: entity
+  name: УФ фонарик
+  id: UltravioletFlashlight
+  parent: BaseItem
+  description: A special flashlight that can reveal invisible signatures and make glowing signatures invert their colors.
+  components:
+  - type: Sprite
+    sprite: Objects/Tools/seclite.rsi
+    state: seclite
+  - type: Item
+    sprite: Objects/Tools/seclite.rsi
+    heldPrefix: flashlight
+    size: Tiny
+  - type: Tag
+    tags:
+    - Flashlight
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 30
+      Glass: 10
+  - type: PointLight
+    color: "#ccb3ff"
+    radius: 2
+    energy: 0.5
+  - type: UseDelay
+    delay: 0.5
+  - type: UltravioletFlashlight

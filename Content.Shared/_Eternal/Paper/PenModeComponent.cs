@@ -9,6 +9,13 @@ public enum PenMode
     Sign
 }
 
+public enum SignatureType
+{
+    Normal,     // Обычная подпись
+    Glowing,    // Светящаяся подпись (видна под УФ)
+    Invisible   // Невидимая подпись (видна только под УФ)
+}
+
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class PenModeComponent : Component
 {
@@ -20,4 +27,7 @@ public sealed partial class PenModeComponent : Component
 
     [DataField, AutoNetworkedField]
     public string StampState = "paper_stamp-trader";
+
+    [DataField, AutoNetworkedField]
+    public SignatureType SignatureType = SignatureType.Normal;
 }
