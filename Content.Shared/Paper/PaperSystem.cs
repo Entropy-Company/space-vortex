@@ -35,6 +35,7 @@ public sealed class PaperSystem : EntitySystem
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IUltravioletFlashlightSystem _ultravioletFlashlight = default!;
 
     private static readonly ProtoId<TagPrototype> WriteIgnoreStampsTag = "WriteIgnoreStamps";
     private static readonly ProtoId<TagPrototype> WriteIgnoreSignsTag = "WriteIgnoreSigns";
@@ -88,7 +89,7 @@ public sealed class PaperSystem : EntitySystem
 
         if (TryComp<AppearanceComponent>(entity, out var appearance))
         {
-            if (entity.Comp.Content != "")
+            if (HasVisibleContent(entity.Comp.Content))
                 _appearance.SetData(entity, PaperVisuals.Status, PaperStatus.Written, appearance);
 
             if (entity.Comp.StampState != null)
@@ -106,7 +107,7 @@ public sealed class PaperSystem : EntitySystem
         {
             foreach (var hand in hands.Hands.Values)
             {
-                if (hand.HeldEntity != null && HasComp<UltravioletFlashlightComponent>(hand.HeldEntity.Value))
+                if (hand.HeldEntity != null && _ultravioletFlashlight.IsUltravioletFlashlightWorking(hand.HeldEntity.Value))
                 {
                     isUltravioletMode = true;
                     break;
@@ -124,7 +125,7 @@ public sealed class PaperSystem : EntitySystem
 
         using (args.PushGroup(nameof(PaperComponent)))
         {
-            if (entity.Comp.Content != "")
+            if (HasVisibleContent(entity.Comp.Content))
             {
                 args.PushMarkup(
                     Loc.GetString(
@@ -185,7 +186,7 @@ public sealed class PaperSystem : EntitySystem
         {
             foreach (var hand in hands.Hands.Values)
             {
-                if (hand.HeldEntity != null && HasComp<UltravioletFlashlightComponent>(hand.HeldEntity.Value))
+                if (hand.HeldEntity != null && _ultravioletFlashlight.IsUltravioletFlashlightWorking(hand.HeldEntity.Value))
                 {
                     isUltravioletMode = true;
                     break;
@@ -194,7 +195,7 @@ public sealed class PaperSystem : EntitySystem
         }
 
         // Проверяем, используется ли ультрафиолетовый фонарик (конкретно предмет взаимодействия)
-        var isUltravioletFlashlight = HasComp<UltravioletFlashlightComponent>(args.Used);
+        var isUltravioletFlashlight = _ultravioletFlashlight.IsUltravioletFlashlightWorkingWithMessage(args.Used, args.User);
 
         // only allow editing if there are no stamps or when using a cyberpen
         var hasWriteIgnoreStamps = _tagSystem.HasTag(args.Used, WriteIgnoreStampsTag);
@@ -588,7 +589,7 @@ public sealed class PaperSystem : EntitySystem
         {
             SetContent(entity, args.Text);
 
-            var paperStatus = string.IsNullOrWhiteSpace(args.Text) ? PaperStatus.Blank : PaperStatus.Written;
+            var paperStatus = HasVisibleContent(args.Text) ? PaperStatus.Written : PaperStatus.Blank;
 
             if (TryComp<AppearanceComponent>(entity, out var appearance))
                 _appearance.SetData(entity, PaperVisuals.Status, paperStatus, appearance);
@@ -682,6 +683,19 @@ public sealed class PaperSystem : EntitySystem
         SetContent((entity, paper), content);
     }
 
+    /// <summary>
+    /// Проверяет, есть ли видимый текст на бумаге (исключая скрытые теги)
+    /// </summary>
+    private bool HasVisibleContent(string content)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+            return false;
+
+        // Удаляем все скрытые теги и проверяем, остался ли видимый текст
+        var visibleContent = Regex.Replace(content, @"\[hidden\](.*?)\[/hidden\]", "", RegexOptions.Singleline);
+        return !string.IsNullOrWhiteSpace(visibleContent);
+    }
+
     public void SetContent(Entity<PaperComponent> entity, string content)
     {
         entity.Comp.Content = content;
@@ -691,9 +705,9 @@ public sealed class PaperSystem : EntitySystem
         if (!TryComp<AppearanceComponent>(entity, out var appearance))
             return;
 
-        var status = string.IsNullOrWhiteSpace(content)
-            ? PaperStatus.Blank
-            : PaperStatus.Written;
+        var status = HasVisibleContent(content)
+            ? PaperStatus.Written
+            : PaperStatus.Blank;
 
         _appearance.SetData(entity, PaperVisuals.Status, status, appearance);
     }
