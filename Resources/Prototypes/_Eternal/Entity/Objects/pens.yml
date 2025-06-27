@@ -1,0 +1,109 @@
+- type: entity
+  name: pen
+  id: ChameleonPen
+  parent: BaseItem
+  description: A standard pen with black ink.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/pens.rsi
+    state: pen
+  - type: Item
+    sprite: Objects/Misc/pens.rsi
+    heldPrefix: pen
+    size: Tiny
+  - type: Tag
+    tags:
+    - Pen
+    - Write
+    - WriteIgnoreSigns
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 25
+  - type: EmitSoundOnUse
+    sound:
+      path: /Audio/Items/pen_click.ogg
+      params:
+        volume: -4
+        maxDistance: 2
+  - type: UseDelay
+    delay: 1.5
+  - type: ChameleonPen
+    signatureColor: "#000000"
+    stampState: "paper_stamp-trader"
+    forgedSignatureColor: "#000000"
+    forgedSignatureText: ""
+    signatureType: Normal
+  - type: UserInterface
+    interfaces:
+      enum.ChameleonPenUiKey.Key:
+        type: ChameleonPenBui
+
+- type: entity
+  name: glowing pen
+  id: GlowingPen
+  parent: BaseItem
+  description: A pen with glowing ink that inverts its color under ultraviolet light.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/pens.rsi
+    state: pen
+  - type: Item
+    sprite: Objects/Misc/pens.rsi
+    heldPrefix: pen
+    size: Tiny
+  - type: Tag
+    tags:
+    - Pen
+    - Write
+    - WriteIgnoreSigns
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 25
+  - type: EmitSoundOnUse
+    sound:
+      path: /Audio/Items/pen_click.ogg
+      params:
+        volume: -4
+        maxDistance: 2
+  - type: UseDelay
+    delay: 1.5
+  - type: PenMode
+    mode: Write
+    signatureColor: "#00ff00"
+    stampState: "paper_stamp-trader"
+    signatureType: Glowing
+
+- type: entity
+  name: normal pen
+  id: NormalPen
+  parent: BaseItem
+  description: A standard pen with normal ink.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/pens.rsi
+    state: pen
+  - type: Item
+    sprite: Objects/Misc/pens.rsi
+    heldPrefix: pen
+    size: Tiny
+  - type: Tag
+    tags:
+    - Pen
+    - Write
+    - WriteIgnoreSigns
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 25
+  - type: EmitSoundOnUse
+    sound:
+      path: /Audio/Items/pen_click.ogg
+      params:
+        volume: -4
+        maxDistance: 2
+  - type: UseDelay
+    delay: 1.5
+  - type: PenMode
+    mode: Write
+    signatureColor: "#000000"
+    stampState: "paper_stamp-trader"
+    signatureType: Normal

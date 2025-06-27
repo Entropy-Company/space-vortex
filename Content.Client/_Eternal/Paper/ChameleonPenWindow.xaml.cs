@@ -7,30 +7,56 @@ using Content.Shared._Eternal.Paper;
 using Robust.Client.GameObjects;
 using Robust.Shared.Utility;
 using Robust.Client.UserInterface;
+using Robust.Shared.Localization;
 
 namespace Content.Client._Eternal.Paper;
 
 [GenerateTypedNameReferences]
 public sealed partial class ChameleonPenWindow : DefaultWindow
 {
-    public event Action<Color, string>? OnSave;
+    public event Action<Color, string, SignatureType>? OnSave;
+
+    private SignatureType _currentSignatureType = SignatureType.Normal;
 
     public ChameleonPenWindow()
     {
         RobustXamlLoader.Load(this);
+
+        // Локализация
+        Title = Loc.GetString("chameleon-pen-verb-forge-label");
+        ColorLabel.Text = Loc.GetString("chameleon-pen-verb-forge-color");
+        SignatureTextLabel.Text = Loc.GetString("chameleon-pen-verb-forge-text");
+        InkTypeLabel.Text = Loc.GetString("chameleon-pen-ink-type-label");
+        SaveButton.Text = Loc.GetString("chameleon-pen-verb-forge-save");
+        CancelButton.Text = Loc.GetString("chameleon-pen-verb-forge-close");
+
+        InkTypeSelector.AddItem(Loc.GetString("chameleon-pen-ink-type-visible"), 0);
+        InkTypeSelector.AddItem(Loc.GetString("chameleon-pen-ink-type-invisible"), 1);
+        _currentSignatureType = SignatureType.Normal;
+
+        InkTypeSelector.OnItemSelected += args =>
+        {
+            InkTypeSelector.SelectId(args.Id);
+            _currentSignatureType = args.Id == 1 ? SignatureType.Invisible : SignatureType.Normal;
+        };
+
         SaveButton.OnPressed += _ =>
         {
             var color = ColorSelector.Color;
             var text = SignatureTextEdit.Text.Trim();
-            OnSave?.Invoke(color, text);
+            var signatureType = _currentSignatureType;
+            OnSave?.Invoke(color, text, signatureType);
         };
         CancelButton.OnPressed += _ => Close();
     }
 
-    public void SetInitial(Color? color, string? text)
+    public void SetInitial(Color? color, string? text, SignatureType signatureType)
     {
         ColorSelector.Color = color ?? Color.White;
         SignatureTextEdit.Text = text ?? string.Empty;
+        _currentSignatureType = signatureType;
+        var idx = signatureType == SignatureType.Invisible ? 1 : 0;
+        InkTypeSelector.SelectId(idx);
     }
 }
 
@@ -45,9 +71,9 @@ public sealed class ChameleonPenBui : BoundUserInterface
         base.Open();
 
         _window = this.CreateWindow<ChameleonPenWindow>();
-        _window.OnSave += (color, text) =>
+        _window.OnSave += (color, text, signatureType) =>
         {
-            SendMessage(new ChameleonPenBuiSetMessage(color, text));
+            SendMessage(new ChameleonPenBuiSetMessage(color, text, signatureType));
             Close();
         };
     }
@@ -57,7 +83,7 @@ public sealed class ChameleonPenBui : BoundUserInterface
         if (state is not ChameleonPenBuiState s)
             return;
 
-        _window?.SetInitial(s.ForgedSignatureColor, s.ForgedSignatureText);
+        _window?.SetInitial(s.ForgedSignatureColor, s.ForgedSignatureText, s.SignatureType);
     }
 
     protected override void Dispose(bool disposing)

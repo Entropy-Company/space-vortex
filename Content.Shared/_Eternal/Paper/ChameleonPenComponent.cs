@@ -23,4 +23,7 @@ public sealed partial class ChameleonPenComponent : Component
 
     [DataField, AutoNetworkedField]
     public string? ForgedSignatureText;
+
+    [DataField, AutoNetworkedField]
+    public SignatureType SignatureType = SignatureType.Invisible; // Хамелеон по умолчанию оставляет невидимые подписи
 }

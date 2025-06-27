@@ -15,6 +15,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using Content.Shared._Eternal.Paper;
 
 namespace Content.Client.Paper.UI
 {
@@ -50,8 +51,7 @@ namespace Content.Client.Paper.UI
             typeof(FontTag),
             typeof(HeadingTag),
             typeof(ItalicTag),
-            typeof(MonoTag),
-            typeof(SignTag)
+            typeof(MonoTag)
         };
 
         public event Action<string>? OnSaved;
@@ -73,6 +73,17 @@ namespace Content.Client.Paper.UI
         // Default signature limit per person (name + color combination)
         private int _signRepeatLimit = 1;
         private int _signLimit = -1; // -1 means no limit
+
+        // Ультрафиолетовое освещение
+        private bool _isUltravioletMode = false;
+
+        // Сохраняем оригинальные данные подписей для обновления
+        private List<StampDisplayInfo> _originalSignatures = new();
+
+        // Сохраняем оригинальный текст для правильного сохранения скрытых тегов
+        private string _originalText = string.Empty;
+
+        private PaperComponent.PaperBoundUserInterfaceState? _lastState;
 
         public PaperWindow()
         {
@@ -270,11 +281,15 @@ namespace Content.Client.Paper.UI
             InputContainer.Visible = isEditing;
             EditButtons.Visible = isEditing;
 
+            SetUltravioletMode(state.IsUltravioletMode);
+
             // Process text and signatures
             var processedText = state.Text;
+
+            _originalText = state.Text;
+
             var signatureStyle = SignatureDisplayStyle.Classic;
 
-            // Check for signature style tag
             var signStyleMatch = Regex.Match(processedText, @"<sign_style\s*=\s*(classic|list|disable)>", RegexOptions.IgnoreCase);
             if (signStyleMatch.Success)
             {
@@ -288,7 +303,6 @@ namespace Content.Client.Paper.UI
                 };
             }
 
-            // Check for signature repeat limit tag (old sign_limit functionality)
             var signRepeatLimitMatch = Regex.Match(processedText, @"<sign_repeat_limit\s*=\s*(\d+)>", RegexOptions.IgnoreCase);
             if (signRepeatLimitMatch.Success)
             {
@@ -300,10 +314,9 @@ namespace Content.Client.Paper.UI
             }
             else
             {
-                _signRepeatLimit = 1; // Reset to default if no tag found
+                _signRepeatLimit = 1;
             }
 
-            // Check for total signature limit tag
             var signLimitMatch = Regex.Match(processedText, @"<sign_limit\s*=\s*(\d+)>", RegexOptions.IgnoreCase);
             if (signLimitMatch.Success)
             {
@@ -315,30 +328,48 @@ namespace Content.Client.Paper.UI
             }
             else
             {
-                _signLimit = -1; // Reset to no limit if no tag found
+                _signLimit = -1;
             }
 
-            // Remove old sign_visible tag
             processedText = Regex.Replace(processedText, @"<sign_visible\s*=\s*(true|false)>", "", RegexOptions.IgnoreCase);
 
-            // Собираем индексы подписей, которые уже вставлены через <sign=...>
-            var usedSignatureIndices = new HashSet<int>();
-            foreach (Match match in Regex.Matches(processedText, @"<sign=(\d+)>"))
+            if (!state.IsUltravioletMode)
             {
-                if (int.TryParse(match.Groups[1].Value, out int idx))
-                    usedSignatureIndices.Add(idx - 1); // индексы в теге с 1, а в списке с 0
+                processedText = Regex.Replace(processedText, @"\[hidden\](.*?)\[/hidden\]", "", RegexOptions.Singleline);
             }
 
-            // Заменяем <sign=N> на подпись, если есть, иначе на прочерк
+            // Парсим индексы только из оригинального текста!
+            var usedSignatureIndices = new HashSet<int>();
+            foreach (Match match in Regex.Matches(state.Text, @"<sign=(\d+)>"))
+            {
+                if (int.TryParse(match.Groups[1].Value, out int idx))
+                    usedSignatureIndices.Add(idx - 1);
+            }
+
             processedText = Regex.Replace(processedText, @"<sign=(\d+)>", match =>
             {
                 if (!int.TryParse(match.Groups[1].Value, out int index))
                     return "[color=black][bold]___________[/bold][/color]";
-                index--; // Convert to 0-based index
+                index--;
                 if (index < 0 || index >= state.SingBy.Count)
                     return "[color=black][bold]___________[/bold][/color]";
                 var sig = state.SingBy[index];
-                var colorHex = sig.StampedColor.ToHexNoAlpha();
+
+                var show = true;
+                var color = sig.StampedColor;
+                if (sig.SignatureType == SignatureType.Invisible)
+                {
+                    show = _isUltravioletMode;
+                }
+                else if (sig.SignatureType == SignatureType.Glowing)
+                {
+                    color = _isUltravioletMode ? Color.White : sig.StampedColor;
+                }
+
+                if (!show)
+                    return "[color=black][bold]___________[/bold][/color]";
+
+                var colorHex = color.ToHexNoAlpha();
                 return $"[font=\"Sign\" size=15][color={colorHex}]{sig.StampedName}[/color][/font]";
             });
 
@@ -346,58 +377,59 @@ namespace Content.Client.Paper.UI
             msg.AddMarkupPermissive(processedText);
             msg.AddMarkupPermissive("\r\n");
 
-            // Set up rich text with signature support
-            SignTag.CurrentSignatures = state.SingBy;
-            WrittenTextLabel.SetMessage(msg, _allowedTags.Concat(new[] { typeof(SignTag) }).ToArray(), DefaultTextColor);
-            SignTag.CurrentSignatures = null;
+            WrittenTextLabel.SetMessage(msg, _allowedTags, DefaultTextColor);
 
-            // Handle input text
             var shouldCopyText = 0 == Input.TextLength && 0 != state.Text.Length;
             if (!wasEditing || shouldCopyText)
             {
                 Input.TextRope = Rope.Leaf.Empty;
                 Input.CursorPosition = new TextEdit.CursorPos();
-                Input.InsertAtCursor(state.Text);
+
+                var inputText = state.Text;
+
+                if (isEditing)
+                {
+                    if (!_isUltravioletMode)
+                    {
+                        inputText = Regex.Replace(inputText, @"\[hidden\](.*?)\[/hidden\]", "", RegexOptions.Singleline);
+                    }
+                }
+                else
+                {
+                    if (!_isUltravioletMode)
+                    {
+                        inputText = Regex.Replace(inputText, @"\[hidden\](.*?)\[/hidden\]", "", RegexOptions.Singleline);
+                    }
+                }
+
+                Input.InsertAtCursor(inputText);
             }
 
-            // Update visibility
             WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0;
             BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0;
 
-            // Process stamps
             StampDisplay.RemoveAllChildren();
             StampDisplay.RemoveStamps();
-
             foreach (var stamper in state.StampedBy)
             {
                 StampDisplay.AddStamp(new StampWidget { StampInfo = stamper });
             }
 
-            // Process signatures
             SignDisplay.RemoveAllChildren();
             SignDisplay.RemoveSigns();
             SignatureContainer.RemoveAllChildren();
 
-            // Count signatures by name and color to respect the repeat limit
+            _originalSignatures = new List<StampDisplayInfo>(state.SingBy);
+
+            // Собираем лимиты повторов
             var signatureCounts = new Dictionary<string, int>();
             for (int s = 0; s < state.SingBy.Count; s++)
             {
                 var signature = state.SingBy[s];
                 var key = $"{signature.StampedName}|{signature.StampedColor.ToHexNoAlpha()}";
                 var currentCount = signatureCounts.GetValueOrDefault(key, 0);
-
-                // Only count if we haven't reached the repeat limit for this signature type
                 if (currentCount < _signRepeatLimit)
-                {
                     signatureCounts[key] = currentCount + 1;
-                }
-            }
-
-            // Check total signature limit
-            var totalSignatures = 0;
-            if (_signLimit > 0)
-            {
-                totalSignatures = state.SingBy.Count;
             }
 
             switch (signatureStyle)
@@ -405,51 +437,156 @@ namespace Content.Client.Paper.UI
                 case SignatureDisplayStyle.Classic:
                     for (int s = 0; s < state.SingBy.Count; s++)
                     {
+                        // Пропускаем подписи, которые используются в тегах <sign=index>
                         if (usedSignatureIndices.Contains(s))
-                            continue; // Не показываем подпись, если она уже вставлена через тег
+                            continue;
                         var signature = state.SingBy[s];
                         var key = $"{signature.StampedName}|{signature.StampedColor.ToHexNoAlpha()}";
                         var currentCount = signatureCounts.GetValueOrDefault(key, 0);
                         if (currentCount > 0)
                         {
+                            // --- ЭФФЕКТЫ ---
+                            var displayColor = signature.StampedColor;
+                            bool skip = false;
+                            if (signature.SignatureType == SignatureType.Invisible)
+                            {
+                                if (!_isUltravioletMode)
+                                {
+                                    skip = true; // не показываем вне УФ
+                                }
+                            }
+                            else if (signature.SignatureType == SignatureType.Glowing)
+                            {
+                                if (_isUltravioletMode)
+                                {
+                                    // В УФ — ярко-белый
+                                    displayColor = Color.White;
+                                }
+                                // иначе обычный цвет
+                            }
+                            if (skip)
+                                continue;
+                            // --- КОНЕЦ ЭФФЕКТОВ ---
                             SignDisplay.AddSign(new SignWidget
                             {
                                 SignInfo = new SignDisplayInfo
                                 {
                                     StampedName = signature.StampedName,
-                                    StampedColor = signature.StampedColor
+                                    StampedColor = displayColor
                                 }
                             });
                             signatureCounts[key] = currentCount - 1;
                         }
                     }
+                    SignDisplay.Visible = SignDisplay.ChildCount > 0;
+                    SignatureContainer.Visible = false;
                     break;
                 case SignatureDisplayStyle.List:
                     for (int s = 0; s < state.SingBy.Count; s++)
                     {
                         if (usedSignatureIndices.Contains(s))
-                            continue; // Не показываем подпись, если она уже вставлена через тег
+                            continue;
                         var signature = state.SingBy[s];
                         var key = $"{signature.StampedName}|{signature.StampedColor.ToHexNoAlpha()}";
                         var currentCount = signatureCounts.GetValueOrDefault(key, 0);
                         if (currentCount > 0)
                         {
-                            var label = new Label
+                            // --- ЭФФЕКТЫ ---
+                            var displayColor = signature.StampedColor;
+                            bool skip = false;
+                            if (signature.SignatureType == SignatureType.Invisible)
                             {
-                                Text = signature.StampedName.Split('|')[0],
-                                FontColorOverride = signature.StampedColor,
-                                Margin = new Thickness(8, 2, 8, 2),
+                                if (!_isUltravioletMode)
+                                {
+                                    skip = true;
+                                }
+                            }
+                            else if (signature.SignatureType == SignatureType.Glowing)
+                            {
+                                if (_isUltravioletMode)
+                                {
+                                    displayColor = Color.White;
+                                }
+                            }
+                            if (skip)
+                                continue;
+                            // --- КОНЕЦ ЭФФЕКТОВ ---
+                            var signWidget = new SignWidget
+                            {
+                                SignInfo = new SignDisplayInfo
+                                {
+                                    StampedName = signature.StampedName,
+                                    StampedColor = displayColor
+                                }
                             };
-                            SignatureContainer.AddChild(label);
+                            SignatureContainer.AddChild(signWidget);
                             signatureCounts[key] = currentCount - 1;
                         }
                     }
+                    SignatureContainer.Visible = SignatureContainer.ChildCount > 0;
+                    SignDisplay.Visible = false;
                     break;
                 case SignatureDisplayStyle.Disable:
+                    SignatureContainer.Visible = false;
+                    SignDisplay.Visible = false;
                     break;
             }
+        }
 
-            SignatureContainer.Visible = !isEditing && signatureStyle == SignatureDisplayStyle.List && SignatureContainer.ChildCount > 0;
+        /// <summary>
+        /// Определяет, должна ли подпись быть видна в текущем режиме
+        /// </summary>
+        private bool ShouldShowSignature(StampDisplayInfo signature)
+        {
+            return signature.SignatureType switch
+            {
+                SignatureType.Normal => true, // Обычные подписи всегда видны
+                SignatureType.Glowing => true, // Светящиеся подписи видны всегда
+                SignatureType.Invisible => _isUltravioletMode, // Невидимые видны только под УФ
+                _ => true
+            };
+        }
+
+        /// <summary>
+        /// Получает цвет подписи в зависимости от типа и режима освещения
+        /// </summary>
+        private Color GetSignatureColor(StampDisplayInfo signature)
+        {
+            return signature.SignatureType switch
+            {
+                SignatureType.Normal => signature.StampedColor,
+                SignatureType.Glowing => _isUltravioletMode ? InvertColor(signature.StampedColor) : signature.StampedColor,
+                SignatureType.Invisible => _isUltravioletMode ? signature.StampedColor : Color.Transparent,
+                _ => signature.StampedColor
+            };
+        }
+
+        /// <summary>
+        /// Инвертирует цвет для светящихся подписей под УФ
+        /// </summary>
+        private Color InvertColor(Color color)
+        {
+            return new Color(255 - color.R, 255 - color.G, 255 - color.B, color.A);
+        }
+
+        /// <summary>
+        /// Устанавливает режим ультрафиолетового освещения
+        /// </summary>
+        public void SetUltravioletMode(bool isUltraviolet)
+        {
+            _isUltravioletMode = isUltraviolet;
+
+            // Применяем фиолетовый оттенок к фону в УФ режиме
+            if (_isUltravioletMode)
+            {
+                // Фиолетовое наложение без прозрачности
+                var overlayColor = new Color(0.8f, 0.7f, 1.0f, 1.0f);
+                PaperBackground.ModulateSelfOverride = overlayColor;
+            }
+            else
+            {
+                PaperBackground.ModulateSelfOverride = Color.White;
+            }
         }
 
         /// <summary>
@@ -492,7 +629,82 @@ namespace Content.Client.Paper.UI
         {
             // Prevent further saving while text processing still in
             SaveButton.Disabled = true;
-            OnSaved?.Invoke(Rope.Collapse(Input.TextRope));
+
+            var currentInputText = Rope.Collapse(Input.TextRope);
+
+            if (_isUltravioletMode)
+            {
+                // Если УФ режим активен, отправляем текущий текст из поля ввода
+                OnSaved?.Invoke(currentInputText);
+            }
+            else
+            {
+                // Если УФ режим не активен, применяем изменения к оригинальному тексту
+                // сохраняя скрытые теги нетронутыми
+                var mergedText = MergeChangesWithHiddenTags(_originalText, currentInputText);
+                OnSaved?.Invoke(mergedText);
+            }
+        }
+
+        /// <summary>
+        /// Умно объединяет изменения игрока с оригинальным текстом, сохраняя скрытые теги
+        /// </summary>
+        private string MergeChangesWithHiddenTags(string originalText, string currentText)
+        {
+            // Находим все скрытые теги в оригинальном тексте
+            var hiddenMatches = Regex.Matches(originalText, @"\[hidden\](.*?)\[/hidden\]", RegexOptions.Singleline);
+
+            if (hiddenMatches.Count == 0)
+            {
+                // Если нет скрытых тегов, просто возвращаем текущий текст
+                return currentText;
+            }
+
+            // Создаем "видимую" версию оригинального текста (скрытые теги заменены на пробелы)
+            var visibleOriginalText = originalText;
+            var hiddenTagInfos = new List<(string tag, string spaces, int originalIndex)>();
+
+            foreach (Match match in hiddenMatches)
+            {
+                var tag = match.Value;
+                var content = match.Groups[1].Value;
+                var spaces = new string(' ', content.Length);
+                var originalIndex = match.Index;
+                hiddenTagInfos.Add((tag, spaces, originalIndex));
+                visibleOriginalText = visibleOriginalText.Replace(tag, spaces);
+            }
+
+            // Если видимый текст не изменился, возвращаем оригинал
+            if (visibleOriginalText == currentText)
+            {
+                return originalText;
+            }
+
+            // Применяем изменения, сохраняя позиции скрытых тегов
+            var result = currentText;
+            var offset = 0;
+
+            // Сортируем теги по позиции в оригинальном тексте
+            var sortedTags = hiddenTagInfos.OrderBy(x => x.originalIndex).ToList();
+
+            foreach (var (tag, spaces, originalIndex) in sortedTags)
+            {
+                // Находим позицию пробелов в текущем тексте
+                var adjustedIndex = originalIndex + offset;
+                if (adjustedIndex < result.Length)
+                {
+                    // Проверяем, есть ли пробелы на этой позиции
+                    var substring = result.Substring(adjustedIndex, Math.Min(spaces.Length, result.Length - adjustedIndex));
+                    if (substring.All(c => c == ' '))
+                    {
+                        // Заменяем пробелы на оригинальный тег
+                        result = result.Substring(0, adjustedIndex) + tag + result.Substring(adjustedIndex + spaces.Length);
+                        offset += tag.Length - spaces.Length;
+                    }
+                }
+            }
+
+            return result;
         }
 
         private void UpdateFillState()
@@ -520,6 +732,27 @@ namespace Content.Client.Paper.UI
             Classic,
             List,
             Disable
+        }
+
+        public void UpdateState(PaperComponent.PaperBoundUserInterfaceState state)
+        {
+            _lastState = state;
+            Populate(state);
+        }
+
+        // Гарантируем обновление UI при каждом открытии и смене режима
+        public new void Open()
+        {
+            base.Open();
+            if (_lastState != null)
+                Populate(_lastState);
+        }
+
+        public void OnUltravioletModeChanged(bool isUltraviolet)
+        {
+            SetUltravioletMode(isUltraviolet);
+            if (_lastState != null)
+                Populate(_lastState);
         }
     }
 }

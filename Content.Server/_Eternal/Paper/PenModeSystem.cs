@@ -9,6 +9,7 @@ using System.Linq;
 using Content.Shared._Eternal.Paper;
 using Robust.Server.GameObjects;
 using Content.Shared.UserInterface;
+using Content.Shared.Tag;
 
 namespace Content.Server._Eternal.Paper;
 
@@ -16,6 +17,7 @@ public sealed class PenModeSystem : EntitySystem
 {
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly TagSystem _tagSystem = default!;
 
     public override void Initialize()
     {
@@ -24,6 +26,39 @@ public sealed class PenModeSystem : EntitySystem
         SubscribeLocalEvent<ChameleonPenComponent, GetVerbsEvent<InteractionVerb>>(AddChameleonVerbs);
         SubscribeLocalEvent<ChameleonPenComponent, BoundUIOpenedEvent>(OnBuiOpened);
         SubscribeLocalEvent<ChameleonPenComponent, ChameleonPenBuiSetMessage>(OnBuiMessage);
+
+        // Добавляем глаголы для обычных ручек
+        SubscribeAllEvent<GetVerbsEvent<InteractionVerb>>(OnGetVerbs);
+    }
+
+    private void OnGetVerbs(GetVerbsEvent<InteractionVerb> args)
+    {
+        var uid = args.Target;
+
+        // Проверяем, что это обычная ручка (имеет тег Pen, но не имеет PenModeComponent или ChameleonPenComponent)
+        if (!_tagSystem.HasTag(uid, "Pen") ||
+            HasComp<PenModeComponent>(uid) ||
+            HasComp<ChameleonPenComponent>(uid))
+            return;
+
+        if (!args.CanAccess || !args.CanInteract)
+            return;
+
+        var signVerb = new InteractionVerb
+        {
+            Act = () => SignWithNormalPen(uid, args.User),
+            Priority = 10,
+            Text = Loc.GetString("pen-verb-sign"),
+            Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Objects/Misc/pens.rsi/pen.png"))
+        };
+        args.Verbs.Add(signVerb);
+    }
+
+    private void SignWithNormalPen(EntityUid pen, EntityUid user)
+    {
+        // Обычные ручки подписывают обычными чернилами
+        // Логика подписи обрабатывается в PaperSystem при взаимодействии с бумагой
+        _popup.PopupEntity("Используйте ручку на бумаге для подписи", pen, user);
     }
 
     private void AddModeVerb(EntityUid uid, PenModeComponent comp, GetVerbsEvent<InteractionVerb> args)
@@ -102,7 +137,7 @@ public sealed class PenModeSystem : EntitySystem
 
     private void OnBuiOpened(EntityUid uid, ChameleonPenComponent comp, BoundUIOpenedEvent args)
     {
-        var state = new ChameleonPenBuiState(comp.ForgedSignatureColor, comp.ForgedSignatureText);
+        var state = new ChameleonPenBuiState(comp.ForgedSignatureColor, comp.ForgedSignatureText, comp.SignatureType);
         _uiSystem.SetUiState(uid, ChameleonPenUiKey.Key, state);
     }
 
@@ -110,6 +145,7 @@ public sealed class PenModeSystem : EntitySystem
     {
         comp.ForgedSignatureColor = msg.ForgedSignatureColor;
         comp.ForgedSignatureText = msg.ForgedSignatureText;
+        comp.SignatureType = msg.SignatureType;
         Dirty(uid, comp);
     }
 }

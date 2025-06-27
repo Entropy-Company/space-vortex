@@ -15,11 +15,13 @@ public sealed class ChameleonPenBuiState : BoundUserInterfaceState
 {
     public readonly Color? ForgedSignatureColor;
     public readonly string? ForgedSignatureText;
+    public readonly SignatureType SignatureType;
 
-    public ChameleonPenBuiState(Color? color, string? text)
+    public ChameleonPenBuiState(Color? color, string? text, SignatureType signatureType)
     {
         ForgedSignatureColor = color;
         ForgedSignatureText = text;
+        SignatureType = signatureType;
     }
 }
 
@@ -28,10 +30,12 @@ public sealed class ChameleonPenBuiSetMessage : BoundUserInterfaceMessage
 {
     public readonly Color ForgedSignatureColor;
     public readonly string ForgedSignatureText;
+    public readonly SignatureType SignatureType;
 
-    public ChameleonPenBuiSetMessage(Color color, string text)
+    public ChameleonPenBuiSetMessage(Color color, string text, SignatureType signatureType)
     {
         ForgedSignatureColor = color;
         ForgedSignatureText = text;
+        SignatureType = signatureType;
     }
 }

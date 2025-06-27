@@ -24,6 +24,7 @@ public sealed partial class SignWidget : PanelContainer
     private Font? _font;
     private int _fontSize = 26;
     private string _fontPrototypeId = "Sign";
+    private SignDisplayInfo _signInfo;
 
     public float Orientation
     {
@@ -52,7 +53,9 @@ public sealed partial class SignWidget : PanelContainer
     }
 
     public SignDisplayInfo SignInfo {
+        get => _signInfo;
         set {
+            _signInfo = value;
             StampedByLabel.Text = Loc.GetString(value.StampedName);
             StampedByLabel.FontColorOverride = value.StampedColor;
             ModulateSelfOverride = value.StampedColor;

@@ -1,6 +1,7 @@
 using Robust.Shared.Serialization;
 using Robust.Shared.Audio;
 using Robust.Shared.Maths;
+using Content.Shared._Eternal.Paper;
 
 namespace Content.Shared.Paper;
 
@@ -23,6 +24,9 @@ public partial struct StampDisplayInfo
 
     [DataField("stampedColor")]
     public Color StampedColor;
+
+    [DataField("signatureType")]
+    public SignatureType SignatureType = SignatureType.Normal;
 }
 
 [RegisterComponent]

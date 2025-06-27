@@ -1,6 +1,7 @@
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
+using Content.Shared._Eternal.Paper;
 
 namespace Content.Shared.Paper;
 
@@ -48,13 +49,15 @@ public sealed partial class PaperComponent : Component
         public readonly List<StampDisplayInfo> StampedBy;
         public readonly List<StampDisplayInfo> SingBy;
         public readonly PaperAction Mode;
+        public readonly bool IsUltravioletMode;
 
-        public PaperBoundUserInterfaceState(string text, List<StampDisplayInfo> stampedBy, List<StampDisplayInfo> singBy, PaperAction mode = PaperAction.Read)
+        public PaperBoundUserInterfaceState(string text, List<StampDisplayInfo> stampedBy, List<StampDisplayInfo> singBy, PaperAction mode = PaperAction.Read, bool isUltravioletMode = false)
         {
             Text = text;
             StampedBy = stampedBy;
             SingBy = singBy;
             Mode = mode;
+            IsUltravioletMode = isUltravioletMode;
         }
     }
 
