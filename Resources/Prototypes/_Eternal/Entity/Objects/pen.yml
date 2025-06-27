@@ -28,7 +28,7 @@
 - type: entity
   name: УФ фонарик
   id: UltravioletFlashlight
-  parent: BaseItem
+  parent: FlashlightLantern
   description: A special flashlight that can reveal invisible signatures and make glowing signatures invert their colors.
   components:
   - type: Sprite
@@ -45,10 +45,6 @@
     materialComposition:
       Steel: 30
       Glass: 10
-  - type: PointLight
-    color: "#ccb3ff"
-    radius: 2
-    energy: 0.5
   - type: UseDelay
     delay: 0.5
   - type: UltravioletFlashlight

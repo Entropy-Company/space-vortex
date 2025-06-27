@@ -11,6 +11,7 @@ using Content.Shared.Hands.Components;
 using Robust.Shared.GameStates;
 using Robust.Shared.Input;
 using Robust.Client.Input;
+using Content.Shared._Eternal.Paper;
 
 namespace Content.Client.Paper.UI;
 
@@ -23,6 +24,7 @@ public sealed class PaperBoundUserInterface : BoundUserInterface
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
+    [Dependency] private readonly IUltravioletFlashlightSystem _ultravioletFlashlight = default!;
 
     public PaperBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -75,7 +77,7 @@ public sealed class PaperBoundUserInterface : BoundUserInterface
         {
             foreach (var hand in hands.Hands.Values)
             {
-                if (hand.HeldEntity != null && _entityManager.HasComponent<UltravioletFlashlightComponent>(hand.HeldEntity.Value))
+                if (hand.HeldEntity != null && _ultravioletFlashlight.IsUltravioletFlashlightWorking(hand.HeldEntity.Value))
                 {
                     isUltravioletMode = true;
                     break;

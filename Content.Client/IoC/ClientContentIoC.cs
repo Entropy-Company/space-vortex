@@ -26,6 +26,8 @@ using Content.Shared.Administration.Managers;
 using Content.Shared.Chat;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Players.RateLimiting;
+using Content.Shared._Eternal.Paper;
+using Content.Client._Eternal.Paper;
 
 namespace Content.Client.IoC
 {
@@ -63,6 +65,7 @@ namespace Content.Client.IoC
             collection.Register<SharedPlayerRateLimitManager, PlayerRateLimitManager>();
             collection.Register<TitleWindowManager>();
             collection.Register<ClientsidePlaytimeTrackingManager>();
+            collection.Register<IUltravioletFlashlightSystem, UltravioletFlashlightSystem>();
         }
     }
 }
