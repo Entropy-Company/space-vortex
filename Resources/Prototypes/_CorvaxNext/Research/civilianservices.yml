@@ -16,6 +16,9 @@
   - EnergyCautery
   - AdvancedRetractor
   - BorgModuleAdvancedSurgery
+  position: 2, -1
+  requiredTech:
+  - MechanizedTreatment
 
 - type: technology
   id: CyberneticEnhancements
@@ -34,6 +37,10 @@
   - BasicCyberneticEyes
   - SecurityCyberneticEyes
   - MedicalCyberneticEyes
+  isFinalLevelTech: 3
+  position: 3, -1
+  requiredTech:
+  - AdvancedTreatment
 
 # Tier 3
 
@@ -48,3 +55,6 @@
   cost: 10000
   recipeUnlocks:
   - OmnimedTool
+  position: 4, -1
+  requiredTech:
+  - CyberneticEnhancements
