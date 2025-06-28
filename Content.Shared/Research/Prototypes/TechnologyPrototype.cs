@@ -1,5 +1,7 @@
 ﻿using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Robust.Shared.Maths;
+using System.Numerics;
 
 namespace Content.Shared.Research.Prototypes;
 
@@ -53,10 +55,10 @@ public sealed partial class TechnologyPrototype : IPrototype
     public int Cost = 10000;
 
     /// <summary>
-    /// A list of <see cref="TechnologyPrototype"/>s that need to be unlocked in order to unlock this technology.
+    /// A list of technologies that must be unlocked before this technology can be researched.
     /// </summary>
     [DataField]
-    public List<ProtoId<TechnologyPrototype>> TechnologyPrerequisites = new();
+    public List<ProtoId<TechnologyPrototype>> RequiredTech = new();
 
     /// <summary>
     /// A list of <see cref="LatheRecipePrototype"/>s that are unlocked by this technology
@@ -69,6 +71,19 @@ public sealed partial class TechnologyPrototype : IPrototype
     /// </summary>
     [DataField]
     public IReadOnlyList<GenericUnlock> GenericUnlocks = new List<GenericUnlock>();
+
+    /// <summary>
+    /// Optional position in the tech tree (X, Y). If not set, will be auto-arranged.
+    /// </summary>
+    [DataField]
+    public Vector2? Position { get; private set; }
+
+    /// <summary>
+    /// If set, this technology will set the discipline level to this value when unlocked.
+    /// Only applies if the current discipline level is lower than this value.
+    /// </summary>
+    [DataField]
+    public int? IsFinalLevelTech { get; private set; }
 }
 
 [DataDefinition]

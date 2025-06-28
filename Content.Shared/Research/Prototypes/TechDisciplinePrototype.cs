@@ -34,15 +34,21 @@ public sealed partial class TechDisciplinePrototype : IPrototype
     public SpriteSpecifier Icon = default!;
 
     /// <summary>
-    /// For each tier a discipline supports, what percentage
-    /// of the previous tier must be unlocked for it to become available
-    /// </summary>
-    [DataField("tierPrerequisites", required: true)]
-    public Dictionary<int, float> TierPrerequisites = new();
-
-    /// <summary>
     /// Purchasing this tier of technology causes a server to become "locked" to this discipline.
     /// </summary>
     [DataField("lockoutTier")]
     public int LockoutTier = 3;
+
+    /// <summary>
+    /// What percentage of technologies of the previous tier need to be unlocked
+    /// before the next tier becomes available.
+    /// </summary>
+    [DataField("tierPrerequisites")]
+    public Dictionary<int, float> TierPrerequisites = new();
+
+    /// <summary>
+    /// Short name for menu tab.
+    /// </summary>
+    [DataField]
+    public string? MenuName { get; private set; }
 }

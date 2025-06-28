@@ -1,6 +1,6 @@
 - type: latheRecipe
   id: PKAUpgradeDamage
-  result: LavalandPKAUpgradeDamage  # Probably the strongest so might as well keep it under control.
+  result: LavalandPKAUpgradeDamage # Probably the strongest so might as well keep it under control.
   categories:
   - Weapons
   completetime: 5

@@ -14,6 +14,10 @@
   - HydroponicsTrayMachineCircuitboard
   - ReagentGrinderIndustrialMachineCircuitboard
   - PlantAnalyzer # Corvax-Next-PlantAnalyzer
+  position: 0, -1
+  requiredTech:
+  - AdvancedEntertainment
+
 
 - type: technology
   id: CritterMechs
@@ -34,6 +38,9 @@
   - HamtrPeripheralsElectronics
   - MechEquipmentGrabberSmall
   - VimHarness
+  position: 1, 1
+  requiredTech:
+  - AdvancedEntertainment
 
 - type: technology
   id: AudioVisualCommunication
@@ -53,6 +60,10 @@
   - SurveillanceWirelessCameraMonitorCircuitboard
   - TelecomServerCircuitboard
   - HolopadMachineCircuitboard
+  position: 2, 1
+  isFinalLevelTech: 2
+  requiredTech:
+  - AdvancedEntertainment
 
 - type: technology
   id: AdvancedEntertainment
@@ -69,6 +80,7 @@
     - DawInstrumentMachineCircuitboard
     - MassMediaCircuitboard
     - JukeboxCircuitBoard
+  position: 1, 0
 
 - type: technology
   id: MeatManipulation
@@ -84,6 +96,9 @@
   - BiofabricatorMachineCircuitboard
   - BiomassReclaimerMachineCircuitboard
   - MedicalBiofabMachineBoard #Corvax-Next-Surgery
+  position: 0, -2
+  requiredTech:
+  - AdvancedEntertainment
 
 # Tier 2
 
@@ -134,7 +149,10 @@
   cost: 5000
   recipeUnlocks:
   - BorgModuleAdvancedChemical
-
+  position: 1, -1
+  requiredTech:
+  - AdvancedEntertainment
+  
 - type: technology
   id: AdvancedCleaning
   name: research-technology-advanced-cleaning
@@ -149,6 +167,9 @@
   - MegaSprayBottle
   - BagOfCleanliness # Corvax-Next-BluespaceTrashBag
   - BorgModuleAdvancedCleaning
+  position: -2, 0
+  requiredTech:
+  - AdvancedEntertainment
 
 - type: technology
   id: HONKMech
@@ -169,6 +190,9 @@
   - HonkerPeripheralsElectronics
   - HonkerTargetingElectronics
   - MechEquipmentHorn
+  position: 1, 2
+  requiredTech:
+  - CritterMechs
 
 - type: technology
   id: AdvancedSpray
@@ -182,6 +206,9 @@
   recipeUnlocks:
   - WeaponSprayNozzle
   - ClothingBackpackWaterTank
+  position: -3, 0
+  requiredTech:
+  - AdvancedEntertainment
 
 - type: technology
   id: BluespaceCargoTransport
@@ -194,6 +221,10 @@
   cost: 15000
   recipeUnlocks:
   - CargoTelepadMachineCircuitboard
+  position: 4, 0
+  isFinalLevelTech: 3
+  requiredTech:
+  - FauxAstroTiles
 
 - type: technology
   id: PushHorn
@@ -220,6 +251,9 @@
   cost: 10000
   recipeUnlocks:
   - ClothingShoesBootsSpeed
+  position: 5, 0
+  requiredTech:
+  - BluespaceCargoTransport
 
 - type: technology
   id: BluespaceChemistry
@@ -234,6 +268,9 @@
   - BluespaceBeaker
   - SyringeBluespace
   - BluespaceBodyBag # Corvax-Next-AdvancedBodyBags
+  position: 1, -2
+  requiredTech:
+  - MechanizedTreatment
 
 - type: technology
   id: LauncherSyringe
@@ -247,3 +284,6 @@
   recipeUnlocks:
   - LauncherSyringe
   - MiniSyringe
+  position: 1, -3
+  requiredTech:
+  - BluespaceChemistry
