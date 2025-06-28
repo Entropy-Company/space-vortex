@@ -19,3 +19,8 @@ research-console-prereqs-list-entry = - [color=orchid]{$text}[/color]
 
 research-console-no-access-popup = No access!
 research-console-unlock-technology-radio-broadcast = Unlocked [bold]{$technology}[/bold] for [bold]{$amount}[/bold] research by [bold]{$approver}[/bold].
+
+research-console-center-tree = Center tree
+research-console-research-button = Research
+research-console-unlocks-list-title = Unlocks
+research-console-already-unlocked = Already unlocked

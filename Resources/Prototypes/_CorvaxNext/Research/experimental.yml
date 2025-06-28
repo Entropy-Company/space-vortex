@@ -11,6 +11,9 @@
   recipeUnlocks:
   - ArtificialBluespaceCrystal
   - MachineBluespaceTransitorCircuitboard
+  position: -1, -1
+  requiredTech:
+  - DeterrenceTechnologies
 
 # Tier 3
 - type: technology
@@ -24,5 +27,7 @@
   cost: 30000
   recipeUnlocks:
   - MachineBluespaceHarvesterCircuitboard
-  technologyPrerequisites:
+  position: -1, -4
+  requiredTech:
   - Bluespace
+  - QuantumLeaping

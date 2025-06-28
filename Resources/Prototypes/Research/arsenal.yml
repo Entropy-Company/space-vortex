@@ -12,7 +12,7 @@
   recipeUnlocks:
   - WeaponProtoKineticAccelerator
   - ShuttleGunKineticCircuitboard
-  # These are roundstart but not replenishable for salvage
+  position: 1, 0
 
 - type: technology
   id: DraconicMunitions
@@ -35,7 +35,11 @@
   - MagazineBoxMagnumIncendiary
   - MagazineBoxLightRifleIncendiary
   - MagazineBoxRifleIncendiary
-
+  isFinalLevelTech: 2
+  position: 3, -1
+  requiredTech:
+  - ExplosiveTechnology
+  
 - type: technology
   id: WeaponizedLaserManipulation
   name: research-technology-weaponized-laser-manipulation
@@ -47,7 +51,10 @@
   cost: 7500
   recipeUnlocks:
   - WeaponLaserCarbine
-
+  position: 2, -2
+  requiredTech:
+  - UraniumMunitions
+  
 - type: technology
   id: NonlethalAmmunition
   name: research-technology-nonlethal-ammunition
@@ -62,6 +69,9 @@
   - BoxShellTranquilizer
   - BoxBeanbag
   - WeaponDisabler
+  position: 2, 0
+  requiredTech:
+  - SalvageWeapons
 
 - type: technology
   id: UraniumMunitions
@@ -83,6 +93,9 @@
   - MagazineBoxLightRifleUranium
   - MagazineBoxRifleUranium
   - BoxShotgunUranium
+  position: 1, -1
+  requiredTech:
+  - SalvageWeapons
 
 - type: technology
   id: AdvancedRiotControl
@@ -98,6 +111,9 @@
   - TelescopicShield
   - HoloprojectorSecurity
   - WeaponDisablerSMG
+  position: 3, 1
+  requiredTech:
+  - SpecialMeans
 
 - type: technology
   id: ExplosiveTechnology
@@ -116,6 +132,9 @@
   - FlashPayload
   - ExplosivePayload
   - ChemicalPayload
+  position: 2, -1
+  requiredTech:
+  - UraniumMunitions
 
 - type: technology
   id: SpecialMeans
@@ -128,7 +147,9 @@
   cost: 5000
   recipeUnlocks:
   - ClothingBackpackElectropack
-
+  position: 2, 1
+  requiredTech:
+  - NonlethalAmmunition
 # Tier 2
 
 - type: technology
@@ -142,6 +163,9 @@
   cost: 10000
   recipeUnlocks:
   - WeaponLaserCannon
+  position: 2, -3
+  requiredTech:
+  - WeaponizedLaserManipulation
 
 - type: technology
   id: WaveParticleHarnessing
@@ -154,6 +178,10 @@
   cost: 10000
   recipeUnlocks:
   - WeaponXrayCannon
+  position: 2, -4
+  isFinalLevelTech: 3
+  requiredTech:
+  - ConcentratedLaserWeaponry
 
 - type: technology
   id: KineticModifications
@@ -168,6 +196,9 @@
   - PKAUpgradeDamage
   - PKAUpgradeRange
   - PKAUpgradeFireRate
+  position: 0, 0
+  requiredTech:
+  - SalvageWeapons
 
 - type: technology
   id: BasicShuttleArmament
@@ -188,8 +219,10 @@
   - ShuttleGunSvalinnMachineGunCircuitboard
   - ShuttleGunPerforatorCircuitboard
   - ShuttleGunFriendshipCircuitboard
-  technologyPrerequisites:
-  - SalvageWeapons
+  isFinalLevelTech: 3
+  position: 3, -3
+  requiredTech:
+  - WeaponizedLaserManipulation
 
 # Tier 3
 
@@ -205,6 +238,9 @@
   recipeUnlocks:
   - WeaponAdvancedLaser
   - PortableRecharger
+  position: 2, -6
+  requiredTech:
+  - ThermalWeaponry
 
 - type: technology
   id: ThermalWeaponry
@@ -217,6 +253,9 @@
   cost: 15000
   recipeUnlocks:
   - WeaponTemperatureGun
+  position: 2, -5
+  requiredTech:
+  - WaveParticleHarnessing
 
 - type: technology
   id: AdvancedShuttleWeapon
@@ -231,5 +270,6 @@
   - GrenadeEMP
   - PowerCageHigh
   - ShuttleGunDusterCircuitboard
-  technologyPrerequisites:
+  position: 4, -3
+  requiredTech:
   - BasicShuttleArmament

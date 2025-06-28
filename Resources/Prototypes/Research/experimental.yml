@@ -11,6 +11,9 @@
   cost: 5000
   recipeUnlocks:
   - ProximitySensor
+  position: 1, -1
+  requiredTech:
+  - AlternativeResearch
 
 - type: technology
   id: BasicAnomalousResearch
@@ -27,6 +30,9 @@
   - AnomalyLocatorWide
   - APECircuitboard
   - AnomalyVesselCircuitboard
+  position: 3, -1
+  requiredTech:
+  - AlternativeResearch
 
 - type: technology
   id: BasicXenoArcheology
@@ -41,6 +47,9 @@
   - NodeScanner
   - AnalysisComputerCircuitboard
   - ArtifactAnalyzerMachineCircuitboard
+  position: 3, 1
+  requiredTech:
+  - AlternativeResearch
 
 - type: technology
   id: AlternativeResearch
@@ -53,7 +62,8 @@
   cost: 5000
   recipeUnlocks:
   - TechDiskComputerCircuitboard
-
+  position: 2, 0
+  
 - type: technology
   id: MagnetsTech
   name: research-technology-magnets-tech
@@ -66,6 +76,9 @@
   recipeUnlocks:
   - ClothingShoesBootsMagSci
   - ClothingShoesBootsMoon
+  position: 1, 1
+  requiredTech:
+  - AlternativeResearch
 
 - type: technology
   id: AnomalyCoreHarnessing
@@ -78,7 +91,10 @@
   cost: 10000
   recipeUnlocks:
   - WeaponGauntletGorilla
-
+  position: 4, -1
+  isFinalLevelTech: 2
+  requiredTech:
+  - BasicAnomalousResearch
 # Tier 2
 
 - type: technology
@@ -92,6 +108,9 @@
   cost: 5000
   recipeUnlocks:
   - ArtifactCrusherMachineCircuitboard
+  position: 4, 1
+  requiredTech:
+  - BasicXenoArcheology
 
 - type: technology
   id: AdvancedAnomalyResearch
@@ -106,8 +125,9 @@
   - WeaponPistolCHIMP
   - AnomalySynchronizerCircuitboard
   - AnomalyVesselExperimentalCircuitboard
-  technologyPrerequisites:
-  - BasicAnomalousResearch
+  position: 4, -2
+  requiredTech:
+  - AnomalyCoreHarnessing
 
 - type: technology
   id: DeterrenceTechnologies
@@ -121,6 +141,9 @@
   recipeUnlocks:
   - WeaponParticleDecelerator
   - HoloprojectorField
+  position: 0, -1
+  requiredTech:
+  - MagnetsTech
 
 # Corvax-Next-MutableLaws-Start
 - type: technology
@@ -145,6 +168,10 @@
   - ArtistCircuitBoard
   - NutimovCircuitBoard
   - AiRemoteBrain # Corvax-Next-AiRemoteControl
+  position: 0, 0
+  isFinalLevelTech: 3
+  requiredTech:
+  - MagnetsTech
 # Corvax-Next-MutableLaws-End
 
 # Tier 3
@@ -161,6 +188,10 @@
   recipeUnlocks:
     - WeaponForceGun
     - WeaponTetherGun
+  position: 5, 0
+  requiredTech:
+  - AbnormalArtifactManipulation
+  - AnomalyCoreHarnessing
 
 # Tier 3
 
@@ -175,6 +206,9 @@
   cost: 10000
   recipeUnlocks:
   - DeviceQuantumSpinInverter
+  position: 4, -3
+  requiredTech:
+  - AdvancedAnomalyResearch
 
 - type: technology
   id: BluespaceTimeManipulation
@@ -187,3 +221,6 @@
   cost: 10000
   recipeUnlocks:
   - DeviceDesynchronizer
+  position: 4, -4
+  requiredTech:
+  - QuantumLeaping
