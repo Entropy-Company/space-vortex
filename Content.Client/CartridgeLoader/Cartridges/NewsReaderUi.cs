@@ -35,6 +35,14 @@ public sealed partial class NewsReaderUi : UIFragment
         {
             SendNewsReaderMessage(NewsReaderUiAction.NotificationSwitch, userInterface);
         };
+        _fragment.OnArticleSelected += (index) =>
+        {
+            SendNewsReaderMessage(NewsReaderUiAction.ShowArticle, userInterface, index);
+        };
+        _fragment.OnBackButtonPressed += () =>
+        {
+            SendNewsReaderMessage(NewsReaderUiAction.BackToMain, userInterface);
+        };
     }
 
     public override void UpdateState(BoundUserInterfaceState state)
@@ -42,17 +50,20 @@ public sealed partial class NewsReaderUi : UIFragment
         switch (state)
         {
             case NewsReaderBoundUserInterfaceState cast:
-                _fragment?.UpdateState(cast.Article, cast.TargetNum, cast.TotalNum, cast.NotificationOn);
+                _fragment?.UpdateArticleState(cast.Article, cast.TargetNum, cast.TotalNum, cast.NotificationOn);
                 break;
             case NewsReaderEmptyBoundUserInterfaceState empty:
                 _fragment?.UpdateEmptyState(empty.NotificationOn);
                 break;
+            case NewsReaderListBoundUserInterfaceState list:
+                _fragment?.UpdateListState(list.Articles, list.NotificationOn);
+                break;
         }
     }
 
-    private void SendNewsReaderMessage(NewsReaderUiAction action, BoundUserInterface userInterface)
+    private void SendNewsReaderMessage(NewsReaderUiAction action, BoundUserInterface userInterface, int? articleIndex = null)
     {
-        var newsMessage = new NewsReaderUiMessageEvent(action);
+        var newsMessage = new NewsReaderUiMessageEvent(action, articleIndex);
         var message = new CartridgeUiMessage(newsMessage);
         userInterface.SendMessage(message);
     }

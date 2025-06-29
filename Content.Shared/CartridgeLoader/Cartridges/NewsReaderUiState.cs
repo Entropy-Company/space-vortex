@@ -36,3 +36,16 @@ public sealed class NewsReaderEmptyBoundUserInterfaceState : BoundUserInterfaceS
         NotificationOn = notificationOn;
     }
 }
+
+[Serializable, NetSerializable]
+public sealed class NewsReaderListBoundUserInterfaceState : BoundUserInterfaceState
+{
+    public NewsArticle[] Articles;
+    public bool NotificationOn;
+
+    public NewsReaderListBoundUserInterfaceState(NewsArticle[] articles, bool notificationOn)
+    {
+        Articles = articles;
+        NotificationOn = notificationOn;
+    }
+}

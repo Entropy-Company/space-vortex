@@ -15,4 +15,7 @@ public sealed partial class NewsReaderCartridgeComponent : Component
 
     [ViewVariables(VVAccess.ReadWrite), DataField]
     public bool NotificationOn = true;
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    public bool IsViewingArticle = false;
 }
