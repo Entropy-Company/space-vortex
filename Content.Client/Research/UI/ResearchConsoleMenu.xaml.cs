@@ -56,16 +56,16 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         _accessReader = _entity.System<AccessReaderSystem>();
         // StaticSprite.SetFromSpriteSpecifier(new SpriteSpecifier.Rsi(new("ADT/Interface/rnd-static.rsi"), "static"), new(2));
 
-        // Добавляем слой линий поверх DragContainer
+        // Добавляем слой линий в тот же контейнер что и тайлы
         _linesControl = new TechTreeLinesControl();
-        if (DragContainer.Parent != null)
-        {
-            var parent = DragContainer.Parent;
-            parent.AddChild(_linesControl);
-            _linesControl.SetPositionInParent(DragContainer.GetPositionInParent());
-            _linesControl.VerticalExpand = true;
-            _linesControl.HorizontalExpand = true;
-        }
+        LinesContainer.AddChild(_linesControl);
+        _linesControl.SetPositionInParent(0);
+        LayoutContainer.SetPosition(_linesControl, Vector2.Zero);
+        _linesControl.HorizontalExpand = true;
+        _linesControl.VerticalExpand = true;
+
+        // Подписка на изменение размера DragContainer для автоматического обновления линий
+        DragContainer.OnResized += delegate { UpdateLineCenters(); };
 
         ServerButton.OnPressed += _ => OnServerButtonPressed?.Invoke();
         DragContainer.OnKeyBindDown += args => OnKeybindDown(args);
@@ -159,11 +159,13 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
                 {
                     var tech = card.Technology;
                     var tilePos = _position + tech.Position!.Value * 150;
-                    // Центр тайла (80x80)
                     var center = tilePos + new Vector2(40, 40);
                     _linesControl.NodeCenters[tech.ID] = center;
 
-                    // Определяем статус технологии
+                    // Отладочная информация
+                    Logger.Info($"[RND] {tech.ID} - TilePos: {tilePos}, Center: {center}");
+
+                    // Обновляем статус технологии
                     bool unlocked = _research.IsTechnologyUnlocked(Entity, tech, database);
                     bool prereqsMet = tech.RequiredTech == null || tech.RequiredTech.All(req => _research.IsTechnologyUnlocked(Entity, _prototype.Index<TechnologyPrototype>(req), database));
                     bool available = _research.IsTechnologyAvailable(database, tech) && tech.Tier <= disciplineLevel && prereqsMet;
@@ -310,6 +312,7 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         }
         // Пересчитываем центры линий и перерисовываем
         UpdateLineCenters();
+        LayoutContainer.SetPosition(LinesContainer, DragContainer.Position);
     }
 
     public override void Close()
@@ -346,11 +349,10 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             if (child is MiniTechnologyCardControl card)
             {
                 var tech = card.Technology;
-                var tilePos = _position + tech.Position!.Value * 150;
-                var center = tilePos + new Vector2(40, 40);
+                // Получаем реальную позицию и размер UI-контрола
+                var center = card.Position + card.Size / 2f;
                 _linesControl.NodeCenters[tech.ID] = center;
 
-                // Обновляем статус технологии
                 bool unlocked = _research.IsTechnologyUnlocked(Entity, tech, database);
                 bool prereqsMet = tech.RequiredTech == null || tech.RequiredTech.All(req => _research.IsTechnologyUnlocked(Entity, _prototype.Index<TechnologyPrototype>(req), database));
                 bool available = _research.IsTechnologyAvailable(database, tech) && tech.Tier <= disciplineLevel && prereqsMet;
