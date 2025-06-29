@@ -165,13 +165,13 @@ component.AccountId = 0; // Placeholder
             do
             {
                 accountNumber = _random.Next(100000, 999999);
-            } while (AccountExist(accountId));
+            } while (AccountExist(accountNumber));
 
-            account = new BankAccount(accountNumber, startingBalance);
+            account = new BankAccount(accountNumber, startingBalance, _random);
         }
         else
         {
-            account = new BankAccount(accountId, startingBalance);
+            account = new BankAccount(accountId, startingBalance, _random);
         }
 
         _accounts.Add(account);
