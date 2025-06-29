@@ -252,13 +252,28 @@ public sealed class NewsSystem : SharedNewsSystem
         switch (message.Action)
         {
             case NewsReaderUiAction.Next:
-                NewsReaderLeafArticle(ent, 1);
+                if (ent.Comp.IsViewingArticle)
+                    NewsReaderLeafArticle(ent, 1);
                 break;
             case NewsReaderUiAction.Prev:
-                NewsReaderLeafArticle(ent, -1);
+                if (ent.Comp.IsViewingArticle)
+                    NewsReaderLeafArticle(ent, -1);
                 break;
             case NewsReaderUiAction.NotificationSwitch:
                 ent.Comp.NotificationOn = !ent.Comp.NotificationOn;
+                break;
+            case NewsReaderUiAction.ShowArticle:
+                if (message.ArticleIndex.HasValue)
+                {
+                    ent.Comp.ArticleNumber = message.ArticleIndex.Value;
+                    ent.Comp.IsViewingArticle = true;
+                }
+                break;
+            case NewsReaderUiAction.ShowList:
+                ent.Comp.IsViewingArticle = false;
+                break;
+            case NewsReaderUiAction.BackToMain:
+                ent.Comp.IsViewingArticle = false;
                 break;
         }
 
@@ -267,6 +282,8 @@ public sealed class NewsSystem : SharedNewsSystem
 
     private void OnReaderUiReady(Entity<NewsReaderCartridgeComponent> ent, ref CartridgeUiReadyEvent args)
     {
+        // Always start with list view
+        ent.Comp.IsViewingArticle = false;
         UpdateReaderUi(ent, args.Loader);
     }
     #endregion
@@ -301,21 +318,34 @@ public sealed class NewsSystem : SharedNewsSystem
         if (!TryGetArticles(ent, out var articles))
             return;
 
-        NewsReaderLeafArticle(ent, 0);
-
         if (articles.Count == 0)
         {
             _cartridgeLoaderSystem.UpdateCartridgeUiState(loaderUid, new NewsReaderEmptyBoundUserInterfaceState(ent.Comp.NotificationOn));
             return;
         }
 
-        var state = new NewsReaderBoundUserInterfaceState(
-            articles[ent.Comp.ArticleNumber],
-            ent.Comp.ArticleNumber + 1,
-            articles.Count,
-            ent.Comp.NotificationOn);
+        if (ent.Comp.IsViewingArticle)
+        {
+            // Ensure article number is within bounds
+            if (ent.Comp.ArticleNumber >= articles.Count)
+                ent.Comp.ArticleNumber = 0;
+            if (ent.Comp.ArticleNumber < 0)
+                ent.Comp.ArticleNumber = articles.Count - 1;
 
-        _cartridgeLoaderSystem.UpdateCartridgeUiState(loaderUid, state);
+            var state = new NewsReaderBoundUserInterfaceState(
+                articles[ent.Comp.ArticleNumber],
+                ent.Comp.ArticleNumber + 1,
+                articles.Count,
+                ent.Comp.NotificationOn);
+
+            _cartridgeLoaderSystem.UpdateCartridgeUiState(loaderUid, state);
+        }
+        else
+        {
+            // Show list of articles
+            var state = new NewsReaderListBoundUserInterfaceState(articles.ToArray(), ent.Comp.NotificationOn);
+            _cartridgeLoaderSystem.UpdateCartridgeUiState(loaderUid, state);
+        }
     }
 
     private void NewsReaderLeafArticle(Entity<NewsReaderCartridgeComponent> ent, int leafDir)
