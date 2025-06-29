@@ -1,6 +1,6 @@
 - type: latheRecipe
   id: PKAUpgradeDamage
-  result: LavalandPKAUpgradeDamage # Probably the strongest so might as well keep it under control.
+  result: PKAUpgradeDamage # Probably the strongest so might as well keep it under control.
   categories:
   - Weapons
   completetime: 5
@@ -11,7 +11,7 @@
 
 - type: latheRecipe
   id: PKAUpgradeRange
-  result: LavalandPKAUpgradeRange
+  result: PKAUpgradeRange
   categories:
   - Weapons
   completetime: 5
@@ -22,7 +22,7 @@
 
 - type: latheRecipe
   id: PKAUpgradeFireRate
-  result: LavalandPKAUpgradeFireRate
+  result: PKAUpgradeFireRate
   categories:
   - Weapons
   completetime: 5

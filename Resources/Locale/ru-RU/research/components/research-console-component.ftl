@@ -18,7 +18,3 @@ research-console-prereqs-list-start = Требует:
 research-console-prereqs-list-entry = - [color=orchid]{ $text }[/color]
 research-console-no-access-popup = Нет доступа!
 research-console-unlock-technology-radio-broadcast = Пользователь [bold]{ $approver }[/bold] исследовал [bold]{ $technology }[/bold], за [bold]{ $amount }[/bold] очков исследований.
-research-console-center-tree = Центрировать древо
-research-console-research-button = Исследовать
-research-console-unlocks-list-title = Открывает
-research-console-already-unlocked = Уже изучено

@@ -79,7 +79,7 @@ public abstract class SharedResearchSystem : EntitySystem
         if (component.UnlockedTechnologies.Contains(tech.ID))
             return false;
 
-        foreach (var prereq in tech.RequiredTech)
+        foreach (var prereq in tech.TechnologyPrerequisites)
         {
             if (!component.UnlockedTechnologies.Contains(prereq))
                 return false;
@@ -111,46 +111,12 @@ public abstract class SharedResearchSystem : EntitySystem
         var allUnlocked = new List<TechnologyPrototype>();
         foreach (var recipe in component.UnlockedTechnologies)
         {
-            // Skip special level technologies
-            if (recipe.StartsWith($"{techDiscipline.ID}_Level_"))
-                continue;
-
             var proto = PrototypeManager.Index<TechnologyPrototype>(recipe);
             if (proto.Discipline != techDiscipline.ID)
                 continue;
             allUnlocked.Add(proto);
         }
 
-        // Check for special level technologies first
-        var maxLevelFromTech = 1; // Default level
-        foreach (var tech in allUnlocked)
-        {
-            if (tech.IsFinalLevelTech.HasValue && tech.IsFinalLevelTech.Value > maxLevelFromTech)
-            {
-                maxLevelFromTech = tech.IsFinalLevelTech.Value;
-            }
-        }
-
-        // Also check for special level entries in unlocked technologies
-        foreach (var techId in component.UnlockedTechnologies)
-        {
-            if (techId.StartsWith($"{techDiscipline.ID}_Level_"))
-            {
-                var levelStr = techId.Substring($"{techDiscipline.ID}_Level_".Length);
-                if (int.TryParse(levelStr, out var level) && level > maxLevelFromTech)
-                {
-                    maxLevelFromTech = level;
-                }
-            }
-        }
-
-        // If we have a level from isFinalLevelTech, use that
-        if (maxLevelFromTech > 1)
-        {
-            return maxLevelFromTech;
-        }
-
-        // Fall back to the old tier-based system
         var highestTier = techDiscipline.TierPrerequisites.Keys.Max();
         var tier = 2; //tier 1 is always given
 
@@ -202,10 +168,10 @@ public abstract class SharedResearchSystem : EntitySystem
             description.PushNewline();
         }
 
-        if (includePrereqs && technology.RequiredTech.Any())
+        if (includePrereqs && technology.TechnologyPrerequisites.Any())
         {
             description.AddMarkupOrThrow(Loc.GetString("research-console-prereqs-list-start"));
-            foreach (var recipe in technology.RequiredTech)
+            foreach (var recipe in technology.TechnologyPrerequisites)
             {
                 var techProto = PrototypeManager.Index(recipe);
                 description.PushNewline();
