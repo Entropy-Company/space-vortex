@@ -254,8 +254,10 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             _position += args.Relative;
             foreach (var child in DragContainer.Children)
             {
-                LayoutContainer.SetPosition(child, child.Position + args.Relative);
+                if (child is MiniTechnologyCardControl card)
+                    LayoutContainer.SetPosition(card, _position + card.Technology.Position!.Value * 150);
             }
+            // Пересчитываем центры линий и перерисовываем
             UpdateLineCenters();
         }
     }
@@ -308,6 +310,7 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             if (child is MiniTechnologyCardControl card)
                 LayoutContainer.SetPosition(card, _position + card.Technology.Position!.Value * 150);
         }
+        // Пересчитываем центры линий и перерисовываем
         UpdateLineCenters();
         LayoutContainer.SetPosition(LinesContainer, DragContainer.Position);
     }
@@ -335,16 +338,28 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             return;
         _linesControl.NodeCenters.Clear();
         _linesControl.NodeStatuses.Clear();
+
         if (!_entity.TryGetComponent(Entity, out TechnologyDatabaseComponent? database))
             return;
+
         var disciplineLevel = _research.GetHighestDisciplineTier(database, _prototype.Index<TechDisciplinePrototype>(CurrentDiscipline));
+
         foreach (var child in DragContainer.Children)
         {
             if (child is MiniTechnologyCardControl card)
             {
+                var tech = card.Technology;
+                // Получаем реальную позицию и размер UI-контрола
                 var center = card.Position + card.Size / 2f;
-                _linesControl.NodeCenters[card.Technology.ID] = center;
-                // ... статус ...
+                _linesControl.NodeCenters[tech.ID] = center;
+
+                bool unlocked = _research.IsTechnologyUnlocked(Entity, tech, database);
+                bool prereqsMet = tech.RequiredTech == null || tech.RequiredTech.All(req => _research.IsTechnologyUnlocked(Entity, _prototype.Index<TechnologyPrototype>(req), database));
+                bool available = _research.IsTechnologyAvailable(database, tech) && tech.Tier <= disciplineLevel && prereqsMet;
+
+                var status = unlocked ? ResearchAvailablity.Researched :
+                            (available ? ResearchAvailablity.Available : ResearchAvailablity.Unavailable);
+                _linesControl.NodeStatuses[tech.ID] = status;
             }
         }
         _linesControl.QueueRedraw();
