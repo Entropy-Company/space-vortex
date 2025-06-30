@@ -11,6 +11,7 @@ using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 using Content.Shared.CartridgeLoader.Cartridges;
 using Robust.Client.UserInterface.CustomControls;
+using System.Text;
 
 namespace Content.Client.CartridgeLoader.Cartridges;
 
@@ -26,6 +27,7 @@ public sealed partial class NotekeeperUiFragment : BoxContainer
 
     private int? _currentEditingNoteId = null;
     private int? _currentViewingNoteId = null;
+    private const int MaxLineLength = 55;
 
     public NotekeeperUiFragment()
     {
@@ -43,6 +45,63 @@ public sealed partial class NotekeeperUiFragment : BoxContainer
                 OnNoteSelected?.Invoke(_currentViewingNoteId.Value);
         };
         NewNoteButton.OnPressed += _ => OnCreateNewNote?.Invoke();
+    }
+
+    private string AddWordWrapping(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return text;
+
+        var words = text.Split(' ');
+        var result = new StringBuilder();
+        var currentLineLength = 0;
+
+        foreach (var word in words)
+        {
+            // Если слово само по себе длиннее максимальной длины строки
+            if (word.Length > MaxLineLength)
+            {
+                // Если текущая строка не пустая, добавляем перенос
+                if (currentLineLength > 0)
+                {
+                    result.AppendLine();
+                    currentLineLength = 0;
+                }
+
+                // Разбиваем длинное слово
+                for (int i = 0; i < word.Length; i += MaxLineLength)
+                {
+                    var chunk = word.Substring(i, Math.Min(MaxLineLength, word.Length - i));
+                    if (i > 0)
+                        result.AppendLine();
+                    result.Append(chunk);
+                }
+                currentLineLength = word.Length % MaxLineLength;
+                if (currentLineLength == 0)
+                    currentLineLength = MaxLineLength;
+            }
+            else
+            {
+                // Проверяем, поместится ли слово на текущей строке
+                if (currentLineLength + word.Length + (currentLineLength > 0 ? 1 : 0) > MaxLineLength)
+                {
+                    result.AppendLine();
+                    currentLineLength = 0;
+                }
+
+                // Добавляем пробел перед словом, если это не первое слово в строке
+                if (currentLineLength > 0)
+                {
+                    result.Append(' ');
+                    currentLineLength++;
+                }
+
+                result.Append(word);
+                currentLineLength += word.Length;
+            }
+        }
+
+        return result.ToString();
     }
 
     public void UpdateListState(List<NoteData> notes)
@@ -77,7 +136,10 @@ public sealed partial class NotekeeperUiFragment : BoxContainer
 
         _currentViewingNoteId = note.Id;
         NoteViewTitleLabel.Text = note.Title;
-        NoteViewContentLabel.SetMessage(FormattedMessage.FromMarkupPermissive(note.Content));
+
+        // Добавляем перенос текста для содержимого заметки
+        var wrappedContent = AddWordWrapping(note.Content);
+        NoteViewContentLabel.SetMessage(FormattedMessage.FromMarkupPermissive(wrappedContent));
     }
 
     public void UpdateEditorState(NoteData note)
