@@ -11,6 +11,7 @@ public sealed class ResearchConsoleBoundUserInterface : BoundUserInterface
 {
     [ViewVariables]
     private ResearchConsoleMenu? _consoleMenu;
+    private bool _panelsInitialized = false;
 
     public ResearchConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -34,6 +35,15 @@ public sealed class ResearchConsoleBoundUserInterface : BoundUserInterface
         {
             SendMessage(new ConsoleServerSelectionMessage());
         };
+
+        _panelsInitialized = false;
+        // Инициализируем панели при первом открытии
+        if (State is ResearchConsoleBoundInterfaceState initialState)
+        {
+            _consoleMenu.UpdatePanels(initialState);
+            _consoleMenu.UpdateInformationPanel(initialState);
+            _panelsInitialized = true;
+        }
     }
 
     public override void OnProtoReload(PrototypesReloadedEventArgs args)
@@ -56,7 +66,22 @@ public sealed class ResearchConsoleBoundUserInterface : BoundUserInterface
 
         if (state is not ResearchConsoleBoundInterfaceState castState)
             return;
-        _consoleMenu?.UpdatePanels(castState);
+
+        // Обновляем только информацию (очки), не пересоздаем панели
         _consoleMenu?.UpdateInformationPanel(castState);
+
+        // При первом получении состояния всегда обновляем панели
+        if (!_panelsInitialized && _consoleMenu != null)
+        {
+            _consoleMenu.UpdatePanels(castState);
+            _panelsInitialized = true;
+            return;
+        }
+
+        // Проверяем, изменились ли очки - если да, то обновляем панели
+        if (_consoleMenu != null && _consoleMenu._localState.Points != castState.Points)
+        {
+            _consoleMenu.UpdatePanels(castState);
+        }
     }
 }

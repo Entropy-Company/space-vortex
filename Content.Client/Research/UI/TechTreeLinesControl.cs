@@ -27,24 +27,41 @@ namespace Content.Client.Research.UI
         /// </summary>
         public Dictionary<string, ResearchAvailablity> NodeStatuses = new();
 
+        /// <summary>
+        /// Контейнер, в котором лежат все карточки технологий (MiniTechnologyCardControl)
+        /// </summary>
+        public LayoutContainer? DragContainer { get; set; }
+
         protected override void Draw(DrawingHandleScreen handle)
         {
             base.Draw(handle);
-            foreach (var (from, to) in Edges)
+            if (DragContainer == null)
+                return;
+            foreach (var child in DragContainer.Children)
             {
-                if (!NodeCenters.TryGetValue(from, out var fromPos) || !NodeCenters.TryGetValue(to, out var toPos))
+                if (child is not MiniTechnologyCardControl item)
                     continue;
-
-                // Ортогональный маршрут: сначала по X, потом по Y
-                if (MathF.Abs(fromPos.X - toPos.X) > 1f)
+                if (item.Technology.RequiredTech == null || item.Technology.RequiredTech.Count == 0)
+                    continue;
+                // Ищем карточки, которые являются prerequisites для текущей
+                foreach (var second in DragContainer.Children)
                 {
-                    var mid = new Vector2(toPos.X, fromPos.Y);
-                    handle.DrawLine(fromPos, mid, Color.White);
-                    handle.DrawLine(mid, toPos, Color.White);
-                }
-                else
-                {
-                    handle.DrawLine(fromPos, toPos, Color.White);
+                    if (second is not MiniTechnologyCardControl prereq)
+                        continue;
+                    if (!item.Technology.RequiredTech.Contains(prereq.Technology.ID))
+                        continue;
+                    // Центры карточек
+                    var startCoords = new Vector2(prereq.PixelPosition.X + prereq.PixelWidth / 2, prereq.PixelPosition.Y + prereq.PixelHeight / 2);
+                    var endCoords = new Vector2(item.PixelPosition.X + item.PixelWidth / 2, item.PixelPosition.Y + item.PixelHeight / 2);
+                    if (prereq.PixelPosition.Y != item.PixelPosition.Y)
+                    {
+                        handle.DrawLine(startCoords, new(endCoords.X, startCoords.Y), Color.White);
+                        handle.DrawLine(new(endCoords.X, startCoords.Y), endCoords, Color.White);
+                    }
+                    else
+                    {
+                        handle.DrawLine(startCoords, endCoords, Color.White);
+                    }
                 }
             }
         }
