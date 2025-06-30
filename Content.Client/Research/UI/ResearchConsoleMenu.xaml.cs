@@ -39,13 +39,14 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
     public EntityUid Entity;
     public ProtoId<TechDisciplinePrototype> CurrentDiscipline = "Industrial";
     public Dictionary<string, ResearchAvailablity> List = new();
-    private ResearchConsoleBoundInterfaceState _localState = new(0);
+    internal ResearchConsoleBoundInterfaceState _localState = new(0);
     private bool _dragging;
     private TechnologyPrototype? _selectedTechnology;
     private string? _playerSelectedTechnologyId;
     private bool _playerHasMadeSelection = false;
     private TechTreeLinesControl? _linesControl;
     private Vector2 _position = new Vector2(45, 250);
+    private TechnologyPrototype? _lastSelectedTechnology;
 
     public ResearchConsoleMenu()
     {
@@ -54,17 +55,15 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         _research = _entity.System<ResearchSystem>();
         _sprite = _entity.System<SpriteSystem>();
         _accessReader = _entity.System<AccessReaderSystem>();
-        // StaticSprite.SetFromSpriteSpecifier(new SpriteSpecifier.Rsi(new("ADT/Interface/rnd-static.rsi"), "static"), new(2));
 
-        // Добавляем слой линий в тот же контейнер что и тайлы
         _linesControl = new TechTreeLinesControl();
         LinesContainer.AddChild(_linesControl);
         _linesControl.SetPositionInParent(0);
         LayoutContainer.SetPosition(_linesControl, Vector2.Zero);
         _linesControl.HorizontalExpand = true;
         _linesControl.VerticalExpand = true;
+        _linesControl.DragContainer = DragContainer;
 
-        // Подписка на изменение размера DragContainer для автоматического обновления линий
         DragContainer.OnResized += delegate { UpdateLineCenters(); };
 
         ServerButton.OnPressed += _ => OnServerButtonPressed?.Invoke();
@@ -85,7 +84,9 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         _localState = state;
         _playerHasMadeSelection = false;
 
-        // Верхняя панель дисциплин
+        // Сохраняем текущую выбранную технологию
+        var previousSelectedTech = _lastSelectedTechnology;
+
         var disciplines = _prototype.EnumeratePrototypes<TechDisciplinePrototype>()
             .OrderBy(x => x.Name)
             .ToList();
@@ -105,12 +106,10 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             discipline.OnPressed += SelectDiscipline;
         }
 
-        // Получаем компонент базы технологий
         if (!_entity.TryGetComponent(Entity, out TechnologyDatabaseComponent? database))
             return;
         var disciplineLevel = _research.GetHighestDisciplineTier(database, _prototype.Index<TechDisciplinePrototype>(CurrentDiscipline));
 
-        // Технологии выбранной дисциплины (только с позицией)
         var techs = _prototype.EnumeratePrototypes<TechnologyPrototype>()
             .Where(x => x.Discipline == CurrentDiscipline && x.Position != null)
             .OrderBy(x => x.Position!.Value.Y).ThenBy(x => x.Position!.Value.X)
@@ -118,9 +117,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
 
         foreach (var tech in techs)
         {
-            // Логирование позиции технологии
-            Logger.Info($"[RND] {tech.ID} Position: {tech.Position}");
-            // Проверка доступности
             bool unlocked = _research.IsTechnologyUnlocked(Entity, tech, database);
             bool prereqsMet = tech.RequiredTech == null || tech.RequiredTech.All(req => _research.IsTechnologyUnlocked(Entity, _prototype.Index<TechnologyPrototype>(req), database));
             bool available = _research.IsTechnologyAvailable(database, tech) && tech.Tier <= disciplineLevel && prereqsMet;
@@ -128,7 +124,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             DragContainer.AddChild(control);
             var tilePos = _position + tech.Position!.Value * 150;
             LayoutContainer.SetPosition(control, tilePos);
-            // Цветовая дифференциация
             if (unlocked)
                 control.SetAvailability(ResearchAvailablity.Researched);
             else if (available)
@@ -141,18 +136,26 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
                 _playerHasMadeSelection = true;
                 SelectTech(tech, unlocked ? ResearchAvailablity.Researched : (available ? ResearchAvailablity.Available : ResearchAvailablity.Unavailable));
             };
-            // Выделение выбранной технологии
             if (_selectedTechnology != null && _selectedTechnology.ID == tech.ID)
                 SelectTech(tech, unlocked ? ResearchAvailablity.Researched : (available ? ResearchAvailablity.Available : ResearchAvailablity.Unavailable));
         }
-        // --- ДОБАВЛЯЕМ ГЕНЕРАЦИЮ ЛИНИЙ ---
+
+        // Восстанавливаем выбранную технологию, если она все еще доступна в текущей дисциплине
+        if (previousSelectedTech != null && techs.Any(t => t.ID == previousSelectedTech.ID))
+        {
+            _lastSelectedTechnology = previousSelectedTech;
+        }
+        else
+        {
+            _lastSelectedTechnology = null;
+        }
+
         if (_linesControl != null)
         {
             _linesControl.NodeCenters.Clear();
             _linesControl.Edges.Clear();
             _linesControl.NodeStatuses.Clear();
 
-            // Собираем центры всех тайлов и их статусы
             foreach (var child in DragContainer.Children)
             {
                 if (child is MiniTechnologyCardControl card)
@@ -162,10 +165,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
                     var center = tilePos + new Vector2(40, 40);
                     _linesControl.NodeCenters[tech.ID] = center;
 
-                    // Отладочная информация
-                    Logger.Info($"[RND] {tech.ID} - TilePos: {tilePos}, Center: {center}");
-
-                    // Обновляем статус технологии
                     bool unlocked = _research.IsTechnologyUnlocked(Entity, tech, database);
                     bool prereqsMet = tech.RequiredTech == null || tech.RequiredTech.All(req => _research.IsTechnologyUnlocked(Entity, _prototype.Index<TechnologyPrototype>(req), database));
                     bool available = _research.IsTechnologyAvailable(database, tech) && tech.Tier <= disciplineLevel && prereqsMet;
@@ -176,7 +175,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
                 }
             }
 
-            // Собираем связи prerequisite -> tech
             foreach (var tech in techs)
             {
                 if (tech.RequiredTech != null)
@@ -189,7 +187,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             }
             _linesControl.QueueRedraw();
         }
-        // --- Обновляем правую панель, если была выбрана технология ---
         if (_selectedTechnology != null)
         {
             var newTech = techs.FirstOrDefault(t => t.ID == _selectedTechnology.ID);
@@ -243,6 +240,9 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             };
             TierDisplayContainer.AddChild(control);
         }
+
+        // Обновляем состояние кнопки выбранной технологии
+        UpdateSelectedTechnologyButtonState();
     }
 
     #region Drag handle
@@ -277,6 +277,10 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
 
     public void SelectTech(TechnologyPrototype proto, ResearchAvailablity avaibility)
     {
+        if (_lastSelectedTechnology?.ID == proto.ID)
+            return;
+
+        _lastSelectedTechnology = proto;
         InfoContainer.DisposeAllChildren();
         if (!_player.LocalEntity.HasValue)
             return;
@@ -286,6 +290,41 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         var infoPanel = new TechnologyInfoPanel(proto, _sprite, hasAccess, avaibility);
         infoPanel.BuyAction = _ => OnTechnologyCardPressed?.Invoke(proto.ID);
         InfoContainer.AddChild(infoPanel);
+
+        // Обновляем состояние кнопки с учетом текущих очков
+        infoPanel.UpdateButtonState(hasAccess, avaibility, _localState.Points);
+    }
+
+    /// <summary>
+    /// Обновляет только состояние кнопки выбранной технологии без пересоздания панели
+    /// </summary>
+    public void UpdateSelectedTechnologyButtonState()
+    {
+        if (_lastSelectedTechnology == null || !_player.LocalEntity.HasValue)
+            return;
+        if (!_entity.TryGetComponent(Entity, out TechnologyDatabaseComponent? database))
+            return;
+
+        var hasAccess = _accessReader.IsAllowed(_player.LocalEntity.Value, Entity);
+        bool unlocked = _research.IsTechnologyUnlocked(Entity, _lastSelectedTechnology, database);
+        bool prereqsMet = _lastSelectedTechnology.RequiredTech == null || _lastSelectedTechnology.RequiredTech.All(req => _research.IsTechnologyUnlocked(Entity, _prototype.Index<TechnologyPrototype>(req), database));
+        var disciplineLevel = _research.GetHighestDisciplineTier(database, _prototype.Index<TechDisciplinePrototype>(CurrentDiscipline));
+        bool available = _research.IsTechnologyAvailable(database, _lastSelectedTechnology) && _lastSelectedTechnology.Tier <= disciplineLevel && prereqsMet;
+
+        var availablity = unlocked ? ResearchAvailablity.Researched : (available ? ResearchAvailablity.Available : ResearchAvailablity.Unavailable);
+
+        // Получаем количество доступных очков
+        int availablePoints = _localState.Points;
+
+        // Находим панель в InfoContainer и обновляем только кнопку
+        foreach (var child in InfoContainer.Children)
+        {
+            if (child is TechnologyInfoPanel infoPanel && infoPanel.Prototype.ID == _lastSelectedTechnology.ID)
+            {
+                infoPanel.UpdateButtonState(hasAccess, availablity, availablePoints);
+                break;
+            }
+        }
     }
 
     public void SelectDiscipline(BaseButton.ButtonEventArgs args)
@@ -296,6 +335,7 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         CurrentDiscipline = proto.ID;
         discipline.SetClickPressed(false);
         UserInterfaceManager.ClickSound();
+        _lastSelectedTechnology = null;
         UpdatePanels(_localState);
         Recenter();
     }
@@ -344,7 +384,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             {
                 var center = card.Position + card.Size / 2f;
                 _linesControl.NodeCenters[card.Technology.ID] = center;
-                // ... статус ...
             }
         }
         _linesControl.QueueRedraw();

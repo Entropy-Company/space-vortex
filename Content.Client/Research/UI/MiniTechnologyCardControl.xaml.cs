@@ -23,7 +23,6 @@ public enum ResearchAvailablity
 [GenerateTypedNameReferences]
 public sealed partial class MiniTechnologyCardControl : Control
 {
-    /// The technology that this control represents
     public readonly TechnologyPrototype Technology;
 
     public event Action? OnTileClicked;

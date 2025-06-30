@@ -8,20 +8,29 @@
         Orientation="Vertical"
         VerticalExpand="True"
         Margin="5">
-        <PanelContainer Name="TechnologyTextureBorder" MinSize="56 56" MaxSize="56 56" VerticalAlignment="Center" HorizontalAlignment="Left">
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#00000000" BorderColor="#FFFFFF" BorderThickness="2" />
-            </PanelContainer.PanelOverride>
-            <TextureRect Name="TechnologyTexture"
-                         TextureScale="2 2"
-                         SetSize="48 48"
-                         Stretch="KeepAspectCentered"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"/>
-        </PanelContainer>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+            <PanelContainer Name="TechnologyTextureBorder" MinSize="56 56" MaxSize="56 350" VerticalAlignment="Center">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#00000000" BorderColor="#FFFFFF" BorderThickness="2" />
+                </PanelContainer.PanelOverride>
+                <TextureRect Name="TechnologyTexture"
+                             TextureScale="2 2"
+                             SetSize="48 48"
+                             Stretch="KeepAspectCentered"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"/>
+            </PanelContainer>
+            <Control HorizontalExpand="True"/>
+            <PanelContainer Name="TechnologyDisciplineTexture" MinSize="56 50" MaxSize="56 350" VerticalAlignment="Center">
+                <TextureRect Name="DisciplineTexture"
+                             TextureScale="5 5"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center"
+                             HorizontalExpand="True"/>
+            </PanelContainer>
+        </BoxContainer>
         <BoxContainer Orientation="Horizontal">
             <Label Name="TechnologyNameLabel" StyleClasses="LabelKeyText" HorizontalExpand="True"/>
-            <TextureRect Name="DisciplineTexture" TextureScale="5 5" VerticalAlignment="Top" HorizontalAlignment="Right"/>
         </BoxContainer>
         <BoxContainer Orientation="Horizontal" Name="LevelUpBox" HorizontalAlignment="Left" Margin="0 5 0 0" Visible="False">
             <Label Text="Откройте чтобы повысить уровень до " StyleClasses="LabelKeyText"/>
@@ -32,7 +41,6 @@
             <Label Name="TierValueLabel" Margin="5 0 0 0" Modulate="LightBlue"/>
         </BoxContainer>
         <BoxContainer Orientation="Horizontal" Name="CostBox" HorizontalAlignment="Left" Margin="0 5 0 0">
-            <Label Text="Стоимость:" StyleClasses="LabelKeyText"/>
             <Label Name="CostValueLabel" Margin="5 0 0 0" Modulate="Orchid"/>
             <Label Text="О.И" Margin="5 0 0 0" Modulate="Orchid"/>
         </BoxContainer>
@@ -47,8 +55,8 @@
         SizeFlagsStretchRatio="1"
         VerticalAlignment="Bottom"
         Margin="5"
-        MinSize="400 400"
-        SetSize="400 400">
+        MinSize="350 300"
+        SetSize="350 300">
         <Label Text="{Loc 'research-console-unlocks-list-start'}" HorizontalAlignment="Center"/>
         <customControls:HSeparator StyleClasses="LowDivider" Margin="0 0 0 10"/>
         <PanelContainer VerticalExpand="True">

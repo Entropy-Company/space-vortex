@@ -7,6 +7,8 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Prototypes;
 using Robust.Client.Graphics;
+using Robust.Shared.Utility;
+using System.Numerics;
 
 namespace Content.Client.Research.UI;
 
@@ -36,7 +38,6 @@ public sealed partial class TechnologyInfoPanel : Control
         TierValueLabel.Text = proto.Tier.ToString();
         CostValueLabel.Text = proto.Cost.ToString();
 
-        // Показываем строчку о повышении уровня только если у технологии есть параметр IsFinalLevelTech
         if (proto.IsFinalLevelTech.HasValue)
         {
             LevelUpBox.Visible = true;
@@ -55,14 +56,28 @@ public sealed partial class TechnologyInfoPanel : Control
             UnlocksContainer.AddChild(control);
         }
 
+        UpdateButtonState(hasAccess, availablity, 0);
+        ResearchButton.OnPressed += Bought;
+    }
+
+    /// <summary>
+    /// Обновляет только состояние кнопки без пересоздания всей панели
+    /// </summary>
+    public void UpdateButtonState(bool hasAccess, ResearchAvailablity availablity, int availablePoints = 0)
+    {
         if (!hasAccess)
             ResearchButton.ToolTip = Loc.GetString("research-console-no-access-popup");
+        else
+            ResearchButton.ToolTip = null;
 
         if (availablity == ResearchAvailablity.Researched)
             ResearchButton.Text = Loc.GetString("research-console-menu-server-researched-button");
+        else
+            ResearchButton.Text = Loc.GetString("research-console-menu-server-research-button");
 
-        ResearchButton.Disabled = !hasAccess || availablity != ResearchAvailablity.Available;
-        ResearchButton.OnPressed += Bought;
+        // Проверяем доступность, наличие доступа и достаточность очков
+        bool canAfford = availablePoints >= Prototype.Cost;
+        ResearchButton.Disabled = !hasAccess || availablity != ResearchAvailablity.Available || !canAfford;
     }
 
     protected override void Dispose(bool disposing)
