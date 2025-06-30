@@ -15,9 +15,6 @@
   - WeaponPlasmaCutter # Goobstation
   - OreProcessorIndustrialMachineCircuitboard
   - ClothingMaskWeldingGas
-  position: 3, 0
-  requiredTech:
-  - SpaceScanning
 
 - type: technology
   id: SpaceScanning
@@ -32,10 +29,7 @@
   - RadarConsoleCircuitboard
 # - HandHeldMassScanner - Removed by Lavaland
   - BorgModuleGPS
-  position: 2, 0
-  requiredTech:
-  - PowerGeneration
-  
+
 - type: technology
   id: AdvancedPowercells
   name: research-technology-advanced-powercells
@@ -49,9 +43,6 @@
   - PowerCellHigh
   - TurboItemRechargerCircuitboard
   - SMESAdvancedMachineCircuitboard
-  position: 0, 1
-  requiredTech:
-  - MechanicalCompression
 
 - type: technology
   id: MechanicalCompression
@@ -64,9 +55,6 @@
   cost: 10000
   recipeUnlocks:
   - FlatpackerMachineCircuitboard
-  position: 2, 1
-  requiredTech:
-  - SpaceScanning
 
 - type: technology
   id: IndustrialEngineering
@@ -82,10 +70,6 @@
   - ProtolatheHyperConvectionMachineCircuitboard
   - CircuitImprinterHyperConvectionMachineCircuitboard
   - SheetifierMachineCircuitboard
-  position: 1, 2
-  isFinalLevelTech: 2
-  requiredTech:
-  - MechanicalCompression
 
 - type: technology
   id: PowerGeneration
@@ -103,7 +87,6 @@
   - SolarControlComputerCircuitboard
   - SolarTrackerElectronics
   - EmitterCircuitboard
-  position: 0, 0
 
 - type: technology
   id: AtmosphericTech
@@ -117,10 +100,6 @@
   recipeUnlocks:
   - ThermomachineFreezerMachineCircuitBoard
   - GasRecyclerMachineCircuitboard
-  position: 3, 2
-  isFinalLevelTech: 2
-  requiredTech:
-  - MechanicalCompression
 
 - type: technology
   id: RipleyAPLU
@@ -157,9 +136,6 @@
   - ThrusterMachineCircuitboard
   - GyroscopeMachineCircuitboard
   - MiniGravityGeneratorCircuitboard
-  position: 1, 3
-  requiredTech:
-  - MechanicalCompression
 
 - type: technology
   id: AdvancedAtmospherics
@@ -174,9 +150,8 @@
   - HellfireFreezerMachineCircuitBoard
   - PortableScrubberMachineCircuitBoard
   - HolofanProjector
-  requiredTech:
+  technologyPrerequisites:
   - AtmosphericTech
-  position: 3, 3
 
 - type: technology
   id: AdvancedToolsTechnology
@@ -194,12 +169,7 @@
     - BorgModuleAdvancedTool
     - Fulton
     - FultonBeacon
-  isFinalLevelTech: 3
-  requiredTech:
-  - AdvancedAtmospherics
-  - Shuttlecraft
-  position: 2, 4
-  
+
 - type: technology
   id: MassExcavation
   name: research-technology-excavation
@@ -215,9 +185,6 @@
     - AdvancedMineralScannerEmpty
     - BorgModuleAdvancedMining
     - SalvageExpeditionsComputerCircuitboard # Corvax-Cringe
-  position: 4, 4
-  requiredTech:
-  - SalvageEquipment
 
 # Tier 3
 
@@ -234,11 +201,7 @@
   - ClothingBackpackHolding
   - ClothingBackpackSatchelHolding
   - ClothingBackpackDuffelHolding
-  requiredTech:
-  - MassExcavation
-  - AdvancedToolsTechnology
-  position: 3, 4
-  
+
 - type: technology
   id: OptimizedMicrogalvanism
   name: research-technology-optimized-microgalvanism
@@ -251,6 +214,5 @@
   recipeUnlocks:
   - PowerCellMicroreactor
   - PowerCellHyper
-  requiredTech:
+  technologyPrerequisites:
   - AdvancedPowercells
-  position: 0, 2
