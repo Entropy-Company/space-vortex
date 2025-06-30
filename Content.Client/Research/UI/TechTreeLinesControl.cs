@@ -9,14 +9,13 @@ namespace Content.Client.Research.UI
 {
     /// <summary>
     /// Контрол для отрисовки линий связей между технологиями в дереве исследований.
-    /// Поддерживает цветовую дифференциацию и стрелочки для указания направления.
     /// </summary>
     public sealed class TechTreeLinesControl : Control
     {
         /// <summary>
         /// Центры узлов (технологий) на экране
         /// </summary>
-        public Dictionary<string, System.Numerics.Vector2> NodeCenters = new();
+        public Dictionary<string, Vector2> NodeCenters = new();
 
         /// <summary>
         /// Список связей между технологиями (From -> To)
@@ -31,68 +30,23 @@ namespace Content.Client.Research.UI
         protected override void Draw(DrawingHandleScreen handle)
         {
             base.Draw(handle);
-
-            Logger.Info($"[TechTreeLines] Control size: {Size}, Position: {GetPositionInParent()}, GlobalPosition: {GlobalPosition}");
-            Logger.Info($"[TechTreeLines] Processing {Edges.Count} edges, {NodeCenters.Count} nodes");
             foreach (var (from, to) in Edges)
             {
                 if (!NodeCenters.TryGetValue(from, out var fromPos) || !NodeCenters.TryGetValue(to, out var toPos))
-                {
-                    Logger.Warning($"[TechTreeLines] Missing node: from={from}, to={to}");
                     continue;
-                }
 
-                Logger.Info($"[TechTreeLines] Drawing line from {from} at {fromPos} to {to} at {toPos}");
-
-                var lineColor = GetLineColor(to);
-                const float halfTile = 40f;
-                Vector2 p1, p2, p3, p4;
-
-                if (MathF.Abs(toPos.X - fromPos.X) > 1f)
+                // Ортогональный маршрут: сначала по X, потом по Y
+                if (MathF.Abs(fromPos.X - toPos.X) > 1f)
                 {
-                    if (toPos.X < fromPos.X)
-                        p1 = new Vector2(fromPos.X - halfTile, fromPos.Y);
-                    else
-                        p1 = new Vector2(fromPos.X + halfTile, fromPos.Y);
-                    p2 = new Vector2(toPos.X, fromPos.Y);
-                    p3 = new Vector2(toPos.X, toPos.Y - halfTile);
-                    p4 = new Vector2(toPos.X, toPos.Y);
+                    var mid = new Vector2(toPos.X, fromPos.Y);
+                    handle.DrawLine(fromPos, mid, Color.White);
+                    handle.DrawLine(mid, toPos, Color.White);
                 }
                 else
                 {
-                    p1 = new Vector2(fromPos.X, fromPos.Y + halfTile);
-                    p2 = new Vector2(fromPos.X, toPos.Y - halfTile);
-                    p3 = new Vector2(toPos.X, toPos.Y - halfTile);
-                    p4 = new Vector2(toPos.X, toPos.Y);
+                    handle.DrawLine(fromPos, toPos, Color.White);
                 }
-
-                // Отключаем фильтрацию по видимости
-                // var view = new Box2(Vector2.Zero, Size);
-                // if (!view.Contains(p1) && !view.Contains(p2) && !view.Contains(p3) && !view.Contains(p4))
-                //     continue;
-
-                DrawThickLine(handle, p1, p2, lineColor);
-                DrawThickLine(handle, p2, p3, lineColor);
-                DrawThickLine(handle, p3, p4, lineColor);
-                DrawArrow(handle, p3, p4, lineColor);
             }
-        }
-
-        /// <summary>
-        /// Определяет цвет линии на основе статуса технологии
-        /// </summary>
-        private Color GetLineColor(string technologyId)
-        {
-            if (!NodeStatuses.TryGetValue(technologyId, out var status))
-                return Color.Gray; // По умолчанию серый для неизвестных технологий
-
-            return status switch
-            {
-                ResearchAvailablity.Researched => Color.LimeGreen, // Зеленый для исследованных
-                ResearchAvailablity.Available => Color.Yellow, // Желтый для доступных
-                ResearchAvailablity.Unavailable => Color.Red, // Красный для недоступных
-                _ => Color.Gray
-            };
         }
 
         /// <summary>
@@ -118,42 +72,25 @@ namespace Content.Client.Research.UI
         }
 
         /// <summary>
-        /// Рисует стрелочку на конце линии для указания направления
+        /// Рисует стрелку на линии, указывающую направление (от prerequisite к unlockable)
         /// </summary>
         private void DrawArrow(DrawingHandleScreen handle, Vector2 from, Vector2 to, Color color)
         {
-            const float arrowSize = 10f; // Увеличиваем размер стрелки
-            const float arrowAngle = 0.4f; // угол стрелки в радианах
-            const float arrowOffset = 15f; // отступ от конца линии
-
-            var direction = Vector2.Normalize(to - from);
-            var arrowTip = to - direction * arrowOffset; // отступаем от конца
-
-            // Вычисляем точки стрелки
-            var leftArrow = arrowTip + new Vector2(
-                direction.X * MathF.Cos(arrowAngle) - direction.Y * MathF.Sin(arrowAngle),
-                direction.X * MathF.Sin(arrowAngle) + direction.Y * MathF.Cos(arrowAngle)
-            ) * arrowSize;
-
-            var rightArrow = arrowTip + new Vector2(
-                direction.X * MathF.Cos(-arrowAngle) - direction.Y * MathF.Sin(-arrowAngle),
-                direction.X * MathF.Sin(-arrowAngle) + direction.Y * MathF.Cos(-arrowAngle)
-            ) * arrowSize;
-
-            // Рисуем тень стрелочки (черная с небольшим смещением)
-            var shadowOffset = new Vector2(1f, 1f);
-            handle.DrawLine(arrowTip + shadowOffset, leftArrow + shadowOffset, Color.Black);
-            handle.DrawLine(arrowTip + shadowOffset, rightArrow + shadowOffset, Color.Black);
-
-            // Рисуем стрелочку
-            handle.DrawLine(arrowTip, leftArrow, color);
-            handle.DrawLine(arrowTip, rightArrow, color);
-
-            // Добавляем небольшую линию от стрелки к концу для лучшей видимости
-            handle.DrawLine(arrowTip, to, color);
-
-            // Рисуем дополнительную линию для усиления стрелки
-            handle.DrawLine(leftArrow, rightArrow, color);
+            // Стрелка рисуется на 80% пути к to
+            var dir = Vector2.Normalize(to - from);
+            var arrowPos = from + dir * ((to - from).Length() * 0.8f);
+            const float arrowSize = 12f;
+            const float angle = 0.5f; // ~30 градусов
+            // Левая часть стрелки
+            var left = new Vector2(
+                arrowPos.X + arrowSize * (float)Math.Cos(Math.Atan2(dir.Y, dir.X) + Math.PI - angle),
+                arrowPos.Y + arrowSize * (float)Math.Sin(Math.Atan2(dir.Y, dir.X) + Math.PI - angle));
+            // Правая часть стрелки
+            var right = new Vector2(
+                arrowPos.X + arrowSize * (float)Math.Cos(Math.Atan2(dir.Y, dir.X) + Math.PI + angle),
+                arrowPos.Y + arrowSize * (float)Math.Sin(Math.Atan2(dir.Y, dir.X) + Math.PI + angle));
+            handle.DrawLine(arrowPos, left, color);
+            handle.DrawLine(arrowPos, right, color);
         }
 
         /// <summary>
