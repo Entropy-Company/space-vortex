@@ -28,7 +28,6 @@
                     <PanelContainer.PanelOverride>
                         <gfx:StyleBoxFlat BackgroundColor="#18181A" />
                     </PanelContainer.PanelOverride>
-                    <ui:LayoutContainer Name="LinesContainer" HorizontalExpand="True" VerticalExpand="True" MouseFilter="Pass" RectClipContent="True"/>
                     <ui:LayoutContainer Name="DragContainer" HorizontalExpand="True" VerticalExpand="True" MouseFilter="Pass" RectClipContent="True"/>
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalAlignment="Bottom" Margin="5 0 0 0">
                         <Button Name="RecenterButton" Text="{Loc 'research-console-menu-recenter-button'}" MinHeight="40" HorizontalAlignment="Left"/>
