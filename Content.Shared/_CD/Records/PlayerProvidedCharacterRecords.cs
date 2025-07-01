@@ -134,12 +134,12 @@ public sealed partial class PlayerProvidedCharacterRecords
     {
         return new PlayerProvidedCharacterRecords(
             hasWorkAuthorization: true,
-            height: 170, weight: 70,
+            height: 175, weight: 72,
             emergencyContactName: "",
             identifyingFeatures: "",
-            allergies: "None",
-            drugAllergies: "None",
-            postmortemInstructions: "Return home",
+            allergies: "Нет",
+            drugAllergies: "Нет",
+            postmortemInstructions: "None",
             medicalEntries: new List<RecordEntry>(),
             securityEntries: new List<RecordEntry>(),
             employmentEntries: new List<RecordEntry>()
