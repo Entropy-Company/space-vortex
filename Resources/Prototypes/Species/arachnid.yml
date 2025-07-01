@@ -14,6 +14,7 @@
   femaleLastNames: NamesArachnidLast # Corvax-LastnameGender
   sexes:
   - Unsexed
+  minHeight: 0.81
 
 - type: speciesBaseSprites
   id: MobArachnidSprites

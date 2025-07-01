@@ -10,6 +10,7 @@
   dollPrototype: MobFelinidDummy
   skinColoration: HumanToned
   baseScale: "0.9, 0.9"
+  minHeight: 0.88
 
 - type: speciesBaseSprites
   id: MobFelinidSprites
