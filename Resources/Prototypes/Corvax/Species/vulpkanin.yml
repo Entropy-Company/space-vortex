@@ -13,6 +13,11 @@
   femaleFirstNames: NamesVulpFirstFemale
   maleLastNames: NamesVulpLast # Corvax-LastnameGender
   femaleLastNames: NamesVulpLast # Corvax-LastnameGender
+  baseScale: "0.98, 0.98"
+  minHeight: 0.85
+  maxHeight: 1.15
+  maxWidth: 1.1
+  minWidth: 0.90
 
 - type: speciesBaseSprites
   id: MobVulpkaninSprites
