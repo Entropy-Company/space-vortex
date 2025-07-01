@@ -8,9 +8,9 @@
   dollPrototype: MobHumanDummy
   skinColoration: HumanToned
   minHeight: 0.86
-  maxWidth: 1.15
+  maxWidth: 1.2
   minWidth: 0.90
-  
+
 # The lack of a layer means that
 # this person cannot have round-start anything
 # applied to that layer. It has to instead
