@@ -31,6 +31,11 @@
   naming: First
   sexes:
   - Unsexed
+  baseScale: "0.87, 0.87"
+  minHeight: 0.80
+  maxHeight: 1.1
+  maxWidth: 1.1
+  minWidth: 0.90
 
 - type: speciesBaseSprites
   id: MobVoxSprites

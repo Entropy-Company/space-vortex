@@ -30,15 +30,12 @@
   skinColoration: Hues
   maleFirstNames: NamesMothFirstMale
   femaleFirstNames: NamesMothFirstFemale
-  lastNames: NamesMothLast
-  # begin Goobstation: port EE height/width sliders
-  minHeight: 0.8
-  defaultHeight: 1
-  maxHeight: 1.20
-  minWidth: 0.80
-  defaultWidth: 1
-  maxWidth: 1.25
-  # end Goobstation: port EE height/width sliders
+  maleLastNames: NamesMothLast
+  baseScale: "0.87, 0.87"
+  minHeight: 0.90
+  maxHeight: 1.3
+  maxWidth: 1.1
+  minWidth: 0.90
 
 - type: speciesBaseSprites
   id: MobMothSprites

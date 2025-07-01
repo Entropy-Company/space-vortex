@@ -30,7 +30,11 @@
   lastNames: NamesArachnidLast
   sexes:
   - Unsexed
-  minHeight: 0.81
+  baseScale: "1.16, 1.16"
+  minHeight: 0.80
+  maxHeight: 1.08
+  maxWidth: 1.1
+  minWidth: 0.90
 
 - type: speciesBaseSprites
   id: MobArachnidSprites

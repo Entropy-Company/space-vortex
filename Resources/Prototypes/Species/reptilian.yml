@@ -33,6 +33,11 @@
   maleFirstNames: NamesReptilianMale
   femaleFirstNames: NamesReptilianFemale
   naming: FirstDashFirst
+  baseScale: "1.1, 1.1"
+  minHeight: 0.85
+  maxHeight: 1.1
+  maxWidth: 1.1
+  minWidth: 0.90
 
 - type: speciesBaseSprites
   id: MobReptilianSprites

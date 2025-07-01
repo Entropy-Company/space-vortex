@@ -64,9 +64,6 @@
   - type: Sprite
     noRot: true
     drawdepth: Mobs
-    scale: 1.1, 0.75 # goob value
-  - type: ScaleData # Goobstation
-    scale: 1.1, 0.75
   - type: Body
     prototype: Dwarf
     requiredLegs: 2
