@@ -186,6 +186,9 @@ namespace Content.Shared.Preferences
         [DataField("cosmaticDriftCharacterHeight")]
         public float Height = 1f;
 
+        [DataField("cosmaticDriftCharacterWidth")]
+        public float Width = 1f;
+
         [DataField("cosmaticDriftCharacterRecords")]
         public PlayerProvidedCharacterRecords? CDCharacterRecords;
         // End CD - Character records
@@ -207,6 +210,7 @@ namespace Content.Shared.Preferences
             Dictionary<string, RoleLoadout> loadouts,
             // Begin CD - Character Records
             float height,
+            float width,
             PlayerProvidedCharacterRecords? cdCharacterRecords
             // End CD - Character Records
         )
@@ -227,6 +231,7 @@ namespace Content.Shared.Preferences
             _loadouts = loadouts;
             // Begin CD - Character Records
             Height = height;
+            Width = width;
             CDCharacterRecords = cdCharacterRecords;
             // End CD - Character Records
 
@@ -262,6 +267,7 @@ namespace Content.Shared.Preferences
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
                 new Dictionary<string, RoleLoadout>(other.Loadouts),
                 other.Height, // CD - Character Records
+                other.Width, // CD - Character Records
                 other.CDCharacterRecords) // CD - Character Records
         {
         }
@@ -315,11 +321,13 @@ namespace Content.Shared.Preferences
             var sex = Sex.Unsexed;
             var age = 18;
             var height = 1f; // CD - Character Records
+            var width = 1f; // CD - Character Records
             if (prototypeManager.TryIndex<SpeciesPrototype>(species, out var speciesPrototype))
             {
                 sex = random.Pick(speciesPrototype.Sexes);
-                age = random.Next(speciesPrototype.MinAge, speciesPrototype.OldAge); // people don't look and keep making 119 year old characters with zero rp, cap it at middle aged
+                age = random.Next(speciesPrototype.MinAge, speciesPrototype.OldAge);
                 height = MathF.Round(random.NextFloat(speciesPrototype.MinHeight, speciesPrototype.MaxHeight), 2); // CD - Character Records
+                width = MathF.Round(random.NextFloat(speciesPrototype.MinWidth, speciesPrototype.MaxWidth), 2); // CD - Character Records
             }
 
             // CorvaxGoob-TTS-Start
@@ -354,6 +362,7 @@ namespace Content.Shared.Preferences
                 Voice = voiceId, // CorvaxGoob-TTS
                 Appearance = HumanoidCharacterAppearance.Random(species, sex),
                 Height = height,
+                Width = width,
             };
         }
 
@@ -408,6 +417,11 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile WithHeight(float height)
         {
             return new(this) { Height = height };
+        }
+
+        public HumanoidCharacterProfile WithWidth(float width)
+        {
+            return new(this) { Width = width };
         }
 
         public HumanoidCharacterProfile WithCDCharacterRecords(PlayerProvidedCharacterRecords records)
@@ -585,6 +599,7 @@ namespace Content.Shared.Preferences
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
             if (FlavorText != other.FlavorText) return false;
             if (Height != other.Height) return false; // CD
+            if (Width != other.Width) return false; // CD
             if (CDCharacterRecords != null && other.CDCharacterRecords != null && // CD
                !CDCharacterRecords.MemberwiseEquals(other.CDCharacterRecords)) return false; // CD
             return Appearance.MemberwiseEquals(other.Appearance);
@@ -682,6 +697,10 @@ namespace Content.Shared.Preferences
             var height = Height;
             if (speciesPrototype != null)
                 height = Math.Clamp(MathF.Round(Height, 2), speciesPrototype.MinHeight, speciesPrototype.MaxHeight);
+
+            var width = Width;
+            if (speciesPrototype != null)
+                width = Math.Clamp(MathF.Round(Width, 2), speciesPrototype.MinWidth, speciesPrototype.MaxWidth);
             // End CD - Character Records
 
             var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex, sponsorPrototypes);
@@ -762,6 +781,7 @@ namespace Content.Shared.Preferences
             // CorvaxGoob-TTS-End
             // Begin CD - Character Records
             Height = height;
+            Width = width;
             if (CDCharacterRecords == null)
             {
                 CDCharacterRecords = PlayerProvidedCharacterRecords.DefaultRecords();
@@ -877,6 +897,7 @@ namespace Content.Shared.Preferences
             hashCode.Add((int)SpawnPriority);
             hashCode.Add((int)PreferenceUnavailable);
             hashCode.Add(Height); // CD - Character Records
+            hashCode.Add(Width); // CD - Character Records
             return hashCode.ToHashCode();
         }
 

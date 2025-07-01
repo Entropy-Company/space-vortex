@@ -271,8 +271,6 @@ namespace Content.Client.Lobby.UI
         private bool _isDirty;
 
         // Begin CD - Station Records
-        private float _defaultHeight = 1f;
-
         private readonly RecordEditorGui _recordsTab;
         // End CD - Station Records
 
@@ -407,40 +405,42 @@ namespace Content.Client.Lobby.UI
             };
 
             // Begin CD - Character Records
-            #region CDHeight
+            #region CDWidth
 
-            CDHeight.OnTextChanged += args =>
+            CDWidth.OnTextChanged += args =>
             {
-                if (Profile is null || !float.TryParse(args.Text, out var newHeight))
+                if (Profile is null || !float.TryParse(args.Text, out var newWidth))
                     return;
 
                 var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
-                newHeight = MathF.Round(Math.Clamp(newHeight, prototype.MinHeight, prototype.MaxHeight), 2);
+                newWidth = MathF.Round(Math.Clamp(newWidth, prototype.MinWidth, prototype.MaxWidth), 2);
 
                 // The percentage between the start and end numbers, aka "inverse lerp"
-                var sliderPercent = (newHeight - prototype.MinHeight) /
-                                    (prototype.MaxHeight - prototype.MinHeight);
-                CDHeightSlider.Value = sliderPercent;
+                var sliderPercent = (newWidth - prototype.MinWidth) /
+                                    (prototype.MaxWidth - prototype.MinWidth);
+                CDWidthSlider.Value = sliderPercent;
 
-                SetProfileHeight(newHeight);
+                SetProfileWidth(newWidth);
             };
 
-            CDHeightReset.OnPressed += _ =>
+            CDWidthReset.OnPressed += _ =>
             {
-                CDHeight.SetText(_defaultHeight.ToString(CultureInfo.InvariantCulture), true);
+                if (Profile is null)
+                    return;
+                CDWidth.SetText(_prototypeManager.Index<SpeciesPrototype>(Profile.Species).DefaultWidth.ToString(CultureInfo.InvariantCulture), true);
             };
 
-            CDHeightSlider.OnValueChanged += _ =>
+            CDWidthSlider.OnValueChanged += _ =>
             {
                 if (Profile is null)
                     return;
                 var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
-                var newHeight = MathF.Round(MathHelper.Lerp(prototype.MinHeight, prototype.MaxHeight, CDHeightSlider.Value), 2);
-                CDHeight.Text = newHeight.ToString(CultureInfo.InvariantCulture);
-                SetProfileHeight(newHeight);
+                var newWidth = MathF.Round(MathHelper.Lerp(prototype.MinWidth, prototype.MaxWidth, CDWidthSlider.Value), 2);
+                CDWidth.Text = newWidth.ToString(CultureInfo.InvariantCulture);
+                SetProfileWidth(newWidth);
             };
 
-            #endregion CDHeight
+            #endregion CDWidth
             // End CD - Character Records
 
             #region Skin
@@ -679,6 +679,79 @@ namespace Content.Client.Lobby.UI
 
             UpdateSpeciesGuidebookIcon();
             IsDirty = false;
+
+            #region CDWidth
+
+            CDWidth.OnTextChanged += args =>
+            {
+                if (Profile is null || !float.TryParse(args.Text, out var newWidth))
+                    return;
+
+                var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
+                newWidth = MathF.Round(Math.Clamp(newWidth, prototype.MinWidth, prototype.MaxWidth), 2);
+
+                var sliderPercent = (newWidth - prototype.MinWidth) /
+                                    (prototype.MaxWidth - prototype.MinWidth);
+                CDWidthSlider.Value = sliderPercent;
+
+                SetProfileWidth(newWidth);
+            };
+
+            CDWidthReset.OnPressed += _ =>
+            {
+                if (Profile is null)
+                    return;
+                CDWidth.SetText(_prototypeManager.Index<SpeciesPrototype>(Profile.Species).DefaultWidth.ToString(CultureInfo.InvariantCulture), true);
+            };
+
+            CDWidthSlider.OnValueChanged += _ =>
+            {
+                if (Profile is null)
+                    return;
+                var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
+                var newWidth = MathF.Round(MathHelper.Lerp(prototype.MinWidth, prototype.MaxWidth, CDWidthSlider.Value), 2);
+                CDWidth.Text = newWidth.ToString(CultureInfo.InvariantCulture);
+                SetProfileWidth(newWidth);
+            };
+
+            #endregion CDWidth
+
+            #region CDHeight
+
+            CDHeight.OnTextChanged += args =>
+            {
+                if (Profile is null || !float.TryParse(args.Text, out var newHeight))
+                    return;
+
+                var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
+                newHeight = MathF.Round(Math.Clamp(newHeight, prototype.MinHeight, prototype.MaxHeight), 2);
+
+                // The percentage between the start and end numbers, aka "inverse lerp"
+                var sliderPercent = (newHeight - prototype.MinHeight) /
+                                    (prototype.MaxHeight - prototype.MinHeight);
+                CDHeightSlider.Value = sliderPercent;
+
+                SetProfileHeight(newHeight);
+            };
+
+            CDHeightReset.OnPressed += _ =>
+            {
+                if (Profile is null)
+                    return;
+                CDHeight.SetText(_prototypeManager.Index<SpeciesPrototype>(Profile.Species).DefaultHeight.ToString(CultureInfo.InvariantCulture), true);
+            };
+
+            CDHeightSlider.OnValueChanged += _ =>
+            {
+                if (Profile is null)
+                    return;
+                var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
+                var newHeight = MathF.Round(MathHelper.Lerp(prototype.MinHeight, prototype.MaxHeight, CDHeightSlider.Value), 2);
+                CDHeight.Text = newHeight.ToString(CultureInfo.InvariantCulture);
+                SetProfileHeight(newHeight);
+            };
+
+            #endregion CDHeight
         }
 
         /// <summary>
@@ -1024,6 +1097,8 @@ namespace Content.Client.Lobby.UI
 
             // Check and set the dirty flag to enable the save/reset buttons as appropriate.
             SetDirty();
+
+            UpdateWidthControls();
         }
 
         /// <summary>
@@ -1065,6 +1140,7 @@ namespace Content.Client.Lobby.UI
 
             // Begin CD - Character Records
             UpdateHeightControls();
+            UpdateWidthControls();
             _recordsTab.Update(profile);
             // End CD - Character Records
 
@@ -1095,6 +1171,8 @@ namespace Content.Client.Lobby.UI
 
             // Check and set the dirty flag to enable the save/reset buttons as appropriate.
             SetDirty();
+
+            UpdateWidthControls();
         }
 
         private void OnSpeciesInfoButtonPressed(BaseButton.ButtonEventArgs args)
@@ -1586,15 +1664,6 @@ namespace Content.Client.Lobby.UI
             _entManager.System<MetaDataSystem>().SetEntityName(PreviewDummy, newName);
         }
 
-        // Begin CD - Character Records
-        private void SetProfileHeight(float height)
-        {
-            Profile = Profile?.WithHeight(height);
-            SetDirty();
-            ReloadProfilePreview();
-        }
-        // End CD - Character Records
-
         private void SetSpawnPriority(SpawnPriorityPreference newSpawnPriority)
         {
             Profile = Profile?.WithSpawnPriorityPreference(newSpawnPriority);
@@ -1820,26 +1889,6 @@ namespace Content.Client.Lobby.UI
 
             PronounsButton.SelectId((int) Profile.Gender);
         }
-
-        // Begin CD - Character Records
-        private void UpdateHeightControls()
-        {
-            if (Profile == null)
-            {
-                return;
-            }
-
-            var species = _species.Find(x => x.ID == Profile.Species);
-            if (species != null)
-                _defaultHeight = species.DefaultHeight;
-
-            var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
-            var sliderPercent = (Profile.Height - prototype.MinHeight) /
-                                (prototype.MaxHeight - prototype.MinHeight);
-            CDHeightSlider.Value = sliderPercent;
-            CDHeight.Text = Profile.Height.ToString(CultureInfo.InvariantCulture);
-        }
-        // End CD - Character Records
 
         private void UpdateSpawnPriorityControls()
         {
@@ -2172,6 +2221,43 @@ namespace Content.Client.Lobby.UI
             _exporting = false;
             ImportButton.Disabled = false;
             ExportButton.Disabled = false;
+        }
+
+        private void SetProfileHeight(float height)
+        {
+            if (Profile == null)
+                return;
+            Profile = Profile.WithHeight(height);
+            SetDirty();
+            ReloadProfilePreview();
+        }
+
+        private void UpdateHeightControls()
+        {
+            if (Profile == null)
+                return;
+            var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
+            var sliderPercent = (Profile.Height - prototype.MinHeight) / (prototype.MaxHeight - prototype.MinHeight);
+            CDHeightSlider.Value = sliderPercent;
+            CDHeight.Text = Profile.Height.ToString(CultureInfo.InvariantCulture);
+        }
+        private void SetProfileWidth(float width)
+        {
+            if (Profile == null)
+                return;
+            Profile = Profile.WithWidth(width);
+            SetDirty();
+            ReloadProfilePreview();
+        }
+
+        private void UpdateWidthControls()
+        {
+            if (Profile == null)
+                return;
+            var prototype = _prototypeManager.Index<SpeciesPrototype>(Profile.Species);
+            var sliderPercent = (Profile.Width - prototype.MinWidth) / (prototype.MaxWidth - prototype.MinWidth);
+            CDWidthSlider.Value = sliderPercent;
+            CDWidth.Text = Profile.Width.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

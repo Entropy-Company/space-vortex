@@ -208,6 +208,18 @@ public sealed partial class SpeciesPrototype : IPrototype
     /// </summary>
     [DataField("scaleHeight")]
     public bool ScaleHeight = true;
+
+    /// <summary>
+    /// The minimum width for this species
+    /// </summary>
+    [DataField("minWidth")]
+    public float MinWidth = 0.85f;
+
+    /// <summary>
+    /// The maximum width for this species
+    /// </summary>
+    [DataField("maxWidth")]
+    public float MaxWidth = 1.2f;
     // End CD - Character Records
 }
 

@@ -116,6 +116,11 @@ public sealed partial class HumanoidAppearanceComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float Height = 1f;
+    /// <summary>
+    ///     The width of this humanoid.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float Width = 1f;
     // CD - Character Records
 
     // DeltaV - let paradox anomaly be cloned
