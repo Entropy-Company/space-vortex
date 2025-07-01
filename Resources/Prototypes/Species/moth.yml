@@ -12,6 +12,11 @@
   femaleFirstNames: NamesMothFirstFemale
   maleLastNames: NamesMothLast # Corvax-LastnameGender
   femaleLastNames: NamesMothLast # Corvax-LastnameGender
+  baseScale: "0.87, 0.87"
+  minHeight: 0.90
+  maxHeight: 1.3
+  maxWidth: 1.1
+  minWidth: 0.90
 
 - type: speciesBaseSprites
   id: MobMothSprites

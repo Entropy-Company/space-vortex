@@ -11,6 +11,11 @@
   naming: First
   dollPrototype: MobResomiDummy
   skinColoration: Hues
+  baseScale: "0.86, 0.86"
+  minHeight: 0.9
+  maxHeight: 1.15
+  maxWidth: 1.1
+  minWidth: 0.94
 
 - type: speciesBaseSprites
   id: MobResomiSprites
