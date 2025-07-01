@@ -33,7 +33,7 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
 
     private void OnHandleState(EntityUid uid, HumanoidAppearanceComponent component, ref AfterAutoHandleStateEvent args)
     {
-        UpdateSprite((uid, component, Comp<SpriteComponent>(uid)));
+        UpdateSprite(new Entity<HumanoidAppearanceComponent, SpriteComponent>(uid, component, Comp<SpriteComponent>(uid)));
     }
 
     private void OnCvarChanged(bool value)
@@ -41,18 +41,24 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         var humanoidQuery = EntityManager.AllEntityQueryEnumerator<HumanoidAppearanceComponent, SpriteComponent>();
         while (humanoidQuery.MoveNext(out var uid, out var humanoidComp, out var spriteComp))
         {
-            UpdateSprite((uid, humanoidComp, spriteComp));
+            UpdateSprite(new Entity<HumanoidAppearanceComponent, SpriteComponent>(uid, humanoidComp, spriteComp));
         }
     }
 
-        // Begin CD - Character Records
-        var speciesPrototype = _prototypeManager.Index<SpeciesPrototype>(component.Species);
-        var height = Math.Clamp(MathF.Round(component.Height, 2), speciesPrototype.MinHeight, speciesPrototype.MaxHeight); // should NOT be locked, at all
+    private void UpdateSprite(Entity<HumanoidAppearanceComponent, SpriteComponent> entity)
+    {
+        UpdateLayers(entity);
+        ApplyMarkingSet(entity);
 
-        sprite.Scale = speciesPrototype.BaseScale * new Vector2(speciesPrototype.ScaleHeight ? height : 1f, height); // DV - CD Character Records shouldn't nuke species heights
-        // End CD - Character Records
+        var humanoidAppearance = entity.Comp1;
+        var sprite = entity.Comp2;
 
-        sprite[sprite.LayerMapReserveBlank(HumanoidVisualLayers.Eyes)].Color = component.EyeColor;
+        // Применяем масштаб по высоте
+        var speciesPrototype = _prototypeManager.Index<SpeciesPrototype>(humanoidAppearance.Species);
+        var height = Math.Clamp(MathF.Round(humanoidAppearance.Height, 2), speciesPrototype.MinHeight, speciesPrototype.MaxHeight);
+        sprite.Scale = speciesPrototype.BaseScale * new Vector2(speciesPrototype.ScaleHeight ? height : 1f, height);
+
+        sprite[_sprite.LayerMapReserve((entity.Owner, sprite), HumanoidVisualLayers.Eyes)].Color = humanoidAppearance.EyeColor;
     }
 
     private static bool IsHidden(HumanoidAppearanceComponent humanoid, HumanoidVisualLayers layer)
@@ -228,7 +234,7 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         humanoid.EyeColor = profile.Appearance.EyeColor;
         humanoid.Height = profile.Height; // CD - Character Records
 
-        UpdateSprite((uid, humanoid, Comp<SpriteComponent>(uid)));
+        UpdateSprite(new Entity<HumanoidAppearanceComponent, SpriteComponent>(uid, humanoid, Comp<SpriteComponent>(uid)));
     }
 
     private void ApplyMarkingSet(Entity<HumanoidAppearanceComponent, SpriteComponent> entity)
