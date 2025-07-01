@@ -16,7 +16,7 @@
   baseScale: "0.98, 0.98"
   minHeight: 0.85
   maxHeight: 1.15
-  maxWidth: 1.1
+  maxWidth: 1.15
   minWidth: 0.90
 
 - type: speciesBaseSprites
