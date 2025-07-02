@@ -3,77 +3,79 @@
          xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
          Margin="5"
          VerticalExpand="True">
-    <BoxContainer
-        Name="InfoContainer"
-        Orientation="Vertical"
-        VerticalExpand="True"
-        Margin="5">
-        <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-            <PanelContainer Name="TechnologyTextureBorder" MinSize="56 56" MaxSize="56 350" VerticalAlignment="Center">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#00000000" BorderColor="#FFFFFF" BorderThickness="2" />
-                </PanelContainer.PanelOverride>
-                <TextureRect Name="TechnologyTexture"
-                             TextureScale="2 2"
-                             SetSize="48 48"
-                             Stretch="KeepAspectCentered"
-                             HorizontalAlignment="Center"
-                             VerticalAlignment="Center"/>
-            </PanelContainer>
-            <Control HorizontalExpand="True"/>
-            <PanelContainer Name="TechnologyDisciplineTexture" MinSize="56 50" MaxSize="56 350" VerticalAlignment="Center">
-                <TextureRect Name="DisciplineTexture"
-                             TextureScale="5 5"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Center"
-                             HorizontalExpand="True"/>
-            </PanelContainer>
+    <GridContainer Columns="1" VerticalExpand="True" MinHeight="600">
+        <BoxContainer
+            Name="InfoContainer"
+            Orientation="Vertical"
+            MinWidth="390"
+            MaxWidth="390"
+            MinHeight="200"
+            MaxHeight="200"
+            Margin="5"
+            VerticalExpand="False">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                <PanelContainer Name="TechnologyTextureBorder" MinSize="56 56" MaxSize="56 390" VerticalAlignment="Center">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#00000000" BorderColor="#FFFFFF" BorderThickness="2" />
+                    </PanelContainer.PanelOverride>
+                    <TextureRect Name="TechnologyTexture"
+                                 TextureScale="2 2"
+                                 SetSize="48 48"
+                                 Stretch="KeepAspectCentered"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"/>
+                </PanelContainer>
+                <Control HorizontalExpand="True"/>
+                <PanelContainer Name="TechnologyDisciplineTexture" MinSize="56 50" MaxSize="56 350" VerticalAlignment="Center">
+                    <TextureRect Name="DisciplineTexture"
+                                 TextureScale="5 5"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Center"
+                                 HorizontalExpand="True"/>
+                </PanelContainer>
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal">
+                <Label Name="TechnologyNameLabel" StyleClasses="LabelKeyText" HorizontalExpand="True"/>
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal" Name="LevelUpBox" HorizontalAlignment="Left" Margin="0 5 0 0" Visible="False">
+                <Label Text="Откройте чтобы повысить уровень до " StyleClasses="LabelKeyText"/>
+                <Label Name="LevelUpValueLabel" Modulate="Gold"/>
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal" Name="TierBox" HorizontalAlignment="Left" Margin="0 5 0 0">
+                <Label Text="Требуется уровень:" StyleClasses="LabelKeyText"/>
+                <Label Name="TierValueLabel" Margin="5 0 0 0" Modulate="LightBlue"/>
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal" Name="CostBox" HorizontalAlignment="Left" Margin="0 5 0 0">
+                <Label Name="CostValueLabel" Margin="5 0 0 0" Modulate="Orchid"/>
+                <Label Text="О.И" Margin="5 0 0 0" Modulate="Orchid"/>
+            </BoxContainer>
+            <Button Name="ResearchButton" Text="{Loc 'research-console-menu-server-research-button'}" HorizontalAlignment="Left" Margin="0 4"/>
         </BoxContainer>
-        <BoxContainer Orientation="Horizontal">
-            <Label Name="TechnologyNameLabel" StyleClasses="LabelKeyText" HorizontalExpand="True"/>
+        <BoxContainer Orientation="Vertical" VerticalExpand="True" Margin="5 20 5 5">
+            <BoxContainer Name="PrereqsContainer" Orientation="Vertical" MinHeight="200" SizeFlagsStretchRatio="2" Margin="5 15 5 5">
+                <Label Text="{Loc 'research-console-required-text'}" HorizontalAlignment="Center"/>
+                <customControls:HSeparator StyleClasses="LowDivider" Margin="0 0 0 10"/>
+                <PanelContainer VerticalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#1B1B1E"/>
+                    </PanelContainer.PanelOverride>
+                    <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                        <BoxContainer Name="RequiredTechContainer" Orientation="Vertical" VerticalExpand="True"/>
+                    </ScrollContainer>
+                </PanelContainer>
+            </BoxContainer>
+            <BoxContainer Name="RecipesContainer" Orientation="Vertical" VerticalExpand="True" SizeFlagsStretchRatio="2" Margin="5 15 5 5">
+                <Label Text="{Loc 'research-console-unlocks-text'}" HorizontalAlignment="Center"/>
+                <customControls:HSeparator StyleClasses="LowDivider" Margin="0 0 0 10"/>
+                <PanelContainer VerticalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#1B1B1E"/>
+                    </PanelContainer.PanelOverride>
+                    <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                        <BoxContainer Name="UnlocksContainer" Orientation="Vertical" VerticalExpand="True"/>
+                    </ScrollContainer>
+                </PanelContainer>
+            </BoxContainer>
         </BoxContainer>
-        <BoxContainer Orientation="Horizontal" Name="LevelUpBox" HorizontalAlignment="Left" Margin="0 5 0 0" Visible="False">
-            <Label Text="Откройте чтобы повысить уровень до " StyleClasses="LabelKeyText"/>
-            <Label Name="LevelUpValueLabel" Modulate="Gold"/>
-        </BoxContainer>
-        <BoxContainer Orientation="Horizontal" Name="TierBox" HorizontalAlignment="Left" Margin="0 5 0 0">
-            <Label Text="Требуется уровень:" StyleClasses="LabelKeyText"/>
-            <Label Name="TierValueLabel" Margin="5 0 0 0" Modulate="LightBlue"/>
-        </BoxContainer>
-        <BoxContainer Orientation="Horizontal" Name="CostBox" HorizontalAlignment="Left" Margin="0 5 0 0">
-            <Label Name="CostValueLabel" Margin="5 0 0 0" Modulate="Orchid"/>
-            <Label Text="О.И" Margin="5 0 0 0" Modulate="Orchid"/>
-        </BoxContainer>
-        <Button Name="ResearchButton" Text="{Loc 'research-console-menu-server-research-button'}" HorizontalAlignment="Left"/>
-    </BoxContainer>
-    <Control MinSize="10 10"
-             HorizontalExpand="True"/>
-    <BoxContainer
-        Name="RecipesContainer"
-        Orientation="Vertical"
-        VerticalExpand="True"
-        SizeFlagsStretchRatio="1"
-        VerticalAlignment="Bottom"
-        Margin="5"
-        MinSize="350 300"
-        SetSize="350 300">
-        <Label Text="{Loc 'research-console-unlocks-list-start'}" HorizontalAlignment="Center"/>
-        <customControls:HSeparator StyleClasses="LowDivider" Margin="0 0 0 10"/>
-        <PanelContainer VerticalExpand="True">
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#1B1B1E" />
-            </PanelContainer.PanelOverride>
-            <ScrollContainer
-                HScrollEnabled="False"
-                HorizontalExpand="True"
-                SizeFlagsStretchRatio="4"
-                VerticalExpand="True">
-                <BoxContainer
-                    Name="UnlocksContainer"
-                    Orientation="Vertical"
-                    VerticalExpand="True">
-                </BoxContainer>
-            </ScrollContainer>
-        </PanelContainer>
-    </BoxContainer>
+    </GridContainer>
 </Control>

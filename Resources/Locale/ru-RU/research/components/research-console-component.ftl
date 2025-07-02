@@ -22,3 +22,5 @@ research-console-center-tree = Центрировать древо
 research-console-research-button = Исследовать
 research-console-unlocks-list-title = Открывает
 research-console-already-unlocked = Уже изучено
+research-console-required-text = Требуемые технологии:
+research-console-no-tech-requirements = Нет требований к технологиям.

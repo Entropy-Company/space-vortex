@@ -27,6 +27,9 @@ public sealed partial class MiniTechnologyCardControl : Control
 
     public event Action? OnTileClicked;
 
+    private ResearchAvailablity _currentAvailability;
+    private bool _isHovered;
+
     public MiniTechnologyCardControl(TechnologyPrototype technology, IPrototypeManager prototypeManager, SpriteSystem spriteSys, FormattedMessage description)
     {
         RobustXamlLoader.Load(this);
@@ -34,32 +37,70 @@ public sealed partial class MiniTechnologyCardControl : Control
 
         Technology = technology;
         TileButton.OnPressed += _ => OnTileClicked?.Invoke();
+        TileButton.OnMouseEntered += _ =>
+        {
+            _isHovered = true;
+            UpdateTileStyle();
+        };
+        TileButton.OnMouseExited += _ =>
+        {
+            _isHovered = false;
+            UpdateTileStyle();
+        };
     }
 
     public void SetAvailability(ResearchAvailablity availablity)
     {
-        var style = (StyleBoxFlat)TilePanel.PanelOverride!;
+        _currentAvailability = availablity;
+        UpdateTileStyle();
+    }
 
-        switch (availablity)
+    private void UpdateTileStyle()
+    {
+        var style = (StyleBoxFlat)TilePanel.PanelOverride!;
+        Color bg, highlight, border;
+        switch (_currentAvailability)
         {
             case ResearchAvailablity.Researched:
-                {
-                    style.BackgroundColor = Color.PaleGreen;
-                    style.BorderColor = Color.LimeGreen;
-                    break;
-                }
+                bg = Color.DarkOliveGreen;
+                highlight = Color.PaleGreen;
+                border = Color.LimeGreen;
+                break;
             case ResearchAvailablity.Available:
-                {
-                    style.BackgroundColor = Color.DarkOliveGreen;
-                    style.BorderColor = Color.LimeGreen;
-                    break;
-                }
+                bg = Color.FromHex("#6b572f");
+                highlight = Color.FromHex("#fad398");
+                border = Color.FromHex("#cca031");
+                break;
             case ResearchAvailablity.Unavailable:
-                {
-                    style.BackgroundColor = Color.DarkRed;
-                    style.BorderColor = Color.Crimson;
-                    break;
-                }
+                bg = Color.DarkRed;
+                highlight = Color.FromHex("#a94442");
+                border = Color.Crimson;
+                break;
+            default:
+                bg = Color.Gray;
+                highlight = Color.Gray;
+                border = Color.Gray;
+                break;
         }
+        if (_isHovered)
+        {
+            style.BackgroundColor = highlight;
+        }
+        else
+        {
+            style.BackgroundColor = bg;
+        }
+        style.BorderColor = border;
+    }
+
+    private Color AlphaBlend(Color baseColor, Color overlay)
+    {
+        float a = overlay.A;
+        return new Color(
+            baseColor.R * (1 - a) + overlay.R * a,
+            baseColor.G * (1 - a) + overlay.G * a,
+            baseColor.B * (1 - a) + overlay.B * a,
+            baseColor.A
+        );
     }
 }
