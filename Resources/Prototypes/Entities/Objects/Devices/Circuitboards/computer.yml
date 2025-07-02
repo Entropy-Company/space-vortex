@@ -86,6 +86,17 @@
 
 - type: entity
   parent: BaseComputerCircuitboard
+  id: LaborRecordsComputerCircuitboard
+  name: station labor computer board
+  description: A computer printed circuit board for a labor records computer.
+  components:
+    - type: Sprite
+      state: cpu_command
+    - type: ComputerBoard
+      prototype: ComputerLaborRecords
+
+- type: entity
+  parent: BaseComputerCircuitboard
   id: CargoRequestComputerCircuitboard
   name: cargo request computer board
   description: A computer printed circuit board for a cargo request computer.
