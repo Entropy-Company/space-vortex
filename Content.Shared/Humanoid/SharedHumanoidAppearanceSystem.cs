@@ -465,6 +465,7 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
 
         humanoid.Age = profile.Age;
         humanoid.Height = profile.Height; // CD - Character Records
+        humanoid.Width = profile.Width; // Eternal - Character Records: Width
 
         humanoid.LastProfileLoaded = profile; // DeltaV - let paradox anomaly be cloned
 
