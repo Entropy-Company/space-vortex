@@ -721,6 +721,31 @@
   - type: GeneralStationRecordConsole
   - type: UserInterface
     interfaces:
+        enum.GeneralStationRecordConsoleKey.Key:
+          type: GeneralStationRecordConsoleBoundUserInterface
+        enum.WiresUiKey.Key:
+          type: WiresBoundUserInterface
+  - type: ActivatableUI
+    key: enum.GeneralStationRecordConsoleKey.Key
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#1f8c28"
+  - type: Computer
+    board: StationRecordsComputerCircuitboard
+  - type: GuideHelp
+    guides:
+    - Forensics
+
+- type: entity
+  parent: BaseComputerAiAccess
+  id: ComputerLaborRecords
+  name: station labor computer
+  description: This can be used to check labor records.
+  components:
+  - type: GeneralStationRecordConsole
+  - type: UserInterface
+    interfaces:
         # Begin CD - Character Records
         enum.CharacterRecordConsoleKey.Key:
           type: CharacterRecordConsoleBoundUserInterface
@@ -738,7 +763,7 @@
     energy: 1.6
     color: "#1f8c28"
   - type: Computer
-    board: StationRecordsComputerCircuitboard
+    board: LaborRecordsComputerCircuitboard
   - type: GuideHelp
     guides:
     - Forensics
