@@ -141,7 +141,7 @@
   recipeUnlocks:
   - WeaponParticleDecelerator
   - HoloprojectorField
-  position: 0, -1
+  position: -1, 1
   requiredTech:
   - MagnetsTech
 
@@ -168,10 +168,10 @@
   - ArtistCircuitBoard
   - NutimovCircuitBoard
   - AiRemoteBrain # Corvax-Next-AiRemoteControl
-  position: 0, 0
+  position: 0, -1
   isFinalLevelTech: 3
   requiredTech:
-  - MagnetsTech
+  - BasicRobotics
 # Corvax-Next-MutableLaws-End
 
 # Tier 3

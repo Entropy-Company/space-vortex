@@ -30,6 +30,7 @@ public sealed class LayingDownSystem : SharedLayingDownSystem
         SubscribeLocalEvent<LayingDownComponent, MoveEvent>(OnMovementInput);
         SubscribeLocalEvent<LayingDownComponent, AfterAutoHandleStateEvent>(OnChangeDraw);
         SubscribeLocalEvent<StandingStateComponent, AfterAutoHandleStateEvent>(OnChangeStanding);
+        SubscribeLocalEvent<StandingStateComponent, ComponentInit>(OnStandingInit);
 
         _cfg.OnValueChanged(NextVars.AutoGetUp, b => _autoGetUp = b, true);
 
@@ -129,6 +130,17 @@ public sealed class LayingDownSystem : SharedLayingDownSystem
             return;
 
         ProcessVisuals((ent.Owner, transform, null, rotationVisuals));
+    }
+
+    private void OnStandingInit(EntityUid uid, StandingStateComponent comp, ComponentInit args)
+    {
+        if (TryComp<SpriteComponent>(uid, out var sprite))
+        {
+            if (comp.Standing)
+                sprite.Rotation = Angle.Zero;
+            else
+                sprite.Rotation = Angle.FromDegrees(270);
+        }
     }
 
     /*

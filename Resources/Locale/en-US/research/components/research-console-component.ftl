@@ -24,3 +24,6 @@ research-console-center-tree = Center tree
 research-console-research-button = Research
 research-console-unlocks-list-title = Unlocks
 research-console-already-unlocked = Already unlocked
+
+research-console-required-text = Required technologies:
+research-console-no-tech-requirements = No technology requirements.

@@ -48,6 +48,23 @@ public sealed partial class TechnologyInfoPanel : Control
             LevelUpBox.Visible = false;
         }
 
+        // Обновляем секцию требований
+        if (proto.RequiredTech == null || proto.RequiredTech.Count == 0)
+        {
+            PrereqsContainer.Visible = false;
+        }
+        else
+        {
+            PrereqsContainer.Visible = true;
+            RequiredTechContainer.DisposeAllChildren();
+            foreach (var prereqId in proto.RequiredTech)
+            {
+                var prereqTech = _proto.Index<TechnologyPrototype>(prereqId);
+                var prereqControl = new TechnologyPrereqCardControl(prereqTech, _proto, sprite);
+                RequiredTechContainer.AddChild(prereqControl);
+            }
+        }
+
         UnlocksContainer.DisposeAllChildren();
         foreach (var item in proto.RecipeUnlocks)
         {
@@ -75,7 +92,6 @@ public sealed partial class TechnologyInfoPanel : Control
         else
             ResearchButton.Text = Loc.GetString("research-console-menu-server-research-button");
 
-        // Проверяем доступность, наличие доступа и достаточность очков
         bool canAfford = availablePoints >= Prototype.Cost;
         ResearchButton.Disabled = !hasAccess || availablity != ResearchAvailablity.Available || !canAfford;
     }
