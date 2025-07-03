@@ -12,6 +12,7 @@ using Content.Server.Station.Systems;
 using Content.Shared._DV.CosmicCult.Components;
 using Content.Shared._DV.CosmicCult;
 using Content.Shared.Maps;
+using Content.Shared.Actions.Components;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -54,7 +55,8 @@ public sealed class CosmicMonumentSystem : EntitySystem
         if (!VerifyPlacement(uid, out var pos))
             return;
 
-        _actions.RemoveAction(uid, uid.Comp.CosmicMonumentPlaceActionEntity);
+        if (TryComp<ActionsComponent>(uid, out var actions))
+            _actions.RemoveAction((uid, actions), uid.Comp.CosmicMonumentPlaceActionEntity);
 
         Spawn(MonumentCollider, pos);
         var monument = Spawn(uid.Comp.MonumentPrototype, pos);
@@ -68,7 +70,8 @@ public sealed class CosmicMonumentSystem : EntitySystem
             || !VerifyPlacement(uid, out var pos))
             return;
 
-        _actions.RemoveAction(uid, uid.Comp.CosmicMonumentMoveActionEntity);
+        if (TryComp<ActionsComponent>(uid, out var actions))
+            _actions.RemoveAction((uid, actions), uid.Comp.CosmicMonumentMoveActionEntity);
 
         //delete all old monument colliders for 100% safety
         var colliderQuery = EntityQueryEnumerator<MonumentCollisionComponent>();
