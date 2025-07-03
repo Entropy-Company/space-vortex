@@ -55,10 +55,7 @@
     trackAllDamage: true
     damageOverlay:
       sprite: Structures/Windows/cracks.rsi
-  - type: Penetratable # Corvax-Next - Better snipers
-    penetrateDamage: 50
-    damagePenalty: 0.1
-  - type: Penetratable # Goobstation - Better snipers
+  - type: Penetratable # Corvax-Next/Goobstation - Better snipers
     penetrateDamage: 50
     damagePenalty: 0.1
   - type: CosmicCorruptible # DeltaV - Cosmic Cult
@@ -123,7 +120,7 @@
         acts: [ "Destruction" ]
   - type: StaticPrice
     price: 22.5
-  - type: Penetratable # Corvax-Next - Better snipers
+  - type: Penetratable # Corvax-Next/Goobstation - Better snipers
     penetrateDamage: 25
     damagePenalty: 0.1
 

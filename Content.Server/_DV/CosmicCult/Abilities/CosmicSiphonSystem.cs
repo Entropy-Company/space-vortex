@@ -12,6 +12,7 @@ using Content.Shared.NPC;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
 using Robust.Shared.Random;
+using Robust.Server.Player;
 
 namespace Content.Server._DV.CosmicCult.Abilities;
 
@@ -27,6 +28,7 @@ public sealed class CosmicSiphonSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     [Dependency] private readonly CosmicCultSystem _cosmicCult = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     private readonly HashSet<Entity<PoweredLightComponent>> _lights = [];
 
@@ -75,8 +77,8 @@ public sealed class CosmicSiphonSystem : EntitySystem
 
         args.Handled = true;
 
-        if (_mind.TryGetMind(uid, out var _, out var mind) && mind.Session != null)
-            RaiseNetworkEvent(new CosmicSiphonIndicatorEvent(GetNetEntity(target)), mind.Session);
+        if (_mind.TryGetMind(uid, out var _, out var mind) && mind.UserId != null && _playerManager.TryGetSessionById(mind.UserId.Value, out var session))
+            RaiseNetworkEvent(new CosmicSiphonIndicatorEvent(GetNetEntity(target)), session);
 
         uid.Comp.EntropyStored += uid.Comp.CosmicSiphonQuantity;
         uid.Comp.EntropyBudget += uid.Comp.CosmicSiphonQuantity;
