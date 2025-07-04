@@ -83,6 +83,10 @@ namespace Content.Client.Paper.UI
         // Сохраняем оригинальный текст для правильного сохранения скрытых тегов
         private string _originalText = string.Empty;
 
+        // Сохраняем оригинальный цвет и стиль фона для восстановления после УФ-режима
+        private Color _originalBackgroundColor = Color.White;
+        private StyleBox? _originalPanelOverride = null;
+
         private PaperComponent.PaperBoundUserInterfaceState? _lastState;
 
         public PaperWindow()
@@ -136,13 +140,15 @@ namespace Content.Client.Paper.UI
             SignDisplay.PlacementSeed = (int)entity;
 
             // Initialize the background:
+            _originalBackgroundColor = visuals.BackgroundModulate;
+            _originalPanelOverride = null;
             PaperBackground.ModulateSelfOverride = visuals.BackgroundModulate;
             var backgroundImage = visuals.BackgroundImagePath != null? _resCache.GetResource<TextureResource>(visuals.BackgroundImagePath) : null;
             if (backgroundImage != null)
             {
                 var backgroundImageMode = visuals.BackgroundImageTile ? StyleBoxTexture.StretchMode.Tile : StyleBoxTexture.StretchMode.Stretch;
                 var backgroundPatchMargin = visuals.BackgroundPatchMargin;
-                PaperBackground.PanelOverride = new StyleBoxTexture
+                var styleBox = new StyleBoxTexture
                 {
                     Texture = backgroundImage,
                     TextureScale = visuals.BackgroundScale,
@@ -152,11 +158,13 @@ namespace Content.Client.Paper.UI
                     PatchMarginRight = backgroundPatchMargin.Right,
                     PatchMarginTop = backgroundPatchMargin.Top
                 };
-
+                PaperBackground.PanelOverride = styleBox;
+                _originalPanelOverride = styleBox;
             }
             else
             {
                 PaperBackground.PanelOverride = null;
+                _originalPanelOverride = null;
             }
 
 
@@ -585,7 +593,9 @@ namespace Content.Client.Paper.UI
             }
             else
             {
-                PaperBackground.ModulateSelfOverride = Color.White;
+                // Восстанавливаем оригинальный цвет и стиль
+                PaperBackground.ModulateSelfOverride = _originalBackgroundColor;
+                PaperBackground.PanelOverride = _originalPanelOverride;
             }
         }
 
