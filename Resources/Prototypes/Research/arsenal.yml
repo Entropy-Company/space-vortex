@@ -1,5 +1,3 @@
-# Tier 1
-
 - type: technology
   id: SalvageWeapons
   name: research-technology-salvage-weapons
@@ -10,10 +8,9 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-  - WeaponProtoKineticAccelerator
-  - ShuttleGunKineticCircuitboard
-  position: 1, 0
-
+    - WeaponProtoKineticAccelerator
+    - ShuttleGunKineticCircuitboard
+  position: 1, 1
 - type: technology
   id: DraconicMunitions
   name: research-technology-draconic-munitions
@@ -24,22 +21,21 @@
   tier: 1
   cost: 10000
   recipeUnlocks:
-  - BoxShotgunIncendiary
-  - MagazineRifleIncendiary
-  - MagazinePistolIncendiary
-  - MagazinePistolSubMachineGunIncendiary
-  - MagazineLightRifleIncendiary
-  - SpeedLoaderMagnumIncendiary
-  - MagazineShotgunIncendiary
-  - MagazineBoxPistolIncendiary
-  - MagazineBoxMagnumIncendiary
-  - MagazineBoxLightRifleIncendiary
-  - MagazineBoxRifleIncendiary
+    - BoxShotgunIncendiary
+    - MagazineRifleIncendiary
+    - MagazinePistolIncendiary
+    - MagazinePistolSubMachineGunIncendiary
+    - MagazineLightRifleIncendiary
+    - SpeedLoaderMagnumIncendiary
+    - MagazineShotgunIncendiary
+    - MagazineBoxPistolIncendiary
+    - MagazineBoxMagnumIncendiary
+    - MagazineBoxLightRifleIncendiary
+    - MagazineBoxRifleIncendiary
   isFinalLevelTech: 2
-  position: 3, -1
+  position: 3, 0
   requiredTech:
-  - ExplosiveTechnology
-  
+    - ExplosiveTechnology
 - type: technology
   id: WeaponizedLaserManipulation
   name: research-technology-weaponized-laser-manipulation
@@ -50,11 +46,10 @@
   tier: 1
   cost: 7500
   recipeUnlocks:
-  - WeaponLaserCarbine
-  position: 2, -2
+    - WeaponLaserCarbine
+  position: 1, -1
   requiredTech:
-  - UraniumMunitions
-  
+    - UraniumMunitions
 - type: technology
   id: NonlethalAmmunition
   name: research-technology-nonlethal-ammunition
@@ -65,14 +60,13 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-  - MagazineShotgunBeanbag
-  - BoxShellTranquilizer
-  - BoxBeanbag
-  - WeaponDisabler
-  position: 2, 0
+    - MagazineShotgunBeanbag
+    - BoxShellTranquilizer
+    - BoxBeanbag
+    - WeaponDisabler
+  position: 1, 2
   requiredTech:
-  - SalvageWeapons
-
+    - SalvageWeapons
 - type: technology
   id: UraniumMunitions
   name: research-technology-uranium-munitions
@@ -83,20 +77,19 @@
   tier: 1
   cost: 7500
   recipeUnlocks:
-  - MagazineRifleUranium
-  - MagazinePistolUranium
-  - MagazinePistolSubMachineGunUranium
-  - MagazineLightRifleUranium
-  - SpeedLoaderMagnumUranium
-  - MagazineBoxPistolUranium
-  - MagazineBoxMagnumUranium
-  - MagazineBoxLightRifleUranium
-  - MagazineBoxRifleUranium
-  - BoxShotgunUranium
-  position: 1, -1
+    - MagazineRifleUranium
+    - MagazinePistolUranium
+    - MagazinePistolSubMachineGunUranium
+    - MagazineLightRifleUranium
+    - SpeedLoaderMagnumUranium
+    - MagazineBoxPistolUranium
+    - MagazineBoxMagnumUranium
+    - MagazineBoxLightRifleUranium
+    - MagazineBoxRifleUranium
+    - BoxShotgunUranium
+  position: 1, 0
   requiredTech:
-  - SalvageWeapons
-
+    - SalvageWeapons
 - type: technology
   id: AdvancedRiotControl
   name: research-technology-advanced-riot-control
@@ -107,14 +100,13 @@
   tier: 1
   cost: 8000
   recipeUnlocks:
-  - Truncheon
-  - TelescopicShield
-  - HoloprojectorSecurity
-  - WeaponDisablerSMG
-  position: 3, 1
+    - Truncheon
+    - TelescopicShield
+    - HoloprojectorSecurity
+    - WeaponDisablerSMG
+  position: 2, 1
   requiredTech:
-  - SpecialMeans
-
+    - SpecialMeans
 - type: technology
   id: ExplosiveTechnology
   name: research-technology-explosive-technology
@@ -125,17 +117,16 @@
   tier: 1
   cost: 10000
   recipeUnlocks:
-  - SignallerAdvanced
-  - SignalTrigger
-  - VoiceTrigger
-  - TimerTrigger
-  - FlashPayload
-  - ExplosivePayload
-  - ChemicalPayload
-  position: 2, -1
+    - SignallerAdvanced
+    - SignalTrigger
+    - VoiceTrigger
+    - TimerTrigger
+    - FlashPayload
+    - ExplosivePayload
+    - ChemicalPayload
+  position: 2, 0
   requiredTech:
-  - UraniumMunitions
-
+    - UraniumMunitions
 - type: technology
   id: SpecialMeans
   name: research-technology-special-means
@@ -146,12 +137,10 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-  - ClothingBackpackElectropack
-  position: 2, 1
+    - ClothingBackpackElectropack
+  position: 2, 2
   requiredTech:
-  - NonlethalAmmunition
-# Tier 2
-
+    - NonlethalAmmunition
 - type: technology
   id: ConcentratedLaserWeaponry
   name: research-technology-concentrated-laser-weaponry
@@ -162,11 +151,10 @@
   tier: 2
   cost: 10000
   recipeUnlocks:
-  - WeaponLaserCannon
-  position: 2, -3
+    - WeaponLaserCannon
+  position: 1, -2
   requiredTech:
-  - WeaponizedLaserManipulation
-
+    - WeaponizedLaserManipulation
 - type: technology
   id: WaveParticleHarnessing
   name: research-technology-wave-particle-harnessing
@@ -177,12 +165,11 @@
   tier: 2
   cost: 10000
   recipeUnlocks:
-  - WeaponXrayCannon
-  position: 2, -4
+    - WeaponXrayCannon
+  position: 1, -3
   isFinalLevelTech: 3
   requiredTech:
-  - ConcentratedLaserWeaponry
-
+    - ConcentratedLaserWeaponry
 - type: technology
   id: KineticModifications
   name: research-technology-kinetic-modifications
@@ -193,13 +180,12 @@
   tier: 2
   cost: 7500
   recipeUnlocks:
-  - PKAUpgradeDamage
-  - PKAUpgradeRange
-  - PKAUpgradeFireRate
-  position: 0, 0
+    - PKAUpgradeDamage
+    - PKAUpgradeRange
+    - PKAUpgradeFireRate
+  position: 0, 1
   requiredTech:
-  - SalvageWeapons
-
+    - SalvageWeapons
 - type: technology
   id: BasicShuttleArmament
   name: research-technology-basic-shuttle-armament
@@ -210,22 +196,20 @@
   tier: 2
   cost: 10500
   recipeUnlocks:
-  - PowerCageRechargerCircuitboard
-  - PowerCageSmall
-  - PowerCageMedium
-  - MagazineGrenadeEmpty
-  - GrenadeFlash
-  - GrenadeBlast
-  - ShuttleGunSvalinnMachineGunCircuitboard
-  - ShuttleGunPerforatorCircuitboard
-  - ShuttleGunFriendshipCircuitboard
+    - PowerCageRechargerCircuitboard
+    - PowerCageSmall
+    - PowerCageMedium
+    - MagazineGrenadeEmpty
+    - GrenadeFlash
+    - GrenadeBlast
+    - ShuttleGunSvalinnMachineGunCircuitboard
+    - ShuttleGunPerforatorCircuitboard
+    - ShuttleGunFriendshipCircuitboard
   isFinalLevelTech: 3
-  position: 3, -3
+  position: 3, -1
   requiredTech:
-  - WeaponizedLaserManipulation
-
-# Tier 3
-
+    - WeaponizedLaserManipulation
+    - DraconicMunitions
 - type: technology
   id: PortableMicrofusionWeaponry
   name: research-technology-portable-microfusion-weaponry
@@ -236,12 +220,11 @@
   tier: 3
   cost: 15000
   recipeUnlocks:
-  - WeaponAdvancedLaser
-  - PortableRecharger
-  position: 2, -6
+    - WeaponAdvancedLaser
+    - PortableRecharger
+  position: 1, -5
   requiredTech:
-  - ThermalWeaponry
-
+    - ThermalWeaponry
 - type: technology
   id: ThermalWeaponry
   name: research-technology-thermal-weaponry
@@ -252,11 +235,10 @@
   tier: 3
   cost: 15000
   recipeUnlocks:
-  - WeaponTemperatureGun
-  position: 2, -5
+    - WeaponTemperatureGun
+  position: 1, -4
   requiredTech:
-  - WaveParticleHarnessing
-
+    - WaveParticleHarnessing
 - type: technology
   id: AdvancedShuttleWeapon
   name: research-technology-advanced-shuttle-weapon
@@ -267,9 +249,9 @@
   tier: 3
   cost: 15000
   recipeUnlocks:
-  - GrenadeEMP
-  - PowerCageHigh
-  - ShuttleGunDusterCircuitboard
-  position: 4, -3
+    - GrenadeEMP
+    - PowerCageHigh
+    - ShuttleGunDusterCircuitboard
+  position: 3, -2
   requiredTech:
-  - BasicShuttleArmament
+    - BasicShuttleArmament

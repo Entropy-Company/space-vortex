@@ -1,5 +1,3 @@
-# Tier 1
-
 - type: technology
   id: Hydroponics
   name: research-technology-basic-hydroponics
@@ -10,15 +8,13 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-  - SeedExtractorMachineCircuitboard
-  - HydroponicsTrayMachineCircuitboard
-  - ReagentGrinderIndustrialMachineCircuitboard
-  - PlantAnalyzer # Corvax-Next-PlantAnalyzer
+    - SeedExtractorMachineCircuitboard
+    - HydroponicsTrayMachineCircuitboard
+    - ReagentGrinderIndustrialMachineCircuitboard
+    - PlantAnalyzer
   position: 0, -1
   requiredTech:
-  - AdvancedEntertainment
-
-
+    - AdvancedEntertainment
 - type: technology
   id: CritterMechs
   name: research-technology-critter-mechs
@@ -29,19 +25,18 @@
   tier: 1
   cost: 7500
   recipeUnlocks:
-  - HamtrHarness
-  - HamtrLArm
-  - HamtrRArm
-  - HamtrLLeg
-  - HamtrRLeg
-  - HamtrCentralElectronics
-  - HamtrPeripheralsElectronics
-  - MechEquipmentGrabberSmall
-  - VimHarness
+    - HamtrHarness
+    - HamtrLArm
+    - HamtrRArm
+    - HamtrLLeg
+    - HamtrRLeg
+    - HamtrCentralElectronics
+    - HamtrPeripheralsElectronics
+    - MechEquipmentGrabberSmall
+    - VimHarness
   position: 1, 1
   requiredTech:
-  - AdvancedEntertainment
-
+    - AdvancedEntertainment
 - type: technology
   id: AudioVisualCommunication
   name: research-technology-audio-visual-communication
@@ -52,19 +47,18 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-  - SurveillanceCameraRouterCircuitboard
-  - SurveillanceCameraWirelessRouterCircuitboard
-  - SurveillanceWirelessCameraMovableCircuitboard
-  - SurveillanceWirelessCameraAnchoredCircuitboard
-  - SurveillanceCameraMonitorCircuitboard
-  - SurveillanceWirelessCameraMonitorCircuitboard
-  - TelecomServerCircuitboard
-  - HolopadMachineCircuitboard
+    - SurveillanceCameraRouterCircuitboard
+    - SurveillanceCameraWirelessRouterCircuitboard
+    - SurveillanceWirelessCameraMovableCircuitboard
+    - SurveillanceWirelessCameraAnchoredCircuitboard
+    - SurveillanceCameraMonitorCircuitboard
+    - SurveillanceWirelessCameraMonitorCircuitboard
+    - TelecomServerCircuitboard
+    - HolopadMachineCircuitboard
   position: 2, 1
   isFinalLevelTech: 2
   requiredTech:
-  - AdvancedEntertainment
-
+    - AdvancedEntertainment
 - type: technology
   id: AdvancedEntertainment
   name: research-technology-advanced-entertainment
@@ -81,7 +75,6 @@
     - MassMediaCircuitboard
     - JukeboxCircuitBoard
   position: 1, 0
-
 - type: technology
   id: MeatManipulation
   name: research-technology-meat-manipulation
@@ -92,16 +85,13 @@
   tier: 1
   cost: 7500
   recipeUnlocks:
-  - FatExtractorMachineCircuitboard
-  - BiofabricatorMachineCircuitboard
-  - BiomassReclaimerMachineCircuitboard
-  - MedicalBiofabMachineBoard #Corvax-Next-Surgery
+    - FatExtractorMachineCircuitboard
+    - BiofabricatorMachineCircuitboard
+    - BiomassReclaimerMachineCircuitboard
+    - MedicalBiofabMachineBoard
   position: 0, -2
   requiredTech:
-  - AdvancedEntertainment
-
-# Tier 2
-
+    - Hydroponics
 - type: technology
   id: FauxAstroTiles
   name: research-technology-faux-astro-tiles
@@ -112,16 +102,15 @@
   tier: 2
   cost: 5000
   recipeUnlocks:
-  - FauxTileAstroGrass
-  - FauxTileMowedAstroGrass
-  - FauxTileJungleAstroGrass
-  - FauxTileAstroIce
-  - FauxTileAstroSnow
-  - FauxTileAstroAsteroidSand
+    - FauxTileAstroGrass
+    - FauxTileMowedAstroGrass
+    - FauxTileJungleAstroGrass
+    - FauxTileAstroIce
+    - FauxTileAstroSnow
+    - FauxTileAstroAsteroidSand
   position: 3, 0
   requiredTech:
-  - AdvancedEntertainment
-  
+    - AdvancedEntertainment
 - type: technology
   id: BiochemicalStasis
   name: research-technology-biochemical-stasis
@@ -132,15 +121,17 @@
   tier: 2
   cost: 7500
   recipeUnlocks:
-  - StasisBedMachineCircuitboard
-  - CryoPodMachineCircuitboard
-  - CryostasisBeaker
-  - SyringeCryostasis
-  - NTBodyBag # Corvax-Next-AdvancedBodyBags
-  - PrisonerBodyBag # Corvax-Next-AdvancedBodyBags
-  - RadiationBodyBag # Corvax-Next-AdvancedBodyBags
-
-- type: technology # Merge with other T2 medical research if possible!
+    - StasisBedMachineCircuitboard
+    - CryoPodMachineCircuitboard
+    - CryostasisBeaker
+    - SyringeCryostasis
+    - NTBodyBag
+    - PrisonerBodyBag
+    - RadiationBodyBag
+  position: 1, -2
+  requiredTech:
+    - AdvancedEntertainment
+- type: technology
   id: MechanizedTreatment
   name: research-technology-mechanized-treatment
   icon:
@@ -150,11 +141,10 @@
   tier: 2
   cost: 5000
   recipeUnlocks:
-  - BorgModuleAdvancedChemical
+    - BorgModuleAdvancedChemical
   position: 1, -1
   requiredTech:
-  - AdvancedEntertainment
-  
+    - AdvancedEntertainment
 - type: technology
   id: AdvancedCleaning
   name: research-technology-advanced-cleaning
@@ -165,14 +155,13 @@
   tier: 2
   cost: 10000
   recipeUnlocks:
-  - AdvMopItem
-  - MegaSprayBottle
-  - BagOfCleanliness # Corvax-Next-BluespaceTrashBag
-  - BorgModuleAdvancedCleaning
-  position: -2, 0
+    - AdvMopItem
+    - MegaSprayBottle
+    - BagOfCleanliness
+    - BorgModuleAdvancedCleaning
+  position: 0, 1
   requiredTech:
-  - AdvancedEntertainment
-
+    - AdvancedEntertainment
 - type: technology
   id: HONKMech
   name: research-technology-honk-mech
@@ -183,19 +172,18 @@
   tier: 2
   cost: 7500
   recipeUnlocks:
-  - HonkerHarness
-  - HonkerLArm
-  - HonkerRArm
-  - HonkerLLeg
-  - HonkerRLeg
-  - HonkerCentralElectronics
-  - HonkerPeripheralsElectronics
-  - HonkerTargetingElectronics
-  - MechEquipmentHorn
+    - HonkerHarness
+    - HonkerLArm
+    - HonkerRArm
+    - HonkerLLeg
+    - HonkerRLeg
+    - HonkerCentralElectronics
+    - HonkerPeripheralsElectronics
+    - HonkerTargetingElectronics
+    - MechEquipmentHorn
   position: 1, 2
   requiredTech:
-  - CritterMechs
-
+    - CritterMechs
 - type: technology
   id: AdvancedSpray
   name: research-technology-advanced-spray
@@ -206,12 +194,11 @@
   tier: 2
   cost: 10000
   recipeUnlocks:
-  - WeaponSprayNozzle
-  - ClothingBackpackWaterTank
-  position: -3, 0
+    - WeaponSprayNozzle
+    - ClothingBackpackWaterTank
+  position: 0, 2
   requiredTech:
-  - AdvancedEntertainment
-
+    - AdvancedCleaning
 - type: technology
   id: BluespaceCargoTransport
   name: research-technology-bluespace-cargo-transport
@@ -222,12 +209,11 @@
   tier: 2
   cost: 15000
   recipeUnlocks:
-  - CargoTelepadMachineCircuitboard
-  position: 4, 0
+    - CargoTelepadMachineCircuitboard
+  position: 3, 1
   isFinalLevelTech: 3
   requiredTech:
-  - FauxAstroTiles
-
+    - FauxAstroTiles
 - type: technology
   id: PushHorn
   name: research-technology-clowning-utilities
@@ -238,10 +224,10 @@
   tier: 2
   cost: 4000
   recipeUnlocks:
-  - PushHorn
-
-# Tier 3
-
+    - PushHorn
+  position: 2, 2
+  requiredTech:
+    - AudioVisualCommunication
 - type: technology
   id: QuantumFiberWeaving
   name: research-technology-quantum-fiber-weaving
@@ -252,11 +238,10 @@
   tier: 3
   cost: 10000
   recipeUnlocks:
-  - ClothingShoesBootsSpeed
-  position: 5, 0
+    - ClothingShoesBootsSpeed
+  position: 3, 2
   requiredTech:
-  - BluespaceCargoTransport
-
+    - BluespaceCargoTransport
 - type: technology
   id: BluespaceChemistry
   name: research-technology-bluespace-chemistry
@@ -267,13 +252,12 @@
   tier: 3
   cost: 10000
   recipeUnlocks:
-  - BluespaceBeaker
-  - SyringeBluespace
-  - BluespaceBodyBag # Corvax-Next-AdvancedBodyBags
-  position: 1, -2
+    - BluespaceBeaker
+    - SyringeBluespace
+    - BluespaceBodyBag
+  position: 1, -3
   requiredTech:
-  - MechanizedTreatment
-
+    - BiochemicalStasis
 - type: technology
   id: LauncherSyringe
   name: research-technology-launcher-syringe
@@ -284,8 +268,60 @@
   tier: 3
   cost: 15000
   recipeUnlocks:
-  - LauncherSyringe
-  - MiniSyringe
-  position: 1, -3
+    - LauncherSyringe
+    - MiniSyringe
+  position: 1, -4
   requiredTech:
-  - BluespaceChemistry
+    - BluespaceChemistry
+- type: technology
+  id: AdvancedTreatment
+  name: research-technology-advanced-treatment
+  icon:
+    sprite: _Shitmed/Objects/Specific/Medical/Surgery/e-scalpel.rsi
+    state: e-scalpel-on
+  discipline: CivilianServices
+  tier: 2
+  cost: 10000
+  recipeUnlocks:
+    - EnergyScalpel
+    - EnergyCautery
+    - AdvancedRetractor
+    - BorgModuleAdvancedSurgery
+  position: 2, -1
+  requiredTech:
+    - MechanizedTreatment
+- type: technology
+  id: CyberneticEnhancements
+  name: research-technology-cybernetic-enhancements
+  icon:
+    sprite: _Shitmed/Mobs/Species/IPC/organs.rsi
+    state: eyes
+  discipline: CivilianServices
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+    - JawsOfLifeLeftArm
+    - JawsOfLifeRightArm
+    - SpeedLeftLeg
+    - SpeedRightLeg
+    - BasicCyberneticEyes
+    - SecurityCyberneticEyes
+    - MedicalCyberneticEyes
+  isFinalLevelTech: 3
+  position: 3, -1
+  requiredTech:
+    - AdvancedTreatment
+- type: technology
+  id: HighEndSurgery
+  name: research-technology-high-end-surgery
+  icon:
+    sprite: _Shitmed/Objects/Specific/Medical/Surgery/omnimed.rsi
+    state: omnimed
+  discipline: CivilianServices
+  tier: 3
+  cost: 10000
+  recipeUnlocks:
+    - OmnimedTool
+  position: 4, -1
+  requiredTech:
+    - CyberneticEnhancements
