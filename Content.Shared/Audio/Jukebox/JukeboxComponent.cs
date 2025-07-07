@@ -37,6 +37,9 @@ public sealed partial class JukeboxComponent : Component
 
     [ViewVariables]
     public float SelectAccumulator;
+
+    [DataField, AutoNetworkedField]
+    public float Volume = 0f; // dB, 0 = 100%, -20 = ~10%
 }
 
 [Serializable, NetSerializable]
@@ -58,6 +61,12 @@ public sealed class JukeboxSelectedMessage(ProtoId<JukeboxPrototype> songId) : B
 public sealed class JukeboxSetTimeMessage(float songTime) : BoundUserInterfaceMessage
 {
     public float SongTime { get; } = songTime;
+}
+
+[Serializable, NetSerializable]
+public sealed class JukeboxSetVolumeMessage(float volume) : BoundUserInterfaceMessage
+{
+    public float Volume { get; } = volume;
 }
 
 [Serializable, NetSerializable]
