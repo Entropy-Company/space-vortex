@@ -13,6 +13,7 @@
     - WeaponPlasmaCutter
     - OreProcessorIndustrialMachineCircuitboard
     - ClothingMaskWeldingGas
+    - ClothingShoesBootsJump
   position: 3, 0
   requiredTech:
     - SpaceScanning
