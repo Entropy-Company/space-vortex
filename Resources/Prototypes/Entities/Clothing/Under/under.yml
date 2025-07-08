@@ -11,6 +11,11 @@
     sprite: Clothing/Under/Socks/bee.rsi
   - type: Clothing
     sprite: Clothing/Under/Socks/bee.rsi
+    slots:
+    - SOCKS
+    clothingVisuals:
+      shoes:
+      - state: equipped-SOCKS
 
 - type: entity
   parent: ClothingShoesBase
@@ -22,3 +27,8 @@
     sprite: Clothing/Under/Socks/coder.rsi
   - type: Clothing
     sprite: Clothing/Under/Socks/coder.rsi
+    slots:
+    - SOCKS
+    clothingVisuals:
+      shoes:
+      - state: equipped-SOCKS
