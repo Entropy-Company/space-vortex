@@ -65,7 +65,10 @@ public sealed partial class JukeboxMenu : FancyWindow
 
         VolumeSlider.OnValueChanged += args =>
         {
-            OnVolumeChanged?.Invoke(VolumeSlider.Value);
+            if (Math.Abs(VolumeSlider.Value - args.Value) > 0.01f)
+                VolumeSlider.SetValueWithoutEvent(args.Value);
+            else
+                OnVolumeChanged?.Invoke(VolumeSlider.Value);
         };
 
         SetPlayPauseButton(_audioSystem.IsPlaying(_audio), force: true);
