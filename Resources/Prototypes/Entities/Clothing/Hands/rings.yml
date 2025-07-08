@@ -8,6 +8,9 @@
     layers:
       - state: ring
         color: "#ffc833"
+  - type: Clothing
+    slots:
+    - RING
 
 - type: entity
   parent: [ RingBase, SilverRingBase ]

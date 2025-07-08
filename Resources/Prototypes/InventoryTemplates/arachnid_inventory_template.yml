@@ -1,6 +1,13 @@
 ﻿- type: inventoryTemplate
   id: arachnid
   slots:
+    - name: socks
+      slotTexture: socks
+      slotFlags: SOCKS
+      stripTime: 2
+      uiWindowPos: 2,0
+      strippingWindowPos: 0,3
+      displayName: Socks
     - name: shoes
       slotTexture: shoes
       slotFlags: FEET
@@ -81,7 +88,6 @@
       uiWindowPos: 3,0
       strippingWindowPos: 0,5
       displayName: Back
-
     - name: pocket4
       slotTexture: web
       fullTextureName: template_small
@@ -140,3 +146,17 @@
       dependsOnComponents:
       - type: AllowSuitStorage
       displayName: Suit Storage
+    - name: ring
+      slotTexture: ring
+      slotFlags: RING
+      stripTime: 2
+      uiWindowPos: 3,1
+      strippingWindowPos: 2,1
+      displayName: Ring
+    - name: watch
+      slotTexture: watch
+      slotFlags: WATCH
+      stripTime: 2
+      uiWindowPos: 3,2
+      strippingWindowPos: 2,3
+      displayName: Watch

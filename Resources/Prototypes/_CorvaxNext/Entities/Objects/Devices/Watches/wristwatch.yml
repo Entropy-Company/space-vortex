@@ -92,6 +92,11 @@
     state: syndiwatch_clock
   - type: Item
     sprite: _CorvaxNext/Objects/Devices/Watches/syndiwatch.rsi
+    inhandVisuals:
+      right:
+        - state: inhand-right
+      left:
+        - state: inhand-left
   - type: Clothing
     sprite: _CorvaxNext/Objects/Devices/Watches/syndiwatch.rsi
   - type: Pinpointer
