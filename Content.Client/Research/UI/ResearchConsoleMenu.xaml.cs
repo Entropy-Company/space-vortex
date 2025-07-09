@@ -271,7 +271,13 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
     }
     protected override DragMode GetDragModeFor(Vector2 relativeMousePos)
     {
-        return _dragging ? DragMode.None : base.GetDragModeFor(relativeMousePos);
+        var dragRect = DragContainer.GlobalRect;
+        var globalPos = GlobalPosition + relativeMousePos;
+
+        if (dragRect.Contains(globalPos))
+            return DragMode.None;
+
+        return base.GetDragModeFor(relativeMousePos);
     }
     #endregion
 
