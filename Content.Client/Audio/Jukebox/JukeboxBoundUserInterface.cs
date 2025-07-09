@@ -57,6 +57,7 @@ public sealed class JukeboxBoundUserInterface : BoundUserInterface
         if (_menu == null || !EntMan.TryGetComponent(Owner, out JukeboxComponent? jukebox))
             return;
 
+        _menu.ResetPendingVolume();
         _menu.SetAudioStream(jukebox.AudioStream);
         _menu.SetVolume(jukebox.Volume);
 
