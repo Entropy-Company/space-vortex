@@ -36,6 +36,10 @@ public sealed partial class JukeboxMenu : FancyWindow
 
     private float _lockTimer;
 
+    private bool _suppressNextVolumeSync = false;
+
+    private float? _pendingVolume = null;
+
     public JukeboxMenu()
     {
         RobustXamlLoader.Load(this);
@@ -65,10 +69,8 @@ public sealed partial class JukeboxMenu : FancyWindow
 
         VolumeSlider.OnValueChanged += args =>
         {
-            if (Math.Abs(VolumeSlider.Value - args.Value) > 0.01f)
-                VolumeSlider.SetValueWithoutEvent(args.Value);
-            else
-                OnVolumeChanged?.Invoke(VolumeSlider.Value);
+            OnVolumeChanged?.Invoke(VolumeSlider.Value);
+            _pendingVolume = VolumeSlider.Value;
         };
 
         SetPlayPauseButton(_audioSystem.IsPlaying(_audio), force: true);
@@ -175,6 +177,25 @@ public sealed partial class JukeboxMenu : FancyWindow
 
     public void SetVolume(float volume)
     {
-        VolumeSlider.SetValueWithoutEvent(volume);
+        if (VolumeSlider.Grabbed)
+            return;
+        if (_pendingVolume.HasValue)
+        {
+            if (Math.Abs(_pendingVolume.Value - volume) < 0.01f)
+            {
+                _pendingVolume = null;
+            }
+            else
+            {
+                return;
+            }
+        }
+        if (Math.Abs(VolumeSlider.Value - volume) > 0.01f)
+            VolumeSlider.SetValueWithoutEvent(volume);
+    }
+
+    public void ResetPendingVolume()
+    {
+        _pendingVolume = null;
     }
 }
