@@ -19,7 +19,7 @@
         enum.ChameleonUiKey.Key:
           type: ChameleonBoundUserInterface
 # Corvax-HiddenDesc-Start
-    - type: HiddenDescription 
+    - type: HiddenDescription
       entries:
       - label: corvax-hidden-desc-Chameleon-syndicate
         whitelistMind:
@@ -132,6 +132,8 @@
       # middle hands to prevent overlapping inhand sprites
       # This can be changed once we have per-hand displacement maps
       extra_hand_1:
+        name: extra_hand_1
         location: Middle
       extra_hand_2:
+        name: extra_hand_2
         location: Middle

@@ -7,7 +7,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.Hands.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
-[Access(typeof(SharedHandsSystem))]
+[Access(typeof(SharedHandsSystem), typeof(ExtraHandsEquipmentSystem))]
 public sealed partial class HandsComponent : Component
 {
     /// <summary>
@@ -105,13 +105,14 @@ public sealed partial class HandsComponent : Component
 }
 
 [Serializable, NetSerializable]
-public sealed class Hand //TODO: This should definitely be a struct - Jezi
+[DataDefinition]
+public sealed partial class Hand //TODO: This should definitely be a struct - Jezi
 {
-    [ViewVariables]
-    public string Name { get; }
+    [ViewVariables, DataField("name")]
+    public string Name { get; set; } = string.Empty;
 
-    [ViewVariables]
-    public HandLocation Location { get; }
+    [ViewVariables, DataField("location")]
+    public HandLocation Location { get; set; }
 
     /// <summary>
     ///     The container used to hold the contents of this hand. Nullable because the client must get the containers via <see cref="ContainerManagerComponent"/>,
@@ -124,6 +125,8 @@ public sealed class Hand //TODO: This should definitely be a struct - Jezi
     public EntityUid? HeldEntity => Container?.ContainedEntity;
 
     public bool IsEmpty => HeldEntity == null;
+
+    public Hand() { }
 
     public Hand(string name, HandLocation location, ContainerSlot? container = null)
     {

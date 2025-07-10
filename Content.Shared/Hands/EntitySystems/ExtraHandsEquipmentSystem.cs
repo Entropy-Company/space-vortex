@@ -22,9 +22,11 @@ public sealed class ExtraHandsEquipmentSystem : EntitySystem
 
         foreach (var (handName, hand) in ent.Comp.Hands)
         {
-            // add the NetEntity id to the container name to prevent multiple items with this component from conflicting
             var handId = $"{GetNetEntity(ent.Owner).Id}-{handName}";
-            _hands.AddHand(args.Equipee, handId, hand.Location, handsComp);
+            if (handsComp.Hands.ContainsKey(handId))
+                continue;
+            var newHand = new Hand(handId, hand.Location);
+            _hands.AddHand(args.Equipee, newHand.Name, newHand.Location, handsComp);
         }
     }
 
