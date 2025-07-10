@@ -13,7 +13,6 @@
       time: 6000
   access:
   - TypanService
-  - SyndicateAgent
 
 
 - type: startingGear

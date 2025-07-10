@@ -13,8 +13,6 @@
       time: 6000
   access:
   - TypanScience
-  - SyndicateAgent
-  - TypanMaint
 
 - type: startingGear
   id: SyndicateScience

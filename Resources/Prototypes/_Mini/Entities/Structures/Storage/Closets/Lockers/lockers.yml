@@ -20,6 +20,8 @@
       - id: RCDAmmo
       - id: RPDsindi
       - id: SindiRCD
+  - type: AccessReader
+    access: [["TypanAtmospherics"]]
 
 - type: entity
   id: LockerSyndicateCap
@@ -35,6 +37,8 @@
   - type: StorageFill
     contents:
       - id: WeaponRevolverPython
+  - type: AccessReader
+    access: [["TypanAtmospherics"]]
 
 - type: entity
   id: LockerSyndicateCargo
@@ -47,9 +51,11 @@
     stateBaseClosed: cargos
     stateDoorOpen: cargos_open
     stateDoorClosed: cargos_door
+  - type: AccessReader
+    access: [["TypanCargo"]]
 
 - type: entity
-  id: LockerSyndicateCargo
+  id: LockerSyndicateMed
   name: шкаф для медикоментов
   parent: LockerMedicineFilled
   description: Хранилище вещей карготехника синдиката.
@@ -59,3 +65,5 @@
     stateBaseClosed: cargos
     stateDoorOpen: cargos_open
     stateDoorClosed: meds_door
+  - type: AccessReader
+    access: [["TypanMedical"]]
