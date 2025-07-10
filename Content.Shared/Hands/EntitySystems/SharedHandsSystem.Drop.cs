@@ -7,6 +7,7 @@ using Content.Shared.Tag;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Content.Shared.Components;
 
 namespace Content.Shared.Hands.EntitySystems;
 
@@ -115,6 +116,10 @@ public abstract partial class SharedHandsSystem
             return false;
 
         var entity = hand.HeldEntity!.Value;
+
+        // Блокируем стандартный drop для переносимых мобов
+        if (HasComp<MobCarriedComponent>(entity))
+            return false;
 
         // if item is a fake item (like with pulling), just delete it rather than bothering with trying to drop it into the world
         if (TryComp(entity, out VirtualItemComponent? @virtual))

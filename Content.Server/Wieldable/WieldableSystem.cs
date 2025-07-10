@@ -42,4 +42,16 @@ public sealed class WieldableSystem : SharedWieldableSystem
 
         args.Args.Scale += eyeCursorOffset.PvsIncrease;
     }
+
+    public void SetFreeHandsRequired(EntityUid uid, int value)
+    {
+        if (EntityManager.TryGetComponent<WieldableComponent>(uid, out var wieldable))
+            wieldable.FreeHandsRequired = value;
+    }
+
+    public void SetUnwieldOnUse(EntityUid uid, bool value)
+    {
+        if (EntityManager.TryGetComponent<WieldableComponent>(uid, out var wieldable))
+            wieldable.UnwieldOnUse = value;
+    }
 }
