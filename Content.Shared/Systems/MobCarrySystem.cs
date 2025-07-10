@@ -24,6 +24,12 @@ public abstract class SharedMobCarrySystem : EntitySystem
         if (HasComp<MobCarriedComponent>(uid))
             return;
 
+        if (HasComp<MobCarriedComponent>(args.User))
+            return;
+
+        if (args.User == uid)
+            return;
+
         var verb = new ActivationVerb
         {
             Act = () => OnCarryVerbActivated(uid, args.User, component),

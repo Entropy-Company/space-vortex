@@ -115,6 +115,9 @@
             state: jumpsuit-female
   - type: FTLKnockdownImmune # Corvax-Next-FTLImmune
   - type: Rootable
+  - type: MobCarry # Entropy-Zero-Carry
+  - type: CanCarryMobs # Entropy-Zero-Carry
+  - type: CanEscapeCarry # Entropy-Zero-Carry
 
 - type: entity
   parent: BaseSpeciesDummy

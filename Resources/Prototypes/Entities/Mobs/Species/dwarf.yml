@@ -65,6 +65,9 @@
   - type: InnateMiningScannerViewer # Corvax-Next-Dwarfs
     pingSound: null
     viewRange: 3
+  - type: MobCarry # Entropy-Zero-Carry
+  - type: CanCarryMobs # Entropy-Zero-Carry
+  - type: CanEscapeCarry # Entropy-Zero-Carry
 
 - type: entity
   parent: BaseSpeciesDummy
