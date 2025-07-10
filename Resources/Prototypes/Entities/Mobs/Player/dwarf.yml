@@ -12,3 +12,6 @@
     - Surgery
     - MedicalEquipment
     - Butchering
+  - type: MobCarry # Entropy-Zero-Carry
+  - type: CanCarryMobs # Entropy-Zero-Carry
+  - type: CanEscapeCarry # Entropy-Zero-Carry

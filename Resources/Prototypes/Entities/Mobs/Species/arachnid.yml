@@ -117,7 +117,9 @@
   - type: Inventory
     templateId: arachnid
     speciesId: arachnid
-
+  - type: MobCarry # Entropy-Zero-Carry
+  - type: CanCarryMobs # Entropy-Zero-Carry
+  - type: CanEscapeCarry # Entropy-Zero-Carry
 
 - type: entity
   parent: BaseSpeciesDummy
@@ -127,7 +129,7 @@
   - type: HumanoidAppearance
     species: Arachnid
   - type: Inventory
-    speciesId: arachnid 
+    speciesId: arachnid
 
 
 #>88w88<

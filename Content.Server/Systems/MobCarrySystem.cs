@@ -17,6 +17,9 @@ using Content.Shared.Throwing;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Hands.Components;
 using Content.Shared.Follower.Components;
+using Content.Shared.Hands;
+using System.Numerics;
+using Content.Shared.Movement.Events;
 
 namespace Content.Server.Systems;
 
@@ -38,14 +41,18 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
         SubscribeLocalEvent<MobCarryComponent, MobCarryDoAfterEvent>(OnDoAfter);
         SubscribeLocalEvent<MobCarriedComponent, ThrowAttemptEvent>(OnThrowAttempt);
         SubscribeLocalEvent<MobCarriedComponent, ThrowItemAttemptEvent>(OnThrowItemAttempt);
-        SubscribeLocalEvent<MobCarriedComponent, DropAttemptEvent>(OnDropAttempt);
         SubscribeLocalEvent<ItemComponent, ThrowAttemptEvent>(OnItemThrowAttemptBlockIfCarried);
         SubscribeLocalEvent<ItemComponent, ThrowItemAttemptEvent>(OnItemThrowItemAttemptBlockIfCarried);
         SubscribeLocalEvent<ItemComponent, DropAttemptEvent>(OnItemDropAttemptBlockIfCarried);
+        SubscribeLocalEvent<MobCarriedComponent, VirtualItemDeletedEvent>(OnVirtualItemDeleted);
+        SubscribeLocalEvent<VirtualItemComponent, DropAttemptEvent>(OnVirtualItemDropAttemptForceDelete);
+        SubscribeLocalEvent<MobCarriedComponent, UpdateCanMoveEvent>(OnCarriedUpdateCanMove);
     }
 
     protected override void OnCarryVerbActivated(EntityUid target, EntityUid user, MobCarryComponent component)
     {
+        if (_entMan.HasComponent<MobCarriedComponent>(user))
+            return;
         var doAfterArgs = new DoAfterArgs(_entMan, user, component.CarryDoAfter, new MobCarryDoAfterEvent(_entMan.GetNetEntity(target)), target, target)
         {
             NeedHand = true,
@@ -66,22 +73,20 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
         if (!_entMan.EntityExists(target) || HasComp<MobCarriedComponent>(target))
             return;
 
-        if (!_entMan.HasComponent<ItemComponent>(target))
-        {
-            _entMan.AddComponent<ItemComponent>(target);
-            _itemSystem.SetSize(target, "Ginormous");
-        }
-        if (!_entMan.HasComponent<WieldableComponent>(target))
-        {
-            _entMan.AddComponent<WieldableComponent>(target);
-        }
-        _wieldable.SetUnwieldOnUse(target, false);
-        if (!_hands.TryPickupAnyHand(user, target))
-            return;
-        if (!_wieldable.TryWield(target, _entMan.GetComponent<WieldableComponent>(target), user))
-            return;
+        var carrierXform = _entMan.GetComponent<TransformComponent>(user);
+        var mobXform = _entMan.GetComponent<TransformComponent>(target);
+        mobXform.AttachParent(user);
+        mobXform.LocalPosition = Vector2.Zero;
 
         _standing.Down(target, playSound: false, dropHeldItems: false);
+
+        if (!_virtualItem.TrySpawnVirtualItemInHand(target, user, out var virt1, true))
+            return;
+        if (!_virtualItem.TrySpawnVirtualItemInHand(target, user, out var virt2, true))
+        {
+            _virtualItem.DeleteInHandsMatching(user, target);
+            return;
+        }
 
         var carriedComp = _entMan.EnsureComponent<MobCarriedComponent>(target);
         carriedComp.Carrier = user;
@@ -99,27 +104,6 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
     private void OnThrowItemAttempt(EntityUid uid, MobCarriedComponent component, ref ThrowItemAttemptEvent args)
     {
         args.Cancelled = true;
-    }
-
-    private void OnDropAttempt(EntityUid uid, MobCarriedComponent component, DropAttemptEvent args)
-    {
-        args.Cancel();
-        StandUpCarriedMob(uid, component);
-    }
-
-    public void StandUpCarriedMob(EntityUid mobUid, MobCarriedComponent carried)
-    {
-        if (!carried.Carrier.HasValue || !_entMan.EntityExists(carried.Carrier.Value))
-            return;
-        var carrierXform = _entMan.GetComponent<TransformComponent>(carried.Carrier.Value);
-        var mobXform = _entMan.GetComponent<TransformComponent>(mobUid);
-        mobXform.Coordinates = carrierXform.Coordinates;
-        if (_entMan.HasComponent<ItemComponent>(mobUid))
-            _entMan.RemoveComponent<ItemComponent>(mobUid);
-        if (_entMan.HasComponent<WieldableComponent>(mobUid))
-            _entMan.RemoveComponent<WieldableComponent>(mobUid);
-        _entMan.RemoveComponent<MobCarriedComponent>(mobUid);
-        _standing.Stand(mobUid);
     }
 
     private void OnItemThrowAttemptBlockIfCarried(EntityUid uid, ItemComponent component, ThrowAttemptEvent args)
@@ -145,6 +129,59 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
             args.Cancel();
             var carried = _entMan.GetComponent<MobCarriedComponent>(uid);
             StandUpCarriedMob(uid, carried);
+        }
+    }
+
+    private void OnVirtualItemDeleted(EntityUid uid, MobCarriedComponent comp, VirtualItemDeletedEvent args)
+    {
+        if (args.BlockingEntity != uid)
+            return;
+        StandUpCarriedMob(uid, comp);
+        if (comp.Carrier != null)
+            _virtualItem.DeleteInHandsMatching(comp.Carrier.Value, uid);
+    }
+
+    private void OnVirtualItemDropAttemptForceDelete(EntityUid uid, VirtualItemComponent comp, DropAttemptEvent args)
+    {
+        args.Cancel();
+        _virtualItem.DeleteVirtualItem((uid, comp), args.Uid);
+    }
+
+    private void OnCarriedUpdateCanMove(EntityUid uid, MobCarriedComponent comp, UpdateCanMoveEvent args)
+    {
+        args.Cancel();
+    }
+
+    public void StandUpCarriedMob(EntityUid mobUid, MobCarriedComponent carried)
+    {
+        if (!carried.Carrier.HasValue || !_entMan.EntityExists(carried.Carrier.Value))
+            return;
+        var mobXform = _entMan.GetComponent<TransformComponent>(mobUid);
+        mobXform.AttachToGridOrMap();
+        if (_entMan.HasComponent<ItemComponent>(mobUid))
+            _entMan.RemoveComponent<ItemComponent>(mobUid);
+        if (_entMan.HasComponent<WieldableComponent>(mobUid))
+            _entMan.RemoveComponent<WieldableComponent>(mobUid);
+        _entMan.RemoveComponent<MobCarriedComponent>(mobUid);
+        _standing.Stand(mobUid);
+        if (carried.Carrier != null)
+            _virtualItem.DeleteInHandsMatching(carried.Carrier.Value, mobUid);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        foreach (var comp in _entMan.EntityQuery<MobCarriedComponent>())
+        {
+            var uid = comp.Owner;
+            var carrier = comp.Carrier;
+            if (!carrier.HasValue || !_entMan.EntityExists(carrier.Value))
+                continue;
+            var mobXform = _entMan.GetComponent<TransformComponent>(uid);
+            var carrierXform = _entMan.GetComponent<TransformComponent>(carrier.Value);
+            if (mobXform.ParentUid != carrier.Value)
+                mobXform.AttachParent(carrier.Value);
+            mobXform.LocalPosition = Vector2.Zero;
         }
     }
 }

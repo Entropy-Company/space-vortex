@@ -11,6 +11,9 @@
     damageRecovery:
       types:
         Asphyxiation: -0.5
+  - type: MobCarry # Entropy-Zero-Carry
+  - type: CanCarryMobs # Entropy-Zero-Carry
+  - type: CanEscapeCarry # Entropy-Zero-Carry
   - type: Skills # Corvax-Next-Skills
     skills:
     - ShuttleControl

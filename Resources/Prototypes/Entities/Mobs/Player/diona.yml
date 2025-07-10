@@ -19,7 +19,7 @@
       - Surgery
       - MedicalEquipment
       - Butchering
-    
+
 # Reformed Diona
 - type: entity
   parent: MobDiona
@@ -28,7 +28,7 @@
   name: Reformed Diona
   components:
     - type: IsDeadIC
-    - type: RandomHumanoidAppearance 
+    - type: RandomHumanoidAppearance
     - type: Skills # Corvax-Next-Skills
       skills:
       - ShuttleControl
@@ -37,3 +37,6 @@
       - Surgery
       - MedicalEquipment
       - Butchering
+    - type: MobCarry # Entropy-Zero-Carry
+    - type: CanCarryMobs # Entropy-Zero-Carry
+    - type: CanEscapeCarry # Entropy-Zero-Carry
