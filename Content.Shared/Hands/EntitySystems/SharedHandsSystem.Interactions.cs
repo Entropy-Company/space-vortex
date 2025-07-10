@@ -10,6 +10,7 @@ using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
+using Content.Shared.Components;
 
 namespace Content.Shared.Hands.EntitySystems;
 
@@ -92,6 +93,9 @@ public abstract partial class SharedHandsSystem : EntitySystem
     private void SwapHands(ICommonSession? session, bool reverse)
     {
         if (!TryComp(session?.AttachedEntity, out HandsComponent? component))
+            return;
+
+        if (component.ActiveHand?.HeldEntity is { } held && HasComp<MobCarryComponent>(held))
             return;
 
         if (!_actionBlocker.CanInteract(session.AttachedEntity.Value, null))
