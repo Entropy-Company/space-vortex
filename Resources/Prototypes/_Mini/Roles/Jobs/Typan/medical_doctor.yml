@@ -17,9 +17,8 @@
   access:
   - TypanMedical
   - SyndicateAgent
+  - TypanMaint
   special:
-  - !type:AddImplantSpecial
-    implants: [ MindShieldImplant ]
   - !type:AddComponentSpecial
     components:
     - type: CommandStaff

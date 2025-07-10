@@ -30,7 +30,6 @@
   - type: StealTarget
     stealGroup: CargoShuttleConsoleCircuitboard
 
-
 - type: entity
   parent: BaseComputerAiAccess
   id: SindiComputerId

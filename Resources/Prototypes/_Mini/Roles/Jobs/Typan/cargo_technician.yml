@@ -17,6 +17,7 @@
   - TypanCargo
   - TypanMaint
   - SyndicateAgent
+  - TypanExternal
   special:
   - !type:AddComponentSpecial
     components:
@@ -34,4 +35,6 @@
     back: ClothingBackpackSyndicate
     shoes: ClothingShoesBootsCombatSyndie
     id: SyndiPDACargo
-
+  storage: # DeltaV: Add mining voucher
+    back:
+    - AccessConfiguratorTypan

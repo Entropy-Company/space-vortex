@@ -1,0 +1,48 @@
+# Head
+- type: loadout
+  id: WardenHead
+  equipment:
+    head: ClothingHeadHatWarden
+
+- type: loadout
+  id: WardenBeret
+  equipment:
+    head: ClothingHeadHatBeretWarden
+
+- type: loadout
+  id: WardenHeadAlt
+  equipment:
+    head: ClothingHeadHatCapWardenAlt
+
+# Jumpsuit
+- type: loadout
+  id: WardenJumpsuit
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitWarden
+
+- type: loadout
+  id: WardenJumpskirt
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtWarden
+
+# OuterClothing
+- type: loadout
+  id: WardenCoat
+  equipment:
+    outerClothing: ClothingOuterCoatWarden
+
+- type: loadout
+  id: WardenCoatAlt
+  equipment:
+    outerClothing: ClothingOuterCoatWardenAlt
+
+- type: loadout
+  id: WardenArmoredWinterCoat
+  equipment:
+    outerClothing: ClothingOuterWinterWarden
+
+# Back
+- type: loadout
+  id: WardenBackPack
+  equipment:
+    back: ClothingBackpackWarden

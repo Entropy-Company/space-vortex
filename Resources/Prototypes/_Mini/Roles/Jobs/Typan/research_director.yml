@@ -19,7 +19,11 @@
   - TypanResearchDirector
   - TypanScience
   - SyndicateAgent
-
+  - TypanCommand
+  - TypanVault
+  - TypanExternal
+  - TypanEngineering
+  - TypanMaint
 - type: startingGear
   id: SyndicateRD
   equipment:
