@@ -62,3 +62,6 @@
     pocket2: ClothingMaskGasSyndicate
     eyes: ClothingEyesHudTypan
     neck: ClothingNeckCloakSyndicateAdmiral
+  storage: # DeltaV: Add mining voucher
+    back:
+    - AccessConfiguratorTypan
