@@ -5,7 +5,7 @@
   name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/Typancargo.rsi
+    sprite: _Mini/Objects/Misc/typancargo.rsi
     layers:
     - state: typancardcargo
   - type: PresetIdCard
@@ -24,7 +24,7 @@
   name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/Typansec.rsi
+    sprite: _Mini/Objects/Misc/typansec.rsi
     layers:
     - state: typancardcom
   - type: Access
@@ -52,7 +52,7 @@
   name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/Typaneng.rsi
+    sprite: _Mini/Objects/Misc/typaneng.rsi
     layers:
     - state: typancardeng
   - type: Access
@@ -68,7 +68,7 @@
   name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/Typanmed.rsi
+    sprite: _Mini/Objects/Misc/typanmed.rsi
     layers:
     - state: typancardmed
   - type: Access
@@ -83,7 +83,7 @@
   name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/Typanrd.rsi
+    sprite: _Mini/Objects/Misc/typanrd.rsi
     layers:
     - state: typancardrd
   - type: PresetIdCard
@@ -105,7 +105,7 @@
   name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/Typanscien.rsi
+    sprite: _Mini/Objects/Misc/typanscien.rsi
     layers:
     - state: typancardscience
   - type: PresetIdCard
@@ -122,7 +122,7 @@
   name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/Typanbotan.rsi
+    sprite: _Mini/Objects/Misc/typanbotan.rsi
     layers:
     - state: typancardbotanist
   - type: PresetIdCard
@@ -138,7 +138,7 @@
   name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/Typanchef.rsi
+    sprite: _Mini/Objects/Misc/typanchef.rsi
     layers:
     - state: typancardchef
   - type: PresetIdCard
