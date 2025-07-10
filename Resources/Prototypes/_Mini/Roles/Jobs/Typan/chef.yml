@@ -13,6 +13,7 @@
       time: 6000
   access:
   - TypanService
+  - SyndicateAgent
   special:
   - !type:AddComponentSpecial
     components:

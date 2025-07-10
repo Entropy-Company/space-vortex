@@ -15,6 +15,7 @@
   - TypanEngineering
   - TypanAtmospherics
   - TypanMaint
+  - SyndicateAgent
 
 - type: startingGear
   id: SyndicateAtmos

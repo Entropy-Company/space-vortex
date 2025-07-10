@@ -16,6 +16,7 @@
       time: 18000
   access:
   - TypanMedical
+  - SyndicateAgent
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]

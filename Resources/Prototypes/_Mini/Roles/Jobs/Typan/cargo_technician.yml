@@ -16,6 +16,7 @@
   access:
   - TypanCargo
   - TypanMaint
+  - SyndicateAgent
   special:
   - !type:AddComponentSpecial
     components:
