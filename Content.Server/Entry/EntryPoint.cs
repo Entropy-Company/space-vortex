@@ -77,6 +77,8 @@ namespace Content.Server.Entry
 
             prototypes.RegisterIgnore("parallax");
 
+            prototypes.RegisterKind(typeof(Content.Server._TT.AdditionalMap.TTAdditionalMapPrototype));
+
             ServerContentIoC.Register();
 
             foreach (var callback in TestingCallbacks)
