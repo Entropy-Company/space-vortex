@@ -36787,6 +36787,18 @@ entities:
     - type: Transform
       pos: 4.5,0.5
       parent: 2
+  - uid: 2566
+    components:
+    - type: Transform
+      pos: 3.5,0.5
+      parent: 2
+- proto: SpawnPointLatejoinTypanOfficer
+  entities:
+  - uid: 2564
+    components:
+    - type: Transform
+      pos: 4.5,0.5
+      parent: 2
   - uid: 2568
     components:
     - type: Transform
@@ -36817,11 +36829,6 @@ entities:
     components:
     - type: Transform
       pos: 15.5,-29.5
-      parent: 2
-  - uid: 4967
-    components:
-    - type: Transform
-      pos: -4.5,-7.5
       parent: 2
 - proto: StairDark
   entities:
@@ -37122,17 +37129,24 @@ entities:
     - type: Transform
       pos: 22.5,12.5
       parent: 2
+- proto: SuitStorageSyndieCargo
+  entities:
+  - uid: 2123
+    components:
+    - type: Transform
+      pos: -7.5,14.5
+      parent: 2
+  - uid: 4417
+    components:
+    - type: Transform
+      pos: -8.5,14.5
+      parent: 2
 - proto: SuitStorageSyndieSB
   entities:
   - uid: 119
     components:
     - type: Transform
       pos: 23.5,10.5
-      parent: 2
-  - uid: 2123
-    components:
-    - type: Transform
-      pos: 23.5,-6.5
       parent: 2
   - uid: 2482
     components:

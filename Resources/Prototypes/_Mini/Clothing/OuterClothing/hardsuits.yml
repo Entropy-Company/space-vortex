@@ -300,3 +300,18 @@
         - id: ClothingMaskGasSyndicate
   - type: AccessReader
     access: [["TypanCommand"]]
+
+- type: entity
+  id: SuitStorageSyndieCargo
+  name: хранилище скафандра
+  description: Необычное высокотехнологичное хранилище, предназначенное для хранения космических скафандров.
+  parent: SuitStorageBase
+  suffix: тайпан карго
+  components:
+  - type: StorageFill
+    contents:
+        - id: OxygenTankFilled
+        - id: ClothingOuterHardsuitSalvageSindi
+        - id: ClothingMaskGasSyndicate
+  - type: AccessReader
+    access: [["TypanCargo"]]

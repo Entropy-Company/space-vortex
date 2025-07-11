@@ -43,7 +43,7 @@
 - type: entity
   id: LockerSyndicateCargo
   name: шкаф карготехника синдиката
-  parent: LockerSalvageSpecialistFilled
+  parent: LockerSalvageSpecialist
   description: Хранилище вещей карготехника синдиката.
   components:
   - type: Appearance
@@ -53,6 +53,10 @@
     stateDoorClosed: cargos_door
   - type: AccessReader
     access: [["TypanCargo"]]
+    - type: EntityTableContainerFill
+      containers:
+        entity_storage: !type:NestedSelector
+          tableId: LockerFillSalvageSpecialistSyndie
 
 - type: entity
   id: LockerSyndicateMed
@@ -67,3 +71,21 @@
     stateDoorClosed: meds_door
   - type: AccessReader
     access: [["TypanMedical"]]
+
+- type: entityTable
+  id: LockerFillSalvageSpecialistSyndie
+  table: !type:AllSelector
+    children:
+    - id: ClothingBeltUtilityFilled
+    - id: SurvivalKnife
+    - id: HandheldGPSBasic
+    - id: RadioHandheld
+    - id: AppraisalTool
+    - id: FireExtinguisher
+    # Lavaland Change Start
+    - id: WeaponProtoKineticAccelerator
+    - id: OreBag
+    - id: Pickaxe
+    - id: MineralScanner
+    - id: ClothingEyesGlassesMeson
+    - id: SeismicCharge
