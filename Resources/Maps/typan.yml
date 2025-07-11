@@ -4,8 +4,8 @@ meta:
   engineVersion: 252.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/11/2025 02:15:47
-  entityCount: 5944
+  time: 07/11/2025 02:50:54
+  entityCount: 5962
 maps:
 - 1
 grids:
@@ -6000,7 +6000,7 @@ entities:
       pos: 1.5,-0.5
       parent: 5000
     - type: Door
-      secondsUntilStateChange: -1814.1465
+      secondsUntilStateChange: -1920.0134
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -6459,7 +6459,7 @@ entities:
       pos: 24.5,-5.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -14323.131
+      secondsUntilStateChange: -14428.998
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -11532,6 +11532,26 @@ entities:
     - type: Transform
       pos: -2.5,1.5
       parent: 5416
+  - uid: 5959
+    components:
+    - type: Transform
+      pos: 18.5,6.5
+      parent: 2
+  - uid: 5960
+    components:
+    - type: Transform
+      pos: 17.5,6.5
+      parent: 2
+  - uid: 5961
+    components:
+    - type: Transform
+      pos: 24.5,2.5
+      parent: 2
+  - uid: 5962
+    components:
+    - type: Transform
+      pos: 24.5,1.5
+      parent: 2
 - proto: CableApcStack1
   entities:
   - uid: 5450
@@ -13992,6 +14012,16 @@ entities:
     - type: Transform
       pos: 24.5,3.5
       parent: 2
+  - uid: 4966
+    components:
+    - type: Transform
+      pos: 18.5,2.5
+      parent: 2
+  - uid: 4967
+    components:
+    - type: Transform
+      pos: 19.5,2.5
+      parent: 2
   - uid: 4987
     components:
     - type: Transform
@@ -14172,6 +14202,66 @@ entities:
     - type: Transform
       pos: -1.5,-0.5
       parent: 5416
+  - uid: 5947
+    components:
+    - type: Transform
+      pos: 20.5,2.5
+      parent: 2
+  - uid: 5948
+    components:
+    - type: Transform
+      pos: 21.5,2.5
+      parent: 2
+  - uid: 5949
+    components:
+    - type: Transform
+      pos: 22.5,2.5
+      parent: 2
+  - uid: 5950
+    components:
+    - type: Transform
+      pos: 23.5,2.5
+      parent: 2
+  - uid: 5951
+    components:
+    - type: Transform
+      pos: -5.5,10.5
+      parent: 2
+  - uid: 5952
+    components:
+    - type: Transform
+      pos: -7.5,10.5
+      parent: 2
+  - uid: 5953
+    components:
+    - type: Transform
+      pos: -6.5,10.5
+      parent: 2
+  - uid: 5954
+    components:
+    - type: Transform
+      pos: -8.5,10.5
+      parent: 2
+  - uid: 5955
+    components:
+    - type: Transform
+      pos: -7.5,9.5
+      parent: 2
+  - uid: 5956
+    components:
+    - type: Transform
+      pos: -7.5,8.5
+      parent: 2
+  - uid: 5957
+    components:
+    - type: Transform
+      pos: -7.5,7.5
+      parent: 2
+  - uid: 5958
+    components:
+    - type: Transform
+      pos: -7.5,6.5
+      parent: 2
 - proto: CableMVStack1
   entities:
   - uid: 5848
@@ -17492,14 +17582,8 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingOuterHardsuitSyndieElite
+- proto: ClothingOuterHardsuitAtmosSindi
   entities:
-  - uid: 1136
-    components:
-    - type: Transform
-      parent: 1135
-    - type: Physics
-      canCollide: False
   - uid: 4848
     components:
     - type: Transform
@@ -17512,6 +17596,14 @@ entities:
     - type: Geiger
       isEnabled: True
     - type: RadiationReceiver
+- proto: ClothingOuterHardsuitSyndieElite
+  entities:
+  - uid: 1136
+    components:
+    - type: Transform
+      parent: 1135
+    - type: Physics
+      canCollide: False
 - proto: ClothingShoesBootsMagSyndie
   entities:
   - uid: 4430
