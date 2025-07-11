@@ -39,21 +39,6 @@ public sealed class RadioSystem : EntitySystem
 
     private EntityQuery<TelecomExemptComponent> _exemptQuery;
 
-    private readonly Dictionary<string, string[]> _departments = new Dictionary<string, string[]>
-    {
-        { "fcdf03", ["командование", "кэп", "капитан", "глава персонала"] },
-        { "d98b71", ["юридический отдел", "магистрат", "юрист", "агент внутренних дел"] },
-        { "1563bd", ["служба безопасности", "бриг", "варден", "смотритель", "инструктор", "детектив", "пилот сб", "бригмед", "кадет"] },
-        { "57b8f0", ["медицинский отдел", "главный врач", "ведущий врач", "химик", "врач", "парамед", "коронер", "психолог", "интерн"] },
-        { "c68cfa", ["научный отдел", "рнд", "нио", "научный руководитель", "ведущий учёный", "учёный", "робоёб", "лаборант", "анома"] },
-        { "f2ac26", ["инженерный отдел", "инженерный", "старший инженер", "ведущий инженер", "атмосферный техник", "атмос", "инженер", "инженер стажёр"] },
-        { "a46106", ["отдел снабжения", "карго", "каргонцы", "ведущий утилизатор", "ведущий утиль", "утиль", "утилизатор", "грузчик"] },
-        { "6ca729", ["сервисный отдел", "сервис", "менеджер", "шеф", "повар", "ботаник", "бармен", "боксер", "уборщик", "библиотекарь", "священик", "святой отец", "зоотехник", "репортёр", "музыкант"] },
-        { "2ed2fd", ["искусственный интеллект", "юнит", "борг"] },
-        { "fb77f3", ["клуня", "клоун"] },
-        { "d0d0d0", ["мим"] }
-    };
-
     public override void Initialize()
     {
         base.Initialize();
@@ -134,8 +119,6 @@ public sealed class RadioSystem : EntitySystem
 
             job = $"\\[{job}\\] ";
         }
-
-        content = Highlight(content);
 
         var wrappedMessage = Loc.GetString(speech.Bold ? "chat-radio-message-wrap-bold" : "chat-radio-message-wrap",
             ("channel-color", channel.Color),
@@ -226,44 +209,25 @@ public sealed class RadioSystem : EntitySystem
     }
 
     // DS14-start
-    private string Highlight(string msg)
-    {
-
-        foreach (var department in _departments)
-        {
-            string color = department.Key;
-            foreach (string word in department.Value)
-            {
-                string redex_word = RedexWord(word);
-
-                Regex regex = new Regex($@"\w*{redex_word}\w*", RegexOptions.IgnoreCase);
-                MatchCollection matches = regex.Matches(msg);
-
-                foreach (Match match in matches)
-                {
-                    msg = msg.Replace(match.Value, "[color=#" + color + "]" + match.Value + "[/color]");
-                }
-            }
-        }
-        return msg;
-    }
-
-    private string RedexWord(string word)
-    {
-        string redex_word = "";
-        foreach (char letter in word)
-        {
-            string add_letter = letter.ToString();
-            if (letter == 'л')
-                add_letter = "[лв]";
-            if (letter == 'р')
-                add_letter = "[рв]";
-            if (letter == 'ы')
-                add_letter = "[иы]";
-            redex_word += add_letter + "+";
-        }
-
-        return redex_word.Remove(redex_word.Length - 1);
-    }
+    // private string Highlight(string msg)
+    // {
+    //     foreach (var department in _departments)
+    //     {
+    //         string color = department.Key;
+    //         foreach (string word in department.Value)
+    //         {
+    //             string redex_word = RedexWord(word);
+    //
+    //             Regex regex = new Regex($@"\w*{redex_word}\w*", RegexOptions.IgnoreCase);
+    //             MatchCollection matches = regex.Matches(msg);
+    //
+    //             foreach (Match match in matches)
+    //             {
+    //                 msg = msg.Replace(match.Value, "[color="#" + color + "]" + match.Value + "[/color]");
+    //             }
+    //         }
+    //     }
+    //     return msg;
+    // }
     // DS14-end
 }
