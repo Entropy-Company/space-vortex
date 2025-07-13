@@ -604,107 +604,26 @@
         {
             "name": "representative_door"
         },
-    {
-      "name": "syndicate"
-    },
-    {
-      "name": "syndicate_door"
-    },
-    {
-      "name": "syndicate_open"
-    },
-    {
-      "name": "tac"
-    },
-    {
-      "name": "tac_door"
-    },
-    {
-      "name": "tac_open"
-    },
-    {
-      "name": "unlocked"
-    },
-    {
-      "name": "warden"
-    },
-    {
-      "name": "warden_door"
-    },
-    {
-      "name": "warden_open"
-    },
-    {
-      "name": "welded"
-    },
-    {
-      "name": "white_door"
-    },
-    {
-      "name": "yellow_door"
-    },
-    {
-      "name": "clown"
-    },
-    {
-      "name": "clown_door"
-    },
-    {
-      "name": "clown_open"
-    },
-    {
-      "name": "mime"
-    },
-    {
-      "name": "mime_door"
-    },
-    {
-      "name": "mime_open"
-    },
-    {
-      "name": "representative_door"
-    },
-    {
-       "name": "brigmedlocked"
-    },
-    {
-       "name": "blueshield"
-    },
-    {
-       "name": "blueshield_door"
-    },
-    {
-       "name": "blueshield_open"
-    },
-    {
-       "name": "coroner_secure"
-    },
-    {
-       "name": "coroner_secure_door"
-    },
-    {
-       "name": "coroner_secure_open"
-    },
-    {
-       "name": "typanatm"
-    },
-    {
-       "name": "typanatm_door"
-    },
-    {
-       "name": "typanatm_open"
-    },
-    {
-       "name": "cargos"
-    },
-    {
-       "name": "cargos_door"
-    },
-    {
-       "name": "cargos_open"
-    },
-    {
-       "name": "meds_door"
-    }
+		{
+		   "name": "typanatm"
+		},
+		{
+		   "name": "typanatm_door"
+		},
+		{
+		   "name": "typanatm_open"
+		},
+		{
+		   "name": "cargos"
+		},
+		{
+		   "name": "cargos_door"
+		},
+		{
+		   "name": "cargos_open"
+		},
+		{
+		   "name": "meds_door"
+		}
     ]
 }
