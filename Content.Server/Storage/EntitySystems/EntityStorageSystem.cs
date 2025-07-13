@@ -18,6 +18,9 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
+using Content.Server.Systems;
+using Content.Shared.Components;
+using Robust.Shared.Physics.Systems;
 
 namespace Content.Server.Storage.EntitySystems;
 
@@ -27,6 +30,9 @@ public sealed class EntityStorageSystem : SharedEntityStorageSystem
     [Dependency] private readonly AtmosphereSystem _atmos = default!;
     [Dependency] private readonly IMapManager _map = default!;
     [Dependency] private readonly MapSystem _mapSystem = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private readonly MobCarrySystem _mobCarrySystem = default!;
+    [Dependency] private readonly SharedJointSystem _joints = default!;
 
     public override void Initialize()
     {
@@ -56,6 +62,7 @@ public sealed class EntityStorageSystem : SharedEntityStorageSystem
         SubscribeLocalEvent<InsideEntityStorageComponent, AtmosExposedGetAirEvent>(OnInsideExposed);
 
         SubscribeLocalEvent<InsideEntityStorageComponent, EntGotRemovedFromContainerMessage>(OnRemoved);
+        SubscribeLocalEvent<EntityStorageComponent, EntInsertedIntoContainerMessage>(OnEntInsertedIntoContainer);
     }
 
     private void OnMapInit(EntityUid uid, EntityStorageComponent component, MapInitEvent args)
@@ -191,4 +198,14 @@ public sealed class EntityStorageSystem : SharedEntityStorageSystem
     }
 
     #endregion
+
+    private void OnEntInsertedIntoContainer(EntityUid uid, EntityStorageComponent component, EntInsertedIntoContainerMessage args)
+    {
+        if (EntityManager.HasComponent<MobCarriedComponent>(args.Entity))
+        {
+            var mobCarrySystem = EntitySystem.Get<MobCarrySystem>();
+            var carried = EntityManager.GetComponent<MobCarriedComponent>(args.Entity);
+            mobCarrySystem.StandUpCarriedMob(args.Entity, carried);
+        }
+    }
 }

@@ -26,6 +26,9 @@ using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Inventory.VirtualItem;
+using Robust.Shared.Utility;
+using Content.Server.Systems;
+using Content.Shared.Components;
 
 namespace Content.Server.Hands.Systems
 {
@@ -269,6 +272,20 @@ namespace Content.Server.Hands.Systems
 
         private void OnDropHandItems(Entity<HandsComponent> entity, ref DropHandItemsEvent args)
         {
+            // Если в руках есть переносимая сущность, снять carry и поставить на ноги
+            var entMan = EntityManager;
+            foreach (var hand in entity.Comp.Hands.Values)
+            {
+                if (hand.HeldEntity is not EntityUid held)
+                    continue;
+                if (entMan.HasComponent<MobCarriedComponent>(held))
+                {
+                    var mobCarrySystem = EntitySystem.Get<MobCarrySystem>();
+                    var carried = entMan.GetComponent<MobCarriedComponent>(held);
+                    mobCarrySystem.StandUpCarriedMob(held, carried);
+                }
+            }
+
             // If the holder doesn't have a physics component, they ain't moving
             var holderVelocity = _physicsQuery.TryComp(entity, out var physics) ? physics.LinearVelocity : Vector2.Zero;
             var spreadMaxAngle = Angle.FromDegrees(DropHeldItemsSpread);
