@@ -8,6 +8,7 @@ using Robust.Client.GameObjects;
 using Content.Shared._Eternal.Paper;
 using Robust.Client.Player;
 using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Input;
 using Robust.Client.Input;
@@ -75,9 +76,10 @@ public sealed class PaperBoundUserInterface : BoundUserInterface
         var isUltravioletMode = false;
         if (_entityManager.TryGetComponent<HandsComponent>(player.Value, out var hands))
         {
-            foreach (var hand in hands.Hands.Values)
+            foreach (var handId in hands.Hands.Keys)
             {
-                if (hand.HeldEntity != null && _ultravioletFlashlight.IsUltravioletFlashlightWorking(hand.HeldEntity.Value))
+                if (_entityManager.System<SharedHandsSystem>().TryGetHeldItem((player.Value, hands), handId, out var heldEntity) && 
+                    _ultravioletFlashlight.IsUltravioletFlashlightWorking(heldEntity.Value))
                 {
                     isUltravioletMode = true;
                     break;

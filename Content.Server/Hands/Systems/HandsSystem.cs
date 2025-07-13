@@ -273,15 +273,15 @@ namespace Content.Server.Hands.Systems
         {
             // Если в руках есть переносимая сущность, снять carry и поставить на ноги
             var entMan = EntityManager;
-            foreach (var hand in entity.Comp.Hands.Values)
+            foreach (var handId in entity.Comp.Hands.Keys)
             {
-                if (hand.HeldEntity is not EntityUid held)
+                if (!TryGetHeldItem(entity.AsNullable(), handId, out var held))
                     continue;
-                if (entMan.HasComponent<MobCarriedComponent>(held))
+                if (entMan.HasComponent<MobCarriedComponent>(held.Value))
                 {
                     var mobCarrySystem = EntitySystem.Get<Content.Server._Eternal.MobCarry.Systems.MobCarrySystem>();
-                    var carried = entMan.GetComponent<MobCarriedComponent>(held);
-                    mobCarrySystem.StandUpCarriedMob(held, carried);
+                    var carried = entMan.GetComponent<MobCarriedComponent>(held.Value);
+                    mobCarrySystem.StandUpCarriedMob(held.Value, carried);
                 }
             }
 

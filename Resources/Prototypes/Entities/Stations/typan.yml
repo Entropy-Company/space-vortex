@@ -1,0 +1,19 @@
+- type: entity
+  id: StandardTypanStation
+  parent:
+    - BaseStation
+    - BaseStationCargo
+    - BaseStationJobsSpawning
+    - BaseStationRecords
+    - BaseStationGateway
+    - BaseStationShuttles
+    - BaseStationAlertLevels
+    - BaseStationMagnet
+    - BaseStationExpeditions
+    - BaseStationSiliconLawNTDefault # Corvax-NTDefault
+    - BaseStationAllEventsEligible
+    - BaseStationStockMarket # Corvax-Next-StockTrading
+    - BaseStationDeliveries
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Transform

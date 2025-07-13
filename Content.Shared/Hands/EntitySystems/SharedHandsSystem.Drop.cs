@@ -8,7 +8,6 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Content.Shared.Components;
 using Content.Shared._Eternal.MobCarry;
 
 namespace Content.Shared.Hands.EntitySystems;

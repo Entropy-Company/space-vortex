@@ -1,0 +1,24 @@
+﻿- type: gameMap
+  id: Typan
+  mapName: 'Станция синдиката'
+  mapPath: /Maps/typan.yml
+  minPlayers: 0
+  stations:
+    Typan:
+      stationProto: StandardTypanStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'НИКК Тайпан' # Corvax
+          nameGenerator:
+            !type:NanotrasenNameGenerator
+            prefixCreator: '14'
+        - type: StationJobs
+          availableJobs:
+            TypanAtmosTech: [ 0, 2 ]
+            TypanBotanist: [ 0, 1 ]
+            TypanCargotech: [ 0, 2 ]
+            TypanChef: [ 0, 1 ]
+            TypanMedic: [ 0, 2 ]
+            TypanRD: [ 0, 1 ]
+            TypanScience: [ 0, 2 ]
+            TypanTelecommunicationsOfficer: [ 0, 1 ]

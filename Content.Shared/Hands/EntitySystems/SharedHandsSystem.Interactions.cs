@@ -95,7 +95,7 @@ public abstract partial class SharedHandsSystem : EntitySystem
         if (!TryComp(session?.AttachedEntity, out HandsComponent? component))
             return;
 
-        if (component.ActiveHand?.HeldEntity is { } held && HasComp<MobCarryComponent>(held))
+        if (component.ActiveHandId != null && TryGetHeldItem((session.AttachedEntity.Value, component), component.ActiveHandId, out var held) && HasComp<MobCarryComponent>(held.Value))
             return;
 
         if (!_actionBlocker.CanInteract(session.AttachedEntity.Value, null))

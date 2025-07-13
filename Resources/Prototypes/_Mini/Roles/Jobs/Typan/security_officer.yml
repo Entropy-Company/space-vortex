@@ -1,0 +1,44 @@
+- type: job
+  id: TypanTelecommunicationsOfficer
+  name: job-name-typan-telecommunications-officer
+  playTimeTracker: TypanTelecommunicationsOfficer
+  description: Офицер телекоммуникаций из далёкого космоса.
+  startingGear: SyndicateFormal
+  icon: "JobIconSyndicateFormal"
+  supervisors: job-supervisors-typan-syndicate
+  canBeAntag: false
+  requirements:
+    - !type:DepartmentTimeRequirement
+      department: Science
+      time: 7200
+    - !type:DepartmentTimeRequirement
+      department: Medical
+      time: 7200
+    - !type:DepartmentTimeRequirement
+      department: Command
+      time: 7200
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 7200
+    - !type:OverallPlaytimeRequirement
+      time: 14400
+    - !type:AgeRequirement
+      requiredAge: 26
+  access:
+  - SyndicateAgent
+  - NuclearOperative
+  accessGroups:
+  - AllAccess
+
+- type: startingGear
+  id: SyndicateFormal
+  equipment:
+    ears: ClothingHeadsetAltSyndicate
+    shoes: ClothingShoesBootsCombat
+    jumpsuit: ClothingUniformJumpsuitSyndieFormal
+    gloves: ClothingHandsGlovesCombat
+    id: SyndiPDACom
+    back: ClothingBackpackSyndicate
+    pocket1: SyndicateWhistle
+    pocket2: ClothingMaskGasSyndicate
+    eyes: ClothingEyesHudTypan

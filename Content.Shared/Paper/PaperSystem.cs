@@ -13,6 +13,7 @@ using static Content.Shared.Paper.PaperComponent;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
 using Robust.Shared.Timing;
 using Robust.Shared.Maths;
@@ -36,6 +37,7 @@ public sealed class PaperSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IUltravioletFlashlightSystem _ultravioletFlashlight = default!;
+    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
 
     private static readonly ProtoId<TagPrototype> WriteIgnoreStampsTag = "WriteIgnoreStamps";
     private static readonly ProtoId<TagPrototype> WriteIgnoreSignsTag = "WriteIgnoreSigns";
@@ -105,9 +107,10 @@ public sealed class PaperSystem : EntitySystem
         var isUltravioletMode = false;
         if (TryComp<HandsComponent>(args.User, out var hands))
         {
-            foreach (var hand in hands.Hands.Values)
+            foreach (var handId in hands.Hands.Keys)
             {
-                if (hand.HeldEntity != null && _ultravioletFlashlight.IsUltravioletFlashlightWorking(hand.HeldEntity.Value))
+                if (_handsSystem.TryGetHeldItem((args.User, hands), handId, out var heldEntity) && 
+                    _ultravioletFlashlight.IsUltravioletFlashlightWorking(heldEntity.Value))
                 {
                     isUltravioletMode = true;
                     break;
@@ -184,9 +187,10 @@ public sealed class PaperSystem : EntitySystem
         var isUltravioletMode = false;
         if (TryComp<HandsComponent>(args.User, out var hands))
         {
-            foreach (var hand in hands.Hands.Values)
+            foreach (var handId in hands.Hands.Keys)
             {
-                if (hand.HeldEntity != null && _ultravioletFlashlight.IsUltravioletFlashlightWorking(hand.HeldEntity.Value))
+                if (_handsSystem.TryGetHeldItem((args.User, hands), handId, out var heldEntity) && 
+                    _ultravioletFlashlight.IsUltravioletFlashlightWorking(heldEntity.Value))
                 {
                     isUltravioletMode = true;
                     break;

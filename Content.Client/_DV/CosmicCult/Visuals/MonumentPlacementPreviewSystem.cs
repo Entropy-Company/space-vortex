@@ -38,6 +38,7 @@ public sealed class MonumentPlacementPreviewSystem : EntitySystem
     [Dependency] private readonly ITileDefinitionManager _tileDef = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly TurfSystem _turf = default!;
 
     private MonumentPlacementPreviewOverlay? _cachedOverlay;
     private CancellationTokenSource? _cancellationTokenSource;
@@ -96,7 +97,7 @@ public sealed class MonumentPlacementPreviewSystem : EntitySystem
         var worldPos = _transform.GetWorldPosition(xform); // this is technically wrong but basically fine
 
         foreach (var tile in _map.GetTilesIntersecting(xform.GridUid.Value, grid, new Circle(worldPos, MinimumDistanceFromSpace)))
-            if (tile.IsSpace(_tileDef))
+            if (_turf.IsSpace(tile))
                 return false;
 
         var localTile = _map.GetTileRef(xform.GridUid.Value, grid, xform.Coordinates);

@@ -54,9 +54,9 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
             return;
 
         var freeHands = 0;
-        foreach (var hand in _hands.EnumerateHands(user))
+        foreach (var handId in _hands.EnumerateHands(user))
         {
-            if (hand.HeldEntity == null)
+            if (_hands.GetHeldItem(user, handId) == null)
                 freeHands++;
         }
 
