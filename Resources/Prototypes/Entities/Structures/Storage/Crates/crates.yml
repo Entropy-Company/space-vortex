@@ -214,7 +214,7 @@
   - type: Sprite
     sprite: Structures/Storage/Crates/engicrate_secure.rsi
   - type: AccessReader
-    access: [["Engineering"]]
+    access: [["Engineering"], ["TypanAtmospherics"], ["TypanResearchDirector"]]
 
 - type: entity
   parent: CrateBaseSecure

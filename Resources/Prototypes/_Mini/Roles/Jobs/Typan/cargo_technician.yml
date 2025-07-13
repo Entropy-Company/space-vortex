@@ -14,10 +14,18 @@
     - !type:OverallPlaytimeRequirement
       time: 3600
   access:
+  - TypanCargo
+  - TypanMaint
   - SyndicateAgent
-  - NuclearOperative
-  accessGroups:
-  - AllAccess
+  - TypanExternal
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: Skills # Corvax-Next-Skills
+        skills:
+        - ShuttleControl
+        - Shooting
+        - Butchering
 
 - type: startingGear
   id: SyndicateCargotech
@@ -27,3 +35,4 @@
     back: ClothingBackpackSyndicate
     shoes: ClothingShoesBootsCombatSyndie
     id: SyndiPDACargo
+

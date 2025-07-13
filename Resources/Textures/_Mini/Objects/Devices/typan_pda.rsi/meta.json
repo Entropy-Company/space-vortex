@@ -43,22 +43,70 @@
       ]
     },
     {
-      "name": "pda-syndi-cargo"
+      "name": "pda-syndi-cargo",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
     },
     {
-      "name": "pda-syndi-botan"
+      "name": "pda-syndi-botan",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
     },
     {
-      "name": "pda-syndi-science"
+      "name": "pda-syndi-science",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
     },
     {
-      "name": "pda-syndi-chef"
+      "name": "pda-syndi-chef",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
     },
     {
-      "name": "pda-syndi-com"
+      "name": "pda-syndi-com",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
     },
     {
-      "name": "pda-syndi-eng"
+      "name": "pda-syndi-eng",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
     },
     {
       "name": "equipped-IDCARD",

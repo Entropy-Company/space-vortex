@@ -25,10 +25,29 @@
     - !type:AgeRequirement
       requiredAge: 26
   access:
+  - TypanArmory
+  - TypanAtmospherics
+  - TypanCargo
+  - TypanCommand
+  - TypanCommunicationsOfficer
+  - TypanEngineering
+  - TypanMaint
+  - TypanMedical
+  - TypanProtection
+  - TypanResearchDirector
+  - TypanScience
+  - TypanService
+  - TypanTechnicalOperationsSupervisor
+  - TypanVault
+  - TypanExternal
   - SyndicateAgent
-  - NuclearOperative
-  accessGroups:
-  - AllAccess
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: Skills # Corvax-Next-Skills
+        skills:
+        - ShuttleControl
+        - Shooting
 
 - type: startingGear
   id: SyndicateFormal
@@ -42,3 +61,7 @@
     pocket1: SyndicateWhistle
     pocket2: ClothingMaskGasSyndicate
     eyes: ClothingEyesHudTypan
+    neck: ClothingNeckCloakSyndicateAdmiral
+  storage: # DeltaV: Add mining voucher
+    back:
+    - AccessConfiguratorTypan

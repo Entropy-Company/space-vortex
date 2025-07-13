@@ -93,9 +93,9 @@
   description: Чёрный тактический комбинезон, подходящий для всех видов исследований.
   components:
   - type: Sprite
-    sprite: _ADT/Clothing/Uniforms/Jumpsuit/investigator_suit.rsi
+    sprite: _Mini/Clothing/Uniforms/suitcargotech.rsi
   - type: Clothing
-    sprite: _ADT/Clothing/Uniforms/Jumpsuit/investigator_suit.rsi
+    sprite: _Mini/Clothing/Uniforms/suitcargotech.rsi
 
 - type: entity
   parent: ClothingUniformBase

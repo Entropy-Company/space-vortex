@@ -291,7 +291,7 @@
     - state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: AccessReader
-    access: [["Service"]]
+    access: [["Service"], ["TypanService"]]
   - type: PointLight
     radius: 1.5
     energy: 1.6
@@ -744,7 +744,7 @@
     - state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: AccessReader
-    access: [["Kitchen"]]
+    access: [["Kitchen"], ["TypanService"]]
   - type: PointLight
     radius: 1.5
     energy: 1.6
@@ -837,7 +837,7 @@
     - state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: AccessReader
-    access: [["Engineering"]]
+    access: [["Engineering"], ["TypanAtmospherics"]]
   - type: PointLight
     radius: 1.5
     energy: 1.6
@@ -872,7 +872,7 @@
     - state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: AccessReader
-    access: [["Medical"]]
+    access: [["Medical"], ["TypanMedical"]]
   - type: PointLight
     radius: 1.5
     energy: 1.6
@@ -909,7 +909,7 @@
     - state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: AccessReader
-    access: [["Hydroponics"]]
+    access: [["Hydroponics"], ["TypanService"]]
   - type: PointLight
     radius: 1.5
     energy: 1.6
@@ -992,7 +992,7 @@
   suffix: Hydroponics
   components:
   - type: AccessReader
-    access: [["Hydroponics"]]
+    access: [["Hydroponics"], ["TypanService"]]
 
 - type: entity
   parent: VendingMachine
@@ -2232,7 +2232,7 @@
     - state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: AccessReader
-    access: [["Chemistry"]]
+    access: [["Chemistry"], ["TypanMedical"]]
   - type: GuideHelp
     guides:
     - Chemicals
@@ -2252,5 +2252,5 @@
     denyState: deny
     ejectDelay: 2
   - type: AccessReader
-    access: [["SyndicateAgent"]]
+    access: [["SyndicateAgent"], ["TypanMedical"]]
 

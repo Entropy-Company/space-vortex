@@ -12,10 +12,9 @@
       department: Science
       time: 6000
   access:
+  - TypanScience
   - SyndicateAgent
-  - NuclearOperative
-  accessGroups:
-  - AllAccess
+  - TypanMaint
 
 - type: startingGear
   id: SyndicateScience

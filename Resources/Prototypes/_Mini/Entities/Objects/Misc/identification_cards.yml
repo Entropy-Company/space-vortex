@@ -1,143 +1,150 @@
+# Typan
 - type: entity
   parent: IDCardStandard
   id: TypanIDCardCargo
-  name: ID карта
+  name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/typancargo.rsi
+    sprite: _Mini/Objects/Misc/Typancargo.rsi
     layers:
     - state: typancardcargo
   - type: PresetIdCard
     job: TypanCargotech
   - type: Access
     tags:
+    - TypanCargo
+    - TypanMaint
     - SyndicateAgent
-    - NuclearOperative
+    - TypanExternal
 
 
 - type: entity
   parent: IDCardStandard
   id: TypanIDCardCom
-  name: ID карта
+  name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/typansec.rsi
+    sprite: _Mini/Objects/Misc/Typansec.rsi
     layers:
     - state: typancardcom
   - type: Access
     tags:
-    - Armory
-    - Cargo
-    - Medical
-    - Engineering
-    - Research
-    - Service
-    - SyndicateAgent
-    - Quartermaster
-    - ResearchDirector
+    - TypanArmory
+    - TypanAtmospherics
+    - TypanCargo
+    - TypanCommand
+    - TypanCommunicationsOfficer
+    - TypanEngineering
+    - TypanMaint
+    - TypanMedical
+    - TypanProtection
+    - TypanResearchDirector
+    - TypanScience
+    - TypanService
+    - TypanTechnicalOperationsSupervisor
+    - TypanVault
+    - TypanExternal
     - NuclearOperative
 
 - type: entity
   parent: IDCardStandard
   id: TypanIDCardEng
-  name: ID карта
+  name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/typaneng.rsi
+    sprite: _Mini/Objects/Misc/Typaneng.rsi
     layers:
     - state: typancardeng
   - type: Access
     tags:
-    - Engineering
+    - TypanEngineering
+    - TypanAtmospherics
+    - TypanMaint
     - SyndicateAgent
-    - NuclearOperative
-    groups:
-    - AllAccess
 
 - type: entity
   parent: IDCardStandard
   id: TypanIDCardMed
-  name: ID карта
+  name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/typanmed.rsi
+    sprite: _Mini/Objects/Misc/Typanmed.rsi
     layers:
     - state: typancardmed
   - type: Access
     tags:
+    - TypanMedical
     - SyndicateAgent
-    - NuclearOperative
-    groups:
-    - AllAccess
+    - TypanMaint
 
 - type: entity
   parent: IDCardStandard
   id: TypanIDCardRd
-  name: ID карта
+  name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/typanrd.rsi
+    sprite: _Mini/Objects/Misc/Typanrd.rsi
     layers:
     - state: typancardrd
   - type: PresetIdCard
     job: TypanRD
   - type: Access
     tags:
+    - TypanResearchDirector
+    - TypanScience
     - SyndicateAgent
-    - NuclearOperative
-    groups:
-    - AllAccess
+    - TypanCommand
+    - TypanVault
+    - TypanExternal
+    - TypanEngineering
+    - TypanMaint
 
 - type: entity
   parent: IDCardStandard
   id: TypanIDCardScience
-  name: ID карта
+  name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/typanscien.rsi
+    sprite: _Mini/Objects/Misc/Typanscien.rsi
     layers:
     - state: typancardscience
   - type: PresetIdCard
     job: TypanScience
   - type: Access
     tags:
+    - TypanScience
     - SyndicateAgent
-    - NuclearOperative
-    groups:
-    - AllAccess
+    - TypanMaint
 
 - type: entity
   parent: IDCardStandard
   id: TypanIDCardBotanist
-  name: ID карта
+  name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/typanbotan.rsi
+    sprite: _Mini/Objects/Misc/Typanbotan.rsi
     layers:
     - state: typancardbotanist
   - type: PresetIdCard
     job: TypanBotanist
   - type: Access
     tags:
+    - TypanService
     - SyndicateAgent
-    - NuclearOperative
-    groups:
-    - AllAccess
 
 - type: entity
   parent: IDCardStandard
   id: TypanIDCardChef
-  name: ID карта
+  name: ID-карта
   components:
   - type: Sprite
-    sprite: _Mini/Objects/Misc/typanchef.rsi
+    sprite: _Mini/Objects/Misc/Typanchef.rsi
     layers:
     - state: typancardchef
   - type: PresetIdCard
     job: TypanChef
   - type: Access
     tags:
+    - TypanService
     - SyndicateAgent
-    - NuclearOperative
-    groups:
-    - AllAccess
+    - TypanMaint

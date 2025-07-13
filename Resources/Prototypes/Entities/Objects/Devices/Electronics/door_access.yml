@@ -135,7 +135,7 @@
   suffix: Cargo, Locked
   components:
   - type: AccessReader
-    access: [["Cargo"]]
+    access: [["Cargo"], ["TypanCargo"]]
 
 # Engineering
 - type: entity
@@ -160,7 +160,7 @@
   suffix: Engineering, Locked
   components:
   - type: AccessReader
-    access: [["Engineering"]]
+    access: [["Engineering"], ["TypanAtmospherics"], ["TypanEngineering"]]
 
 # Science
 - type: entity
@@ -259,7 +259,7 @@
   suffix: Chemistry, Locked
   components:
   - type: AccessReader
-    access: [["Chemistry"]]
+    access: [["Chemistry"], ["TypanMedical"]]
 
 - type: entity
   parent: DoorElectronics
@@ -267,7 +267,7 @@
   suffix: Medical, Locked
   components:
   - type: AccessReader
-    access: [["Medical"]]
+    access: [["Medical"], ["TypanMedical"]]
 
 # Syndicate
 - type: entity

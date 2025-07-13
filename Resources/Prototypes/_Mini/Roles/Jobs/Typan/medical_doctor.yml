@@ -15,10 +15,22 @@
       department: Medical
       time: 18000
   access:
+  - TypanMedical
   - SyndicateAgent
-  - NuclearOperative
-  accessGroups:
-  - AllAccess
+  - TypanMaint
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: CommandStaff
+    #start-_CorvaxNext: surgery
+    #- type: CPRTraining
+    - type: SurgerySpeedModifier
+      speedModifier: 2.5
+    #end-_CorvaxNext: surgery
+    - type: Skills # Corvax-Next-Skills
+      skills:
+      - Surgery
+      - MedicalEquipment
 
 - type: startingGear
   id: SyndicateParamedic

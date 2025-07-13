@@ -22,3 +22,5 @@
             TypanRD: [ 0, 1 ]
             TypanScience: [ 0, 2 ]
             TypanTelecommunicationsOfficer: [ 0, 1 ]
+        - type: StationCargoShuttle
+          path: Maps/Shuttles/SindiCargoShuttle.yml

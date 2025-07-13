@@ -1,0 +1,78 @@
+- type: accessGroup
+  id: TypanAccess
+  tags:
+  - TypanArmory
+  - TypanAtmospherics
+  - TypanCargo
+  - TypanCommand
+  - TypanCommunicationsOfficer
+  - TypanEngineering
+  - TypanMaint
+  - TypanMedical
+  - TypanProtection
+  - TypanResearchDirector
+  - TypanScience
+  - TypanService
+  - TypanTechnicalOperationsSupervisor
+  - TypanVault
+  - TypanExternal
+
+- type: accessLevel
+  id: TypanArmory
+  name: Арсенал
+
+- type: accessLevel
+  id: TypanAtmospherics
+  name: Атмосферный
+
+- type: accessLevel
+  id: TypanCargo
+  name: Снабжение
+
+- type: accessLevel
+  id: TypanCommand
+  name: Командование
+
+- type: accessLevel
+  id: TypanCommunicationsOfficer
+  name: Кабинет ОТК
+
+- type: accessLevel
+  id: TypanEngineering
+  name: Инженерный
+
+- type: accessLevel
+  id: TypanMaint
+  name: Технический
+
+- type: accessLevel
+  id: TypanMedical
+  name: Медицинский
+
+- type: accessLevel
+  id: TypanProtection
+  name: Охрана
+
+- type: accessLevel
+  id: TypanResearchDirector
+  name: Кабинет ДИ
+
+- type: accessLevel
+  id: TypanScience
+  name: Научный
+
+- type: accessLevel
+  id: TypanService
+  name: Сервисный
+
+- type: accessLevel
+  id: TypanTechnicalOperationsSupervisor
+  name: Кабинет РТ
+
+- type: accessLevel
+  id: TypanVault
+  name: Хранилище
+
+- type: accessLevel
+  id: TypanExternal
+  name: Внешний

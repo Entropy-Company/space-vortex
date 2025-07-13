@@ -12,10 +12,9 @@
       department: Civilian
       time: 6000
   access:
+  - TypanService
   - SyndicateAgent
-  - NuclearOperative
-  accessGroups:
-  - AllAccess
+
 
 - type: startingGear
   id: SyndicateBotanist

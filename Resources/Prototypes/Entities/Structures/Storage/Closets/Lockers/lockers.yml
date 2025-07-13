@@ -11,7 +11,7 @@
     stateDoorClosed: cabinet_door
 
   - type: AccessReader
-    access: [["Bar"]]
+    access: [["Bar"], ["TypanService"]]
   - type: EntityStorage
     closeSound:
       path: /Audio/Effects/woodenclosetclose.ogg
@@ -127,7 +127,7 @@
     stateDoorOpen: eng_open
     stateDoorClosed: eng_weld_door
   - type: AccessReader
-    access: [ [ "Engineering" ] ]
+    access: [ [ "Engineering" ], ["TypanAtmospherics"] ]
 
 # Atmos tech
 - type: entity
@@ -216,7 +216,7 @@
     stateDoorOpen: hydro_open
     stateDoorClosed: hydro_door
   - type: AccessReader
-    access: [ [ "Hydroponics" ] ]
+    access: [ [ "Hydroponics" ], ["TypanService"] ]
 
 # Medicine
 - type: entity
@@ -231,7 +231,7 @@
     stateDoorOpen: med_open
     stateDoorClosed: med_door
   - type: AccessReader
-    access: [ [ "Medical" ] ]
+    access: [ [ "Medical" ], ["TypanMedical"] ]
 
 # Medical doctor
 - type: entity
