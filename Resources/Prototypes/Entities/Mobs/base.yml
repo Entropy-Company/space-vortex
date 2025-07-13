@@ -58,6 +58,8 @@
     - Surgery
     - MedicalEquipment
     - Butchering
+  # Sunrise-Start
+  - type: Interactions
 
 - type: entity
   save: false

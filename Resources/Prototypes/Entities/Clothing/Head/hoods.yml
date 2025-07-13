@@ -19,6 +19,7 @@
   - type: Tag
     tags:
     - WhitelistChameleon
+    - FullCovered # INTERACTIONS
   - type: HideLayerClothing
     layers:
       Hair: HEAD
@@ -96,7 +97,7 @@
     zombificationResistanceCoefficient: 0.8
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: ClothingHeadTopCovered # SUNRISE EDIT
   id: ClothingHeadHatHoodChaplainHood
   categories: [ HideSpawnMenu ]
   name: chaplain's hood
@@ -110,12 +111,13 @@
     tags:
     - HamsterWearable
     - WhitelistChameleon
+    - TopCovered # INTERACTIONS
   - type: HideLayerClothing
     slots:
     - Hair
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: ClothingHeadTopCovered # SUNRISE EDIT
   id: ClothingHeadHatHoodCulthood
   name: cult hood
   description: There's no cult without cult hoods.
@@ -127,12 +129,13 @@
   - type: Tag
     tags:
     - WhitelistChameleon
+    - TopCovered # INTERACTIONS
   - type: HideLayerClothing
     slots:
     - Hair
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: ClothingHeadTopCovered # SUNRISE EDIT
   id: ClothingHeadHatHoodNunHood
   name: nun hood
   description: Maximum piety in this star system.
@@ -144,6 +147,7 @@
   - type: Tag
     tags:
     - HamsterWearable
+    - TopCovered # INTERACTIONS
     - WhitelistChameleon
   - type: HideLayerClothing
     slots:
@@ -172,6 +176,13 @@
     - Snout
     - HeadTop
     - HeadSide
+  # SUNRISE EDIT
+  - type: Tag
+    tags:
+    - HamsterWearable
+    - TopCovered # INTERACTIONS
+    - WhitelistChameleon
+  # SUNRISE EDIT
 
 - type: entity
   parent: ClothingHeadBase
@@ -186,12 +197,13 @@
   - type: Tag
     tags:
     - WhitelistChameleon
+    - TopCovered # INTERACTIONS
   - type: HideLayerClothing
     slots:
     - Hair
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: ClothingHeadTopCovered # SUNRISE EDIT
   id: ClothingHeadHatHoodIan
   categories: [ HideSpawnMenu ]
   name: ian hood
@@ -211,7 +223,7 @@
     - WhitelistChameleon
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: ClothingHeadTopCovered # SUNRISE EDIT
   id: ClothingHeadHatHoodCarp
   categories: [ HideSpawnMenu ]
   name: carp hood
@@ -226,7 +238,7 @@
     - Hair
 
 - type: entity
-  parent: ClothingHeadHatHoodCarp
+  parent: ClothingHeadTopCovered # SUNRISE EDIT
   id: ClothingHeadHelmetHardsuitCarp
   categories: [ HideSpawnMenu ]
   components:
@@ -256,6 +268,7 @@
   - type: Tag
     tags:
     - WhitelistChameleon
+    - FullCovered # INTERACTIONS
   - type: HideLayerClothing
     slots:
     - Hair
@@ -774,6 +787,7 @@
   - type: Tag
     tags:
     - WhitelistChameleon
+    - TopCovered # INTERACTIONS
   - type: HideLayerClothing
     slots:
     - Hair

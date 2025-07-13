@@ -95,6 +95,13 @@ namespace Content.Client.Input
             human.AddFunction(ContentKeyFunctions.OfferItem); // Corvax-Next-Offer
             human.AddFunction(ContentKeyFunctions.ToggleStanding); // CorvaxNext: laying system toggle standing
 
+            // Sunrise-Start
+            human.AddFunction(ContentKeyFunctions.CockGun);
+            human.AddFunction(ContentKeyFunctions.Jump);
+            human.AddFunction(ContentKeyFunctions.Reloading);
+            human.AddFunction(ContentKeyFunctions.Interact);
+            // Sunrise-End
+
             // actions should be common (for ghosts, mobs, etc)
             common.AddFunction(ContentKeyFunctions.OpenActionsMenu);
 

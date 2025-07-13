@@ -23,6 +23,13 @@
         Heat: 0.80
   - type: ExplosionResistance
     damageCoefficient: 0.90
+  # SUNRISE EDIT
+  - type: Tag
+    tags:
+    - Vest
+    - NudeBottom # INTERACTIONS
+    - WhitelistChameleon
+  # SUNRISE EDIT
 
 #Standard armor vest, allowed for security and bartenders
 - type: entity
@@ -32,7 +39,7 @@
   - type: Tag
     tags:
     - CorgiWearable
-    - WhitelistChameleon
+    - NudeBottom # INTERACTIONS
 
 #Alternate / slim basic armor vest
 - type: entity
@@ -326,6 +333,13 @@
   - type: ExplosionResistance
     damageCoefficient: 0.9
   - type: GroupExamine
+  # SUNRISE EDIT
+  - type: Tag
+    tags:
+    - Vest
+    - FullBodyOuter
+    - WhitelistChameleon
+  # SUNRISE EDIT
 
 - type: entity
   parent: [ ClothingOuterBaseLarge, BaseMajorContraband, AllowSuitStorageClothing ]

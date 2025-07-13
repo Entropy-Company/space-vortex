@@ -197,6 +197,14 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(ContentKeyFunctions.SaveItemLocation);
             AddButton(ContentKeyFunctions.OfferItem); // Corvax-Next-Offer
             AddButton(ContentKeyFunctions.ToggleStanding); // CorvaxNext: Laying System
+
+            // Sunrise
+            AddButton(ContentKeyFunctions.CockGun);
+            AddButton(ContentKeyFunctions.Jump);
+            AddButton(ContentKeyFunctions.Reloading);
+            AddButton(ContentKeyFunctions.Interact);
+            // Sunrise
+
             AddHeader("ui-options-header-interaction-adv");
             AddButton(ContentKeyFunctions.SmartEquipBackpack);
             AddButton(ContentKeyFunctions.SmartEquipBelt);

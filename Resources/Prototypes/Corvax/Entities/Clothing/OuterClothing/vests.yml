@@ -30,3 +30,6 @@
       sprite: Corvax/Clothing/OuterClothing/Vests/vest_security_medic.rsi
     - type: Clothing
       sprite: Corvax/Clothing/OuterClothing/Vests/vest_security_medic.rsi
+    - type: Tag
+      tags:
+      - NudeBottom  # INTERACTIONS

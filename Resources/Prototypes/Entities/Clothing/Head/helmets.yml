@@ -9,6 +9,7 @@
   - type: Tag
     tags:
     - WhitelistChameleon
+    - TopCovered # INTERACTIONS
   - type: HideLayerClothing
     layers:
       HeadTop : HEAD
@@ -42,6 +43,7 @@
     tags:
     - WhitelistChameleon
     - SecurityHelmet
+    - TopCovered # INTERACTIONS
   - type: HideLayerClothing
     layers:
       Hair: HEAD
@@ -121,6 +123,13 @@
         Blunt: 0.8
         Slash: 0.8
         Piercing: 0.95
+  # SUNRISE EDIT
+  - type: Tag
+    tags:
+    - WhitelistChameleon
+    - SecurityHelmet
+    - FullCovered # INTERACTIONS
+  # SUNRISE EDIT
   - type: HideLayerClothing
     layers:
       Hair: HEAD
@@ -149,6 +158,12 @@
     layers:
       Hair: HEAD
       Snout: HEAD
+  # SUNRISE EDIT
+  - type: Tag
+    tags:
+    - WhitelistChameleon
+    - FullCovered # INTERACTIONS
+  # SUNRISE EDIT
 
 #Janitorial Bombsuit Helmet
 - type: entity
@@ -185,6 +200,11 @@
         Slash: 0.8
         Piercing: 0.9
         Heat: 0.9
+  # SUNRISE EDIT
+  - type: Tag
+    tags:
+    - FullCovered # INTERACTIONS
+  # SUNRISE EDIT
   - type: HideLayerClothing
     layers:
       Hair: HEAD
@@ -203,6 +223,7 @@
   - type: Tag
     tags:
     - WhitelistChameleon
+    - FullCovered # INTERACTIONS
   - type: IngestionBlocker
   - type: IdentityBlocker
   - type: HideLayerClothing
@@ -282,6 +303,7 @@
     tags:
     - WhitelistChameleon
     - FireHelmet
+    - FullCovered # INTERACTIONS
   - type: HideLayerClothing
     layers:
       Hair: HEAD

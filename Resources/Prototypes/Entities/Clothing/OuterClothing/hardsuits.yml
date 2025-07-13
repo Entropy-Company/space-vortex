@@ -110,6 +110,7 @@
   - type: Tag
     tags:
     - Hardsuit
+    - FullBodyOuter # SUNRISE EDIT
     - WhitelistChameleon
     - HardsuitSpatio
     - CorgiWearable
@@ -577,6 +578,7 @@
     tags:
     - MonkeyWearable
     - Hardsuit
+    - FullBodyOuter # SUNRISE EDIT
     - WhitelistChameleon
     - CorgiWearable
     - ScurretWearable
@@ -599,6 +601,7 @@
   - type: Tag
     tags:
     - Hardsuit
+    - FullBodyOuter # SUNRISE EDIT
     - WhitelistChameleon
 
 #Syndicate Elite Hardsuit
@@ -937,6 +940,7 @@
   - type: Tag
     tags:
     - Hardsuit
+    - FullBodyOuter # SUNRISE EDIT
     - WhitelistChameleon
 
 #ERT Janitor Hardsuit
