@@ -1,8 +1,0 @@
-- type: loadoutGroup
-  id: GlassesTypan
-  name: loadout-group-glasses
-  minLimit: 0
-  loadouts:
-  - Glasses
-  - GlassesJamjar
-  - GlassesJensen
