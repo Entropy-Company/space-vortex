@@ -42,8 +42,9 @@ namespace Content.Client.Administration.UI
                 AnnounceType =  (AdminAnnounceType) (_window.AnnounceMethod.SelectedMetadata ?? AdminAnnounceType.Station),
                 Voice = voice, // CorvaxGoob-TTS
                 CloseAfter = !_window.KeepWindowOpen.Pressed,
+                ColorHex = _window.ColorInput.Text,
+                SoundPath = _window.SoundInput.Text,
             });
-
         }
 
         public override void Opened()

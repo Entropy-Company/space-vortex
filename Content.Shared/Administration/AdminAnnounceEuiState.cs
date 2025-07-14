@@ -34,6 +34,8 @@ namespace Content.Shared.Administration
             public string Announcement = default!;
             public AdminAnnounceType AnnounceType;
             public string Voice = default!; // CorvaxGoob-TTS
+            public string? ColorHex;
+            public string? SoundPath;
         }
     }
 }

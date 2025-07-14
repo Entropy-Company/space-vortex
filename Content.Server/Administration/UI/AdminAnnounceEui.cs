@@ -18,7 +18,11 @@ using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.EUI;
 using Content.Shared.Administration;
+using Content.Shared.Chat;
 using Content.Shared.Eui;
+using Robust.Shared.Audio;
+using Robust.Shared.ContentPack;
+using Robust.Shared.Utility;
 
 namespace Content.Server.Administration.UI
 {
@@ -28,6 +32,7 @@ namespace Content.Server.Administration.UI
         [Dependency] private readonly IChatManager _chatManager = default!;
         private readonly TTSSystem _tts; // CorvaxGoob-TTS
         private readonly ChatSystem _chatSystem;
+        [Dependency] private readonly IResourceManager _resourceManager = default!;
 
         public AdminAnnounceEui()
         {
@@ -59,6 +64,15 @@ namespace Content.Server.Administration.UI
                         break;
                     }
 
+                    var color = Color.Gold;
+                    if (!string.IsNullOrWhiteSpace(doAnnounce.ColorHex))
+                    {
+                        try { color = Color.FromHex(doAnnounce.ColorHex); } catch { color = Color.Gold; }
+                    }
+                    var sound = new SoundPathSpecifier("/Audio/Corvax/Announcements/centcomm.ogg");
+                    if (!string.IsNullOrWhiteSpace(doAnnounce.SoundPath))
+                        sound = new SoundPathSpecifier(doAnnounce.SoundPath.Trim());
+
                     switch (doAnnounce.AnnounceType)
                     {
                         case AdminAnnounceType.Server:
@@ -66,7 +80,7 @@ namespace Content.Server.Administration.UI
                             break;
                         // TODO: Per-station announcement support
                         case AdminAnnounceType.Station:
-                            _chatSystem.DispatchGlobalAnnouncement(doAnnounce.Announcement, doAnnounce.Announcer, colorOverride: Color.Gold);
+                            _chatSystem.DispatchGlobalAnnouncement(doAnnounce.Announcement, doAnnounce.Announcer, true, sound, color);
                             _tts.SendTTSAdminAnnouncement(doAnnounce.Announcement, doAnnounce.Voice); // CorvaxGoob-TTS
                             break;
                     }

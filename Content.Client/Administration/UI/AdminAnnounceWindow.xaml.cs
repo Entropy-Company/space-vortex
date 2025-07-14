@@ -24,6 +24,8 @@ using Robust.Shared.Utility;
 using System.Configuration;
 using System.Linq;
 using System.Xml.Linq;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Content.Client.Administration.UI
 {
@@ -93,6 +95,11 @@ namespace Content.Client.Administration.UI
             AnnounceMethod.SelectId(args.Id);
             Announcer.Editable = ((AdminAnnounceType?)args.Button.SelectedMetadata ?? AdminAnnounceType.Station) == AdminAnnounceType.Station;
             TTSContainer.Visible = _cfgManager.GetCVar(CCCVars.TTSEnabled) && (((AdminAnnounceType?) args.Button.SelectedMetadata ?? AdminAnnounceType.Station) == AdminAnnounceType.Station); // CorvaxGoob-TTS
+        }
+
+        private void OnSoundInputTextChanged(LineEdit.LineEditEventArgs args)
+        {
+            SoundInput.ModulateSelfOverride = null;
         }
     }
 }
