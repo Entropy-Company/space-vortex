@@ -25,8 +25,9 @@ namespace Content.Client.Administration.UI
                 Announcer =  _window.Announcer.Text,
                 AnnounceType =  (AdminAnnounceType) (_window.AnnounceMethod.SelectedMetadata ?? AdminAnnounceType.Station),
                 CloseAfter = !_window.KeepWindowOpen.Pressed,
+                ColorHex = _window.ColorInput.Text,
+                SoundPath = _window.SoundInput.Text,
             });
-
         }
 
         public override void Opened()

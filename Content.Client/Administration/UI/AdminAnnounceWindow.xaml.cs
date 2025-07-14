@@ -5,6 +5,8 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Utility;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Content.Client.Administration.UI
 {
@@ -36,6 +38,11 @@ namespace Content.Client.Administration.UI
         {
             AnnounceMethod.SelectId(args.Id);
             Announcer.Editable = ((AdminAnnounceType?)args.Button.SelectedMetadata ?? AdminAnnounceType.Station) == AdminAnnounceType.Station;
+        }
+
+        private void OnSoundInputTextChanged(LineEdit.LineEditEventArgs args)
+        {
+            SoundInput.ModulateSelfOverride = null;
         }
     }
 }

@@ -9,3 +9,5 @@ admin-announce-keep-open = Keep open
 
 cmd-announceui-desc = Opens the announcement UI.
 cmd-announceui-help = Usage: announceui
+admin-announce-color-placeholder = Color (hex, optional)
+admin-announce-sound-placeholder = Sound path (optional)
