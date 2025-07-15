@@ -87,11 +87,14 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         // Сохраняем текущую выбранную технологию
         var previousSelectedTech = _lastSelectedTechnology;
 
-        var disciplines = _prototype.EnumeratePrototypes<TechDisciplinePrototype>()
-            .OrderBy(x => x.Name)
-            .ToList();
-        foreach (var proto in disciplines)
+        if (!_entity.TryGetComponent(Entity, out TechnologyDatabaseComponent? database))
+            return;
+        // Используем порядок дисциплин из database.SupportedDisciplines
+        foreach (var disciplineId in database.SupportedDisciplines)
         {
+            if (!_prototype.HasIndex<TechDisciplinePrototype>(disciplineId))
+                continue;
+            var proto = _prototype.Index<TechDisciplinePrototype>(disciplineId);
             var discipline = new DisciplineButton(proto)
             {
                 ToggleMode = true,
@@ -106,8 +109,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             discipline.OnPressed += SelectDiscipline;
         }
 
-        if (!_entity.TryGetComponent(Entity, out TechnologyDatabaseComponent? database))
-            return;
         var disciplineLevel = _research.GetHighestDisciplineTier(database, _prototype.Index<TechDisciplinePrototype>(CurrentDiscipline));
 
         var techs = _prototype.EnumeratePrototypes<TechnologyPrototype>()
