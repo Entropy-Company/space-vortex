@@ -25,6 +25,10 @@ nano-chat-name-placeholder = Enter a name
 nano-chat-job-placeholder = Enter a job title (optional)
 nano-chat-cancel = Cancel
 nano-chat-create = Create
+nano-chat-edit = Edit chat
+nano-chat-list-number = List number
+nano-chat-toggle-mute-chat = Mute chat
+nano-chat-look-up = Look up
 # LogProbe additions
 log-probe-scan-nanochat = Scanned {$card}'s NanoChat logs
 log-probe-header-access = Access Log Scanner

@@ -1,7 +1,7 @@
 # General
 nano-chat-program-name = NanoChat
 nano-chat-title = NanoChat
-nano-chat-new-chat = Новый Чат 
+nano-chat-new-chat = Новый Чат
 nano-chat-contacts = КОНТАКТЫ
 nano-chat-no-chats = Нет активных чатов
 nano-chat-select-chat = Выберите чат
@@ -25,6 +25,13 @@ nano-chat-name-placeholder = Введите имя
 nano-chat-job-placeholder = Введите должность (необязательно)
 nano-chat-cancel = Отменить
 nano-chat-create = Создать
+nano-chat-look-up = Найти
+nano-chat-edit = Редактировать чат
+nano-chat-toggle-mute-chat = Отключить уведомления чата
+nano-chat-list-number = Убрать свой номер из номерного каталога
+nano-chat-edit-title = Редактирование чата
+nano-chat-confirm = Подтвердить
+nano-chat-look-up-no-server = Не обнаружен сервер телекомунникаций
 # LogProbe additions
 log-probe-scan-nanochat = Логи NanoChat {$card} просканированы
 log-probe-header-access = Сканер Логов Доступа

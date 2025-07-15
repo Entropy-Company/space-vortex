@@ -47,14 +47,14 @@ public sealed partial class LogProbeCartridgeSystem : EntitySystem // Corvax-Nex
         if (args.InteractEvent.Handled || !args.InteractEvent.CanReach || args.InteractEvent.Target is not { } target)
             return;
 
-        // Corvax-Next-PDAChat-Start - Add NanoChat card scanning
+        // Corvax-Next-PDAChat begin - Add NanoChat card scanning
         if (TryComp<NanoChatCardComponent>(target, out var nanoChatCard))
         {
             ScanNanoChatCard(ent, args, target, nanoChatCard);
             args.InteractEvent.Handled = true;
             return;
         }
-        // Corvax-Next-PDAChat-End
+        // Corvax-Next-PDAChat end
 
         if (!TryComp(target, out AccessReaderComponent? accessReaderComponent))
             return;
@@ -65,7 +65,7 @@ public sealed partial class LogProbeCartridgeSystem : EntitySystem // Corvax-Nex
 
         ent.Comp.EntityName = Name(target);
         ent.Comp.PulledAccessLogs.Clear();
-		ent.Comp.ScannedNanoChatData = null; // Corvax-Next-PDAChat - Clear any previous NanoChat data
+        ent.Comp.ScannedNanoChatData = null; // Corvax-Next-PDAChat - Clear any previous NanoChat data
 
         foreach (var accessRecord in accessReaderComponent.AccessLog)
         {

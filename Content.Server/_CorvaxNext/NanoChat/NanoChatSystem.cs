@@ -9,6 +9,8 @@ using Content.Shared._CorvaxNext.NanoChat;
 using Content.Shared.NameIdentifier;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Containers;
+using Content.Shared.PDA;
 
 namespace Content.Server._CorvaxNext.NanoChat;
 
@@ -26,8 +28,30 @@ public sealed class NanoChatSystem : SharedNanoChatSystem
     public override void Initialize()
     {
         base.Initialize();
+
+        SubscribeLocalEvent<NanoChatCardComponent, EntGotInsertedIntoContainerMessage>(OnInserted);
+        SubscribeLocalEvent<NanoChatCardComponent, EntGotRemovedFromContainerMessage>(OnRemoved);
+
         SubscribeLocalEvent<NanoChatCardComponent, MapInitEvent>(OnCardInit);
         SubscribeLocalEvent<NanoChatCardComponent, BeingMicrowavedEvent>(OnMicrowaved, after: [typeof(IdCardSystem)]);
+    }
+
+    private void OnInserted(Entity<NanoChatCardComponent> ent, ref EntGotInsertedIntoContainerMessage args)
+    {
+        if (args.Container.ID != PdaComponent.PdaIdSlotId)
+            return;
+
+        ent.Comp.PdaUid = args.Container.Owner;
+        Dirty(ent);
+    }
+
+    private void OnRemoved(Entity<NanoChatCardComponent> ent, ref EntGotRemovedFromContainerMessage args)
+    {
+        if (args.Container.ID != PdaComponent.PdaIdSlotId)
+            return;
+
+        ent.Comp.PdaUid = null;
+        Dirty(ent);
     }
 
     private void OnMicrowaved(Entity<NanoChatCardComponent> ent, ref BeingMicrowavedEvent args)

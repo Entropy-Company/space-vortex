@@ -23,11 +23,11 @@ public sealed partial class LogProbeUiFragment : BoxContainer
         PrintButton.OnPressed += _ => OnPrintPressed?.Invoke();
     }
 
-    public void UpdateState(LogProbeUiState state, string name, List<PulledAccessLog> logs)
+    // DeltaV begin - Update to handle both types of data
+    public void UpdateState(LogProbeUiState state)
     {
-        EntityName.Text = name;
-        PrintButton.Disabled = string.IsNullOrEmpty(name);
-        ProbedDeviceContainer.RemoveAllChildren();
+        EntityName.Text = state.EntityName;
+        PrintButton.Disabled = string.IsNullOrEmpty(state.EntityName);
 
         if (state.NanoChatData != null)
         {
@@ -37,8 +37,7 @@ public sealed partial class LogProbeUiFragment : BoxContainer
         else
         {
             SetupAccessLogView();
-            if (state.PulledLogs.Count > 0)
-                DisplayAccessLogs(state.PulledLogs);
+            DisplayAccessLogs(state.EntityName, state.PulledLogs);
         }
     }
 
@@ -125,11 +124,18 @@ public sealed partial class LogProbeUiFragment : BoxContainer
             }
         }
     }
+    // DeltaV end
 
-    private void DisplayAccessLogs(List<PulledAccessLog> logs)
+    // DeltaV - Handle this in a separate method
+    private void DisplayAccessLogs(string name, List<PulledAccessLog> logs)
     {
         //Reverse the list so the oldest entries appear at the bottom
         logs.Reverse();
+
+        EntityName.Text = name;
+        PrintButton.Disabled = string.IsNullOrEmpty(name);
+
+        ProbedDeviceContainer.RemoveAllChildren();
 
         var count = 1;
         foreach (var log in logs)
