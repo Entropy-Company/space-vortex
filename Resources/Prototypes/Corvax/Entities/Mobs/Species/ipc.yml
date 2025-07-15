@@ -136,6 +136,9 @@
   - type: SurgeryTarget # _CorvaxNext: surgery
   - type: AutoCryoSleepable # Corvax-Next-AutoCryo
   - type: OfferItem # Corvax-Next-Offer
+  - type: MobCarry # Entropy-Zero-Carry
+  - type: CanCarryMobs # Entropy-Zero-Carry
+  - type: CanEscapeCarry # Entropy-Zero-Carry
 
 - type: entity
   save: false

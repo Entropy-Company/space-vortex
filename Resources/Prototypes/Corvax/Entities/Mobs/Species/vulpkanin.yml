@@ -95,6 +95,9 @@
         Brute: -0.15
         Burn: -0.15
         Airloss: -0.15
+  - type: MobCarry # Entropy-Zero-Carry
+  - type: CanCarryMobs # Entropy-Zero-Carry
+  - type: CanEscapeCarry # Entropy-Zero-Carry
 
 - type: entity
   save: false

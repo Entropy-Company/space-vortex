@@ -70,6 +70,9 @@
   - type: Wagging
   - type: NightVision
     color: "#808080"
+  - type: MobCarry # Entropy-Zero-Carry
+  - type: CanCarryMobs # Entropy-Zero-Carry
+  - type: CanEscapeCarry # Entropy-Zero-Carry
 
 - type: entity
   save: false
