@@ -1,11 +1,10 @@
-using Content.Shared.Components;
-using Content.Shared.Systems;
+using Content.Shared._Eternal.MobCarry.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Standing;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
-using Content.Shared.MobCarry;
+using Content.Shared._Eternal.MobCarry;
 using Robust.Shared.Timing;
 using Content.Server.Wieldable;
 using Content.Shared.Wieldable.Components;
@@ -21,7 +20,7 @@ using Content.Shared.Hands;
 using System.Numerics;
 using Content.Shared.Movement.Events;
 
-namespace Content.Server.Systems;
+namespace Content.Server._Eternal.MobCarry.Systems;
 
 public sealed class MobCarrySystem : SharedMobCarrySystem
 {

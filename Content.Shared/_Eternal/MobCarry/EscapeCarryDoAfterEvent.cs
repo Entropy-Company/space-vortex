@@ -2,7 +2,7 @@ using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared.MobCarry;
+namespace Content.Shared._Eternal.MobCarry;
 
 [Serializable, NetSerializable]
 public sealed partial class EscapeCarryDoAfterEvent : DoAfterEvent

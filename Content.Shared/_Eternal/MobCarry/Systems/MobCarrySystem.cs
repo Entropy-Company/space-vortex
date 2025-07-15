@@ -1,9 +1,9 @@
 using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
 using Content.Shared.Verbs;
-using Content.Shared.Components;
+using Content.Shared._Eternal.MobCarry;
 
-namespace Content.Shared.Systems;
+namespace Content.Shared._Eternal.MobCarry.Systems;
 
 public abstract class SharedMobCarrySystem : EntitySystem
 {

@@ -27,8 +27,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Inventory.VirtualItem;
 using Robust.Shared.Utility;
-using Content.Server.Systems;
-using Content.Shared.Components;
+using Content.Shared._Eternal.MobCarry;
 
 namespace Content.Server.Hands.Systems
 {
@@ -280,7 +279,7 @@ namespace Content.Server.Hands.Systems
                     continue;
                 if (entMan.HasComponent<MobCarriedComponent>(held))
                 {
-                    var mobCarrySystem = EntitySystem.Get<MobCarrySystem>();
+                    var mobCarrySystem = EntitySystem.Get<Content.Server._Eternal.MobCarry.Systems.MobCarrySystem>();
                     var carried = entMan.GetComponent<MobCarriedComponent>(held);
                     mobCarrySystem.StandUpCarriedMob(held, carried);
                 }

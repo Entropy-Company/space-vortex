@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.Components;
+namespace Content.Shared._Eternal.MobCarry;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CanEscapeCarryComponent : Component

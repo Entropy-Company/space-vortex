@@ -1,14 +1,13 @@
-using Content.Shared.Components;
 using Content.Shared.DoAfter;
 using Robust.Shared.GameObjects;
 using Content.Shared.Hands.EntitySystems;
 using Robust.Shared.Player;
 using Content.Shared.Movement.Events;
-using Content.Shared.MobCarry;
+using Content.Shared._Eternal.MobCarry;
 using Content.Shared.Item;
 using Content.Shared.Wieldable.Components;
 
-namespace Content.Server.Systems;
+namespace Content.Server._Eternal.MobCarry.Systems;
 
 public sealed partial class MobCarryEscapeSystem : EntitySystem
 {

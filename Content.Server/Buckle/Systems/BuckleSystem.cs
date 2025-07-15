@@ -1,6 +1,5 @@
 using Content.Shared.Buckle;
-using Content.Server.Systems;
-using Content.Shared.Components;
+using Content.Shared._Eternal.MobCarry;
 using Content.Shared.Buckle.Components;
 
 namespace Content.Server.Buckle.Systems;
@@ -17,7 +16,7 @@ public sealed class BuckleSystem : SharedBuckleSystem
     {
         if (EntityManager.HasComponent<MobCarriedComponent>(uid))
         {
-            var mobCarrySystem = EntitySystem.Get<MobCarrySystem>();
+            var mobCarrySystem = EntitySystem.Get<Content.Server._Eternal.MobCarry.Systems.MobCarrySystem>();
             var carried = EntityManager.GetComponent<MobCarriedComponent>(uid);
             mobCarrySystem.StandUpCarriedMob(uid, carried);
         }
