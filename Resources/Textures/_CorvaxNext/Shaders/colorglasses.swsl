@@ -1,0 +1,11 @@
+light_mode unshaded;
+
+uniform sampler2D SCREEN_TEXTURE;
+uniform highp vec4 tint;
+
+void fragment() {
+    highp vec4 color = zTextureSpec(SCREEN_TEXTURE, FRAGCOORD.xy * SCREEN_PIXEL_SIZE);
+    color.rgb = color.rgb * (1.0 - tint.a) + tint.rgb * tint.a;
+    color.a = 1.0;
+    COLOR = color;
+}

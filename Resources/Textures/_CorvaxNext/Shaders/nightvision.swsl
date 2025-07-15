@@ -13,6 +13,10 @@ void fragment() {
 
     highp vec4 color = zTextureSpec(SCREEN_TEXTURE, FRAGCOORD.xy * SCREEN_PIXEL_SIZE);
 
+    if (color.a == 0.0) {
+        discard;
+    }
+
     // convert color to grayscale using luminance
     highp float grey = dot(color.rgb, vec3(0.298, 0.5882, 0.1137));
 
@@ -33,8 +37,8 @@ void fragment() {
     // add some noise for realism
     lowp float noise = rand(FRAGCOORD.xy + TIME) * noise_amount / 10.0;
     color.rgb += noise;
-	
+
 	color.rgb = clamp(color.rgb, 0.0, 1.0);
-	
+
 	COLOR = color;
 }

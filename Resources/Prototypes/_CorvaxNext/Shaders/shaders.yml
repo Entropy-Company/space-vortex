@@ -2,3 +2,18 @@
   id: NightVision
   kind: source
   path: "/Textures/_CorvaxNext/Shaders/nightvision.swsl"
+  stencil:
+    ref: 1
+    op: Keep
+    func: NotEqual
+
+- type: shader
+  id: ColorGlasses
+  kind: source
+  path: "/Textures/_Eternal/Shaders/colorglasses.swsl"
+  params:
+    tint: "1,1,1"
+  stencil:
+    ref: 1
+    op: Keep
+    func: NotEqual
