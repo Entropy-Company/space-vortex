@@ -33,6 +33,7 @@
       - NotekeeperCartridge
       - NewsReaderCartridge
       - MedTekCartridge
+      - NanoChatCartridge
     diskSpace: 8 # ADT tweak
 
 - type: entity
