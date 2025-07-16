@@ -22,6 +22,8 @@ public sealed class NanoChatSystem : SharedNanoChatSystem
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly NameIdentifierSystem _name = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
 
     private readonly ProtoId<NameIdentifierGroupPrototype> _nameIdentifierGroup = "NanoChat";
 
@@ -42,6 +44,18 @@ public sealed class NanoChatSystem : SharedNanoChatSystem
             return;
 
         ent.Comp.PdaUid = args.Container.Owner;
+
+        // Корректно определяем, что карта вставлена в AdminPDA
+        if (_entityManager.TryGetComponent<PdaComponent>(args.Container.Owner, out var pda))
+        {
+            if (pda.ContainedId == ent.Owner &&
+                _entityManager.TryGetComponent<MetaDataComponent>(args.Container.Owner, out var meta) &&
+                meta.EntityPrototype != null &&
+                meta.EntityPrototype.ID == "AdminPDA")
+            {
+                ent.Comp.ListNumber = false;
+            }
+        }
         Dirty(ent);
     }
 
@@ -149,6 +163,16 @@ public sealed class NanoChatSystem : SharedNanoChatSystem
         // Assign a random number
         _name.GenerateUniqueName(ent, _nameIdentifierGroup, out var number);
         ent.Comp.Number = (uint)number;
+
+        // ListNumber по умолчанию true, кроме AdminObserver
+        var listNumber = true;
+        if (_entityManager.TryGetComponent<MetaDataComponent>(ent.Owner, out var meta) && meta.EntityPrototype != null)
+        {
+            if (meta.EntityPrototype.ID == Content.Server.GameTicking.GameTicker.AdminObserverPrototypeName)
+                listNumber = false;
+        }
+        ent.Comp.ListNumber = listNumber;
+
         Dirty(ent);
     }
 }
