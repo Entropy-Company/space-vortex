@@ -11,7 +11,7 @@ public sealed class OfferItemSystem : SharedOfferItemSystem
     [Dependency] private readonly HandsSystem _hands = default!;
 
     private float _offerAcc = 0;
-    private const float OfferAccMax = 3f;
+    private const float OfferAccMax = 1f;
 
     public override void Update(float frameTime)
     {
