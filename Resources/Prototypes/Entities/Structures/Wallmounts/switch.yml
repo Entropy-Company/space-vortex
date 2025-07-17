@@ -9,7 +9,7 @@
   components:
   - type: StationAiWhitelist
   - type: WallMount
-    arc: 360
+    arc: 175
   - type: Clickable
   - type: InteractionOutline
   - type: Physics
@@ -52,7 +52,7 @@
   components:
   - type: StationAiWhitelist
   - type: WallMount
-    arc: 360
+    arc: 175
   - type: Clickable
   - type: InteractionOutline
   - type: Physics
@@ -115,7 +115,7 @@
       - Wallmount
   components:
     - type: WallMount
-      arc: 360
+      arc: 175
     - type: Clickable
     - type: InteractionOutline
     - type: Physics
