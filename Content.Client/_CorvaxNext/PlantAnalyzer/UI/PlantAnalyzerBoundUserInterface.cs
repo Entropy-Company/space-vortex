@@ -8,6 +8,7 @@ public sealed class PlantAnalyzerBoundUserInterface : BoundUserInterface
 {
     [ViewVariables]
     private PlantAnalyzerWindow? _window;
+    private PlantAnalyzerScannedSeedPlantInformation? _pendingInfo;
 
     public PlantAnalyzerBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -22,15 +23,25 @@ public sealed class PlantAnalyzerBoundUserInterface : BoundUserInterface
         };
         _window.OnClose += Close;
         _window.OpenCenteredLeft();
+
+        if (_pendingInfo != null)
+        {
+            _window.Populate(_pendingInfo);
+            _pendingInfo = null;
+        }
     }
 
     protected override void ReceiveMessage(BoundUserInterfaceMessage message)
     {
-        if (_window == null)
-            return;
-
         if (message is not PlantAnalyzerScannedSeedPlantInformation cast)
             return;
+
+        if (_window == null)
+        {
+            _pendingInfo = cast;
+            return;
+        }
+
         _window.Populate(cast);
     }
 

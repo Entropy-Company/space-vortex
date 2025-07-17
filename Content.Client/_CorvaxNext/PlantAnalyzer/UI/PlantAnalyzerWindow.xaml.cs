@@ -8,6 +8,7 @@ using Robust.Shared.Prototypes;
 using System.Linq;
 using System.Text;
 using FancyWindow = Content.Client.UserInterface.Controls.FancyWindow;
+using Robust.Shared.Timing;
 
 namespace Content.Client._CorvaxNext.PlantAnalyzer.UI;
 
@@ -16,6 +17,7 @@ public sealed partial class PlantAnalyzerWindow : FancyWindow
 {
     private readonly IEntityManager _entityManager;
     private readonly ButtonGroup _buttonGroup = new();
+    private PlantAnalyzerScannedSeedPlantInformation? _pendingMessage;
 
     private const string IndentedNewline = "\n   ";
 
@@ -37,6 +39,24 @@ public sealed partial class PlantAnalyzerWindow : FancyWindow
 
     public void Populate(PlantAnalyzerScannedSeedPlantInformation msg)
     {
+        // Проверяем, доступна ли сущность клиенту
+        if (!_entityManager.TryGetEntity(msg.TargetEntity, out var uid) || !_entityManager.EntityExists(uid.Value))
+        {
+            _pendingMessage = msg;
+            Timer.Spawn(TimeSpan.FromMilliseconds(100), () =>
+            {
+                if (_pendingMessage == null)
+                    return;
+                if (_entityManager.TryGetEntity(_pendingMessage.TargetEntity, out var uid2) && _entityManager.EntityExists(uid2.Value))
+                {
+                    var copy = _pendingMessage;
+                    _pendingMessage = null;
+                    Populate(copy);
+                }
+            });
+            return;
+        }
+
         var target = _entityManager.GetEntity(msg.TargetEntity);
         Title = Loc.GetString("plant-analyzer-interface-title");
 
@@ -115,7 +135,7 @@ public sealed partial class PlantAnalyzerWindow : FancyWindow
                 mutations.Append(IndentedNewline);
                 mutations.Append(Loc.GetString("plant-analyzer-mutation-seedless"));
             }
-            if (advInst.Mutations.HasFlag(MutationFlags.Ligneous)) 
+            if (advInst.Mutations.HasFlag(MutationFlags.Ligneous))
             {
                 mutations.Append(IndentedNewline);
                 mutations.Append(Loc.GetString("plant-analyzer-mutation-ligneous"));
