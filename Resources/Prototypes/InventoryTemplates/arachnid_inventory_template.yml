@@ -1,4 +1,4 @@
-- type: inventoryTemplate
+﻿- type: inventoryTemplate
   id: arachnid
   slots:
     - name: socks
@@ -162,5 +162,5 @@
       slotFlags: WATCH
       stripTime: 2
       uiWindowPos: 3,2
-      strippingWindowPos: 2,3
+      strippingWindowPos: 3,3
       displayName: Watch
