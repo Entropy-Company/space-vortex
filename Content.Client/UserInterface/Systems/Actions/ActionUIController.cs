@@ -275,10 +275,30 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
 
     private void OnActionsUpdated()
     {
-        QueueWindowUpdate();
+        if (_actionsSystem == null)
+            return;
 
-        if (_actionsSystem != null)
-            _container?.SetActionData(_actionsSystem, _actions.ToArray());
+        // Prune any actions that are no longer valid or have been disabled so that they no longer
+        // occupy space on the actions bar. This ensures the UI accurately reflects the set of
+        // usable actions even when components are recycled (e.g., ghost→human transitions).
+        for (var i = _actions.Count - 1; i >= 0; i--)
+        {
+            var actionId = _actions[i];
+
+            if (actionId == null)
+            {
+                _actions.RemoveAt(i);
+                continue;
+            }
+
+            if (_actionsSystem.GetAction(actionId) is not { } action || !action.Comp.Enabled)
+            {
+                _actions.RemoveAt(i);
+            }
+        }
+
+        _container?.SetActionData(_actionsSystem, _actions.ToArray());
+        QueueWindowUpdate();
     }
 
     private void ActionButtonPressed(ButtonEventArgs args)
@@ -752,6 +772,8 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
     private void OnComponentUnlinked()
     {
         _container?.ClearActionData();
+        // Remove any cached actions so the bar is repopulated correctly once we get new links.
+        _actions.Clear();
         QueueWindowUpdate();
         StopTargeting();
     }
