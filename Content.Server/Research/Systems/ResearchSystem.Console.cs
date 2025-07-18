@@ -7,6 +7,7 @@ using Content.Shared.Emag.Systems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server.Research.Systems;
 
@@ -84,7 +85,11 @@ public sealed partial class ResearchSystem
             state = new ResearchConsoleBoundInterfaceState(default);
         }
 
-        _uiSystem.SetUiState(uid, ResearchConsoleUiKey.Key, state);
+        Timer.Spawn(0, () =>
+        {
+            if (!Deleted(uid))
+                _uiSystem.SetUiState(uid, ResearchConsoleUiKey.Key, state);
+        });
     }
 
     private void OnPointsChanged(EntityUid uid, ResearchConsoleComponent component, ref ResearchServerPointsChangedEvent args)
