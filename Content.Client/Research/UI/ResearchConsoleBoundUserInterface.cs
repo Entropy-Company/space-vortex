@@ -37,7 +37,6 @@ public sealed class ResearchConsoleBoundUserInterface : BoundUserInterface
         };
 
         _panelsInitialized = false;
-        // Инициализируем панели при первом открытии
         if (State is ResearchConsoleBoundInterfaceState initialState)
         {
             _consoleMenu.UpdatePanels(initialState);
@@ -67,21 +66,23 @@ public sealed class ResearchConsoleBoundUserInterface : BoundUserInterface
         if (state is not ResearchConsoleBoundInterfaceState castState)
             return;
 
-        // Обновляем только информацию (очки), не пересоздаем панели
-        _consoleMenu?.UpdateInformationPanel(castState);
 
-        // При первом получении состояния всегда обновляем панели
-        if (!_panelsInitialized && _consoleMenu != null)
+        if (_consoleMenu != null)
         {
             _consoleMenu.UpdatePanels(castState);
+            _consoleMenu.UpdateInformationPanel(castState);
             _panelsInitialized = true;
-            return;
         }
+    }
 
-        // Проверяем, изменились ли очки - если да, то обновляем панели
-        if (_consoleMenu != null && _consoleMenu._localState.Points != castState.Points)
+    private int GetCurrentServerId()
+    {
+        var entMan = IoCManager.Resolve<IEntityManager>();
+        if (entMan.TryGetComponent<ResearchClientComponent>(Owner, out var client))
         {
-            _consoleMenu.UpdatePanels(castState);
+            if (client.Server != null && entMan.TryGetComponent<ResearchServerComponent>(client.Server.Value, out var serverComp))
+                return serverComp.Id;
         }
+        return -1;
     }
 }
