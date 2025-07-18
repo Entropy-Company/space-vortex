@@ -73,9 +73,6 @@ public abstract class SharedResearchSystem : EntitySystem
         if (!component.SupportedDisciplines.Contains(tech.Discipline))
             return false;
 
-        if (tech.Tier > disciplineTiers[tech.Discipline])
-            return false;
-
         if (component.UnlockedTechnologies.Contains(tech.ID))
             return false;
 
@@ -106,78 +103,8 @@ public abstract class SharedResearchSystem : EntitySystem
 
     public int GetHighestDisciplineTier(TechnologyDatabaseComponent component, TechDisciplinePrototype techDiscipline)
     {
-        var allTech = PrototypeManager.EnumeratePrototypes<TechnologyPrototype>()
-            .Where(p => p.Discipline == techDiscipline.ID && !p.Hidden).ToList();
-        var allUnlocked = new List<TechnologyPrototype>();
-        foreach (var recipe in component.UnlockedTechnologies)
-        {
-            // Skip special level technologies
-            if (recipe.StartsWith($"{techDiscipline.ID}_Level_"))
-                continue;
-
-            var proto = PrototypeManager.Index<TechnologyPrototype>(recipe);
-            if (proto.Discipline != techDiscipline.ID)
-                continue;
-            allUnlocked.Add(proto);
-        }
-
-        // Check for special level technologies first
-        var maxLevelFromTech = 1; // Default level
-        foreach (var tech in allUnlocked)
-        {
-            if (tech.IsFinalLevelTech.HasValue && tech.IsFinalLevelTech.Value > maxLevelFromTech)
-            {
-                maxLevelFromTech = tech.IsFinalLevelTech.Value;
-            }
-        }
-
-        // Also check for special level entries in unlocked technologies
-        foreach (var techId in component.UnlockedTechnologies)
-        {
-            if (techId.StartsWith($"{techDiscipline.ID}_Level_"))
-            {
-                var levelStr = techId.Substring($"{techDiscipline.ID}_Level_".Length);
-                if (int.TryParse(levelStr, out var level) && level > maxLevelFromTech)
-                {
-                    maxLevelFromTech = level;
-                }
-            }
-        }
-
-        // If we have a level from isFinalLevelTech, use that
-        if (maxLevelFromTech > 1)
-        {
-            return maxLevelFromTech;
-        }
-
-        // Fall back to the old tier-based system
-        var highestTier = techDiscipline.TierPrerequisites.Keys.Max();
-        var tier = 2; //tier 1 is always given
-
-        // todo this might break if you have hidden technologies. i'm not sure
-
-        while (tier <= highestTier)
-        {
-            // we need to get the tech for the tier 1 below because that's
-            // what the percentage in TierPrerequisites is referring to.
-            var unlockedTierTech = allUnlocked.Where(p => p.Tier == tier - 1).ToList();
-            var allTierTech = allTech.Where(p => p.Discipline == techDiscipline.ID && p.Tier == tier - 1).ToList();
-
-            if (allTierTech.Count == 0)
-                break;
-
-            var percent = (float) unlockedTierTech.Count / allTierTech.Count;
-            if (percent < techDiscipline.TierPrerequisites[tier])
-                break;
-
-            if (tier >= techDiscipline.LockoutTier &&
-                component.MainDiscipline != null &&
-                techDiscipline.ID != component.MainDiscipline)
-                break;
-            tier++;
-        }
-
-        return tier - 1;
+        // Система уровней отключена – всегда возвращаем 1.
+        return 1;
     }
 
     public FormattedMessage GetTechnologyDescription(
@@ -188,14 +115,6 @@ public abstract class SharedResearchSystem : EntitySystem
         TechDisciplinePrototype? disciplinePrototype = null)
     {
         var description = new FormattedMessage();
-        if (includeTier)
-        {
-            disciplinePrototype ??= PrototypeManager.Index(technology.Discipline);
-            description.AddMarkupOrThrow(Loc.GetString("research-console-tier-discipline-info",
-                ("tier", technology.Tier), ("color", disciplinePrototype.Color), ("discipline", Loc.GetString(disciplinePrototype.Name))));
-            description.PushNewline();
-        }
-
         if (includeCost)
         {
             description.AddMarkupOrThrow(Loc.GetString("research-console-cost", ("amount", technology.Cost)));
@@ -257,8 +176,7 @@ public abstract class SharedResearchSystem : EntitySystem
             return;
 
         var discipline = PrototypeManager.Index(prototype.Discipline);
-        if (prototype.Tier < discipline.LockoutTier)
-            return;
+        // Блокировка по уровню отключена.
         component.MainDiscipline = prototype.Discipline;
         Dirty(uid, component);
 

@@ -37,14 +37,6 @@
             <BoxContainer Orientation="Horizontal">
                 <Label Name="TechnologyNameLabel" StyleClasses="LabelKeyText" HorizontalExpand="True"/>
             </BoxContainer>
-            <BoxContainer Orientation="Horizontal" Name="LevelUpBox" HorizontalAlignment="Left" Margin="0 5 0 0" Visible="False">
-                <Label Text="Откройте чтобы повысить уровень до " StyleClasses="LabelKeyText"/>
-                <Label Name="LevelUpValueLabel" Modulate="Gold"/>
-            </BoxContainer>
-            <BoxContainer Orientation="Horizontal" Name="TierBox" HorizontalAlignment="Left" Margin="0 5 0 0">
-                <Label Text="Требуется уровень:" StyleClasses="LabelKeyText"/>
-                <Label Name="TierValueLabel" Margin="5 0 0 0" Modulate="LightBlue"/>
-            </BoxContainer>
             <BoxContainer Orientation="Horizontal" Name="CostBox" HorizontalAlignment="Left" Margin="0 5 0 0">
                 <Label Name="CostValueLabel" Margin="5 0 0 0" Modulate="Orchid"/>
                 <Label Text="О.И" Margin="5 0 0 0" Modulate="Orchid"/>

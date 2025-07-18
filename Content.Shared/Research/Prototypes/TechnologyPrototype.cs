@@ -35,14 +35,6 @@ public sealed partial class TechnologyPrototype : IPrototype
     public ProtoId<TechDisciplinePrototype> Discipline;
 
     /// <summary>
-    /// What tier research is this?
-    /// The tier governs how much lower-tier technology
-    /// needs to be unlocked before this one.
-    /// </summary>
-    [DataField(required: true)]
-    public int Tier;
-
-    /// <summary>
     /// Hidden tech is not ever available at the research console.
     /// </summary>
     [DataField]
@@ -77,13 +69,6 @@ public sealed partial class TechnologyPrototype : IPrototype
     /// </summary>
     [DataField]
     public Vector2? Position { get; private set; }
-
-    /// <summary>
-    /// If set, this technology will set the discipline level to this value when unlocked.
-    /// Only applies if the current discipline level is lower than this value.
-    /// </summary>
-    [DataField]
-    public int? IsFinalLevelTech { get; private set; }
 }
 
 [DataDefinition]

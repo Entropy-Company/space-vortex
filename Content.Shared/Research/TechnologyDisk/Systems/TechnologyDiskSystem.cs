@@ -38,16 +38,10 @@ public sealed class TechnologyDiskSystem : EntitySystem
         if (ent.Comp.Recipes != null)
             return;
 
-        var weightedRandom = _protoMan.Index(ent.Comp.TierWeightPrototype);
-        var tier = int.Parse(weightedRandom.Pick(_random));
-
-        //get a list of every distinct recipe in all the technologies.
+        // Случайно выбираем рецепты из любых технологий (уровни упразднены).
         var techs = new HashSet<ProtoId<LatheRecipePrototype>>();
         foreach (var tech in _protoMan.EnumeratePrototypes<TechnologyPrototype>())
         {
-            if (tech.Tier != tier)
-                continue;
-
             techs.UnionWith(tech.RecipeUnlocks);
         }
 

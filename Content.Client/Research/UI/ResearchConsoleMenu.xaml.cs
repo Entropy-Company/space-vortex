@@ -47,6 +47,8 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
     private TechTreeLinesControl? _linesControl;
     private Vector2 _position = new Vector2(45, 250);
     private TechnologyPrototype? _lastSelectedTechnology;
+    private string? _lastClickedTechId;
+    private DateTime _lastClickTime = DateTime.MinValue;
 
     public ResearchConsoleMenu()
     {
@@ -109,8 +111,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             discipline.OnPressed += SelectDiscipline;
         }
 
-        var disciplineLevel = _research.GetHighestDisciplineTier(database, _prototype.Index<TechDisciplinePrototype>(CurrentDiscipline));
-
         var techs = _prototype.EnumeratePrototypes<TechnologyPrototype>()
             .Where(x => x.Discipline == CurrentDiscipline && x.Position != null)
             .OrderBy(x => x.Position!.Value.Y).ThenBy(x => x.Position!.Value.X)
@@ -120,7 +120,7 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         {
             bool unlocked = _research.IsTechnologyUnlocked(Entity, tech, database);
             bool prereqsMet = tech.RequiredTech == null || tech.RequiredTech.All(req => _research.IsTechnologyUnlocked(Entity, _prototype.Index<TechnologyPrototype>(req), database));
-            bool available = _research.IsTechnologyAvailable(database, tech) && tech.Tier <= disciplineLevel && prereqsMet;
+            bool available = _research.IsTechnologyAvailable(database, tech) && prereqsMet;
             var control = new MiniTechnologyCardControl(tech, _prototype, _sprite, new FormattedMessage());
             DragContainer.AddChild(control);
             var tilePos = _position + tech.Position!.Value * 150;
@@ -132,6 +132,20 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             else
                 control.SetAvailability(ResearchAvailablity.Unavailable);
             control.OnTileClicked += () => {
+                var now = DateTime.UtcNow;
+                // Проверяем двойной клик по той же технологии
+                if (_lastClickedTechId == tech.ID && (now - _lastClickTime).TotalMilliseconds < 500)
+                {
+                    // Достаточно ли очков и технология доступна?
+                    if (!unlocked && available && _localState.Points >= tech.Cost)
+                    {
+                        OnTechnologyCardPressed?.Invoke(tech.ID);
+                    }
+                }
+
+                _lastClickedTechId = tech.ID;
+                _lastClickTime = now;
+
                 _selectedTechnology = tech;
                 _playerSelectedTechnologyId = tech.ID;
                 _playerHasMadeSelection = true;
@@ -168,7 +182,7 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
 
                     bool unlocked = _research.IsTechnologyUnlocked(Entity, tech, database);
                     bool prereqsMet = tech.RequiredTech == null || tech.RequiredTech.All(req => _research.IsTechnologyUnlocked(Entity, _prototype.Index<TechnologyPrototype>(req), database));
-                    bool available = _research.IsTechnologyAvailable(database, tech) && tech.Tier <= disciplineLevel && prereqsMet;
+                    bool available = _research.IsTechnologyAvailable(database, tech) && prereqsMet;
 
                     var status = unlocked ? ResearchAvailablity.Researched :
                                 (available ? ResearchAvailablity.Available : ResearchAvailablity.Unavailable);
@@ -198,8 +212,7 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
                 {
                     bool unlocked = _research.IsTechnologyUnlocked(Entity, _selectedTechnology, database2);
                     bool prereqsMet = _selectedTechnology.RequiredTech == null || _selectedTechnology.RequiredTech.All(req => _research.IsTechnologyUnlocked(Entity, _prototype.Index<TechnologyPrototype>(req), database2));
-                    var disciplineLevel2 = _research.GetHighestDisciplineTier(database2, _prototype.Index<TechDisciplinePrototype>(CurrentDiscipline));
-                    bool available = _research.IsTechnologyAvailable(database2, _selectedTechnology) && _selectedTechnology.Tier <= disciplineLevel2 && prereqsMet;
+                    bool available = _research.IsTechnologyAvailable(database2, _selectedTechnology) && prereqsMet;
                     SelectTech(_selectedTechnology, unlocked ? ResearchAvailablity.Researched : (available ? ResearchAvailablity.Available : ResearchAvailablity.Unavailable));
                 }
             }
@@ -219,9 +232,16 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         foreach (var disciplineId in database.SupportedDisciplines)
         {
             var discipline = _prototype.Index<TechDisciplinePrototype>(disciplineId);
-            var tier = _research.GetHighestDisciplineTier(database, discipline);
-            if (tier == 0)
+            // Подсчитываем процент исследованных технологий в дисциплине
+            var allTechs = _prototype.EnumeratePrototypes<TechnologyPrototype>()
+                .Where(p => p.Discipline == disciplineId && !p.Hidden).ToList();
+
+            if (allTechs.Count == 0)
                 continue;
+
+            var unlockedCount = allTechs.Count(p => _research.IsTechnologyUnlocked(Entity, p, database));
+            var percent = (int) MathF.Round((float) unlockedCount / allTechs.Count * 100);
+
             var texture = new TextureRect
             {
                 TextureScale = new Vector2(2, 2),
@@ -229,7 +249,7 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             };
             var label = new RichTextLabel();
             texture.Texture = _sprite.Frame0(discipline.Icon);
-            label.SetMessage(Loc.GetString("research-console-tier-info-small", ("tier", tier)));
+            label.SetMessage($": {percent}%");
             var control = new BoxContainer
             {
                 Children =
@@ -242,7 +262,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             TierDisplayContainer.AddChild(control);
         }
 
-        // Обновляем состояние кнопки выбранной технологии
         UpdateSelectedTechnologyButtonState();
     }
 
@@ -315,8 +334,7 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         var hasAccess = _accessReader.IsAllowed(_player.LocalEntity.Value, Entity);
         bool unlocked = _research.IsTechnologyUnlocked(Entity, _lastSelectedTechnology, database);
         bool prereqsMet = _lastSelectedTechnology.RequiredTech == null || _lastSelectedTechnology.RequiredTech.All(req => _research.IsTechnologyUnlocked(Entity, _prototype.Index<TechnologyPrototype>(req), database));
-        var disciplineLevel = _research.GetHighestDisciplineTier(database, _prototype.Index<TechDisciplinePrototype>(CurrentDiscipline));
-        bool available = _research.IsTechnologyAvailable(database, _lastSelectedTechnology) && _lastSelectedTechnology.Tier <= disciplineLevel && prereqsMet;
+        bool available = _research.IsTechnologyAvailable(database, _lastSelectedTechnology) && prereqsMet;
 
         var availablity = unlocked ? ResearchAvailablity.Researched : (available ? ResearchAvailablity.Available : ResearchAvailablity.Unavailable);
 
@@ -384,7 +402,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         _linesControl.NodeStatuses.Clear();
         if (!_entity.TryGetComponent(Entity, out TechnologyDatabaseComponent? database))
             return;
-        var disciplineLevel = _research.GetHighestDisciplineTier(database, _prototype.Index<TechDisciplinePrototype>(CurrentDiscipline));
         foreach (var child in DragContainer.Children)
         {
             if (child is MiniTechnologyCardControl card)

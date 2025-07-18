@@ -11,42 +11,6 @@ namespace Content.IntegrationTests.Tests;
 public sealed class ResearchTest
 {
     [Test]
-    public async Task DisciplineValidTierPrerequesitesTest()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        var protoManager = server.ResolveDependency<IPrototypeManager>();
-
-        await server.WaitAssertion(() =>
-        {
-            var allTechs = protoManager.EnumeratePrototypes<TechnologyPrototype>().ToList();
-
-            Assert.Multiple(() =>
-            {
-                foreach (var discipline in protoManager.EnumeratePrototypes<TechDisciplinePrototype>())
-                {
-                    foreach (var tech in allTechs)
-                    {
-                        if (tech.Discipline != discipline.ID)
-                            continue;
-
-                        // we ignore these, anyways
-                        if (tech.Tier == 1)
-                            continue;
-
-                        Assert.That(tech.Tier, Is.GreaterThan(0), $"Technology {tech} has invalid tier {tech.Tier}.");
-                        Assert.That(discipline.TierPrerequisites.ContainsKey(tech.Tier),
-                            $"Discipline {discipline.ID} does not have a TierPrerequisites definition for tier {tech.Tier}");
-                    }
-                }
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task AllTechPrintableTest()
     {
         await using var pair = await PoolManager.GetServerClient();

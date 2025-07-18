@@ -22,10 +22,6 @@ public sealed partial class TechnologyCardControl : Control
 
         DisciplineTexture.Texture = spriteSys.Frame0(discipline.Icon);
         TechnologyNameLabel.Text = Loc.GetString(technology.Name);
-        var message = new FormattedMessage();
-        message.AddMarkupOrThrow(Loc.GetString("research-console-tier-discipline-info",
-            ("tier", technology.Tier), ("color", discipline.Color), ("discipline", Loc.GetString(discipline.Name))));
-        TierLabel.SetMessage(message);
         UnlocksLabel.SetMessage(description);
 
         TechnologyTexture.Texture = spriteSys.Frame0(technology.Icon);

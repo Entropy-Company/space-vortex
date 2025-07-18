@@ -35,18 +35,7 @@ public sealed partial class TechnologyInfoPanel : Control
         var discipline = _proto.Index<TechDisciplinePrototype>(proto.Discipline);
         var borderStyle = (StyleBoxFlat)TechnologyTextureBorder.PanelOverride!;
         borderStyle.BorderColor = discipline.Color;
-        TierValueLabel.Text = proto.Tier.ToString();
         CostValueLabel.Text = proto.Cost.ToString();
-
-        if (proto.IsFinalLevelTech.HasValue)
-        {
-            LevelUpBox.Visible = true;
-            LevelUpValueLabel.Text = proto.IsFinalLevelTech.Value.ToString();
-        }
-        else
-        {
-            LevelUpBox.Visible = false;
-        }
 
         // Обновляем секцию требований
         if (proto.RequiredTech == null || proto.RequiredTech.Count == 0)

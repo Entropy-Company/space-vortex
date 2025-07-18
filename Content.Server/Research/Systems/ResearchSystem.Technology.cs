@@ -86,7 +86,7 @@ public sealed partial class ResearchSystem
         UpdateTechnologyCards(serverEnt.Value);
 
         _adminLog.Add(LogType.Action, LogImpact.Medium,
-            $"{ToPrettyString(user):player} unlocked {prototype.ID} (discipline: {prototype.Discipline}, tier: {prototype.Tier}) at {ToPrettyString(client)}, for server {ToPrettyString(serverEnt.Value)}.");
+            $"{ToPrettyString(user):player} unlocked {prototype.ID} (discipline: {prototype.Discipline}) at {ToPrettyString(client)}, for server {ToPrettyString(serverEnt.Value)}.");
         return true;
     }
 
@@ -120,22 +120,6 @@ public sealed partial class ResearchSystem
         }
 
         component.UnlockedTechnologies.Add(technology.ID);
-
-        // Handle isFinalLevelTech - set discipline level if specified and current level is lower
-        if (technology.IsFinalLevelTech.HasValue)
-        {
-            var currentLevel = GetHighestDisciplineTier(component, technology.Discipline);
-            if (currentLevel < technology.IsFinalLevelTech.Value)
-            {
-                // We need to update the discipline level
-                // This is a bit hacky but we'll add a special technology that represents the level
-                var levelTechId = $"{technology.Discipline}_Level_{technology.IsFinalLevelTech.Value}";
-                if (!component.UnlockedTechnologies.Contains(levelTechId))
-                {
-                    component.UnlockedTechnologies.Add(levelTechId);
-                }
-            }
-        }
 
         var addedRecipes = new List<string>();
         foreach (var unlock in technology.RecipeUnlocks)

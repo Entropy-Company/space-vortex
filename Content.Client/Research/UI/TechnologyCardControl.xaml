@@ -29,7 +29,6 @@
                         </BoxContainer>
                         <customControls:HSeparator StyleClasses="LowDivider" Margin="0 5 0 5"/>
                         <BoxContainer Orientation="Horizontal">
-                            <RichTextLabel Name="TierLabel" HorizontalAlignment="Left" StyleClasses="LabelSubText" HorizontalExpand="True"/>
                             <Button Name="ResearchButton" Text="{Loc 'research-console-menu-server-research-button'}"/>
                         </BoxContainer>
                     </BoxContainer>
