@@ -19,6 +19,7 @@ using Content.Shared.Follower.Components;
 using Content.Shared.Hands;
 using System.Numerics;
 using Content.Shared.Movement.Events;
+using Content.Shared.Popups;
 
 namespace Content.Server._Eternal.MobCarry.Systems;
 
@@ -32,26 +33,38 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
     [Dependency] private readonly WieldableSystem _wieldable = default!;
     [Dependency] private readonly SharedItemSystem _itemSystem = default!;
     [Dependency] private readonly SharedVirtualItemSystem _virtualItem = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
     private static readonly ISawmill Sawmill = Logger.GetSawmill("mobcarry");
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<MobCarryComponent, MobCarryDoAfterEvent>(OnDoAfter);
-        SubscribeLocalEvent<MobCarriedComponent, ThrowAttemptEvent>(OnThrowAttempt);
-        SubscribeLocalEvent<MobCarriedComponent, ThrowItemAttemptEvent>(OnThrowItemAttempt);
-        SubscribeLocalEvent<ItemComponent, ThrowAttemptEvent>(OnItemThrowAttemptBlockIfCarried);
-        SubscribeLocalEvent<ItemComponent, ThrowItemAttemptEvent>(OnItemThrowItemAttemptBlockIfCarried);
         SubscribeLocalEvent<ItemComponent, DropAttemptEvent>(OnItemDropAttemptBlockIfCarried);
         SubscribeLocalEvent<MobCarriedComponent, VirtualItemDeletedEvent>(OnVirtualItemDeleted);
         SubscribeLocalEvent<VirtualItemComponent, DropAttemptEvent>(OnVirtualItemDropAttemptForceDelete);
         SubscribeLocalEvent<MobCarriedComponent, UpdateCanMoveEvent>(OnCarriedUpdateCanMove);
+        SubscribeLocalEvent<VirtualItemComponent, VirtualItemThrownEvent>(OnVirtualItemThrown);
     }
 
     protected override void OnCarryVerbActivated(EntityUid target, EntityUid user, MobCarryComponent component)
     {
         if (_entMan.HasComponent<MobCarriedComponent>(user))
             return;
+
+        var freeHands = 0;
+        foreach (var hand in _hands.EnumerateHands(user))
+        {
+            if (hand.HeldEntity == null)
+                freeHands++;
+        }
+
+        if (freeHands < 2)
+        {
+            _popup.PopupEntity(Loc.GetString("mob-carry-hands-full"), user, user);
+            return;
+        }
         var doAfterArgs = new DoAfterArgs(_entMan, user, component.CarryDoAfter, new MobCarryDoAfterEvent(_entMan.GetNetEntity(target)), target, target)
         {
             NeedHand = true,
@@ -72,20 +85,22 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
         if (!_entMan.EntityExists(target) || HasComp<MobCarriedComponent>(target))
             return;
 
+        // Reserve both hands with virtual items. If it fails, show popup and abort.
+        if (!_virtualItem.TrySpawnVirtualItemInHand(target, user, out var virt1, false) ||
+            !_virtualItem.TrySpawnVirtualItemInHand(target, user, out var virt2, false))
+        {
+            _virtualItem.DeleteInHandsMatching(user, target);
+            _popup.PopupEntity(Loc.GetString("mob-carry-hands-full"), user, user);
+            return;
+        }
+
+        // Now that hands are locked in, attach the carried mob.
         var carrierXform = _entMan.GetComponent<TransformComponent>(user);
         var mobXform = _entMan.GetComponent<TransformComponent>(target);
         mobXform.AttachParent(user);
         mobXform.LocalPosition = Vector2.Zero;
 
         _standing.Down(target, playSound: false, dropHeldItems: false);
-
-        if (!_virtualItem.TrySpawnVirtualItemInHand(target, user, out var virt1, true))
-            return;
-        if (!_virtualItem.TrySpawnVirtualItemInHand(target, user, out var virt2, true))
-        {
-            _virtualItem.DeleteInHandsMatching(user, target);
-            return;
-        }
 
         var carriedComp = _entMan.EnsureComponent<MobCarriedComponent>(target);
         carriedComp.Carrier = user;
@@ -95,31 +110,6 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
         args.Handled = true;
     }
 
-    private void OnThrowAttempt(EntityUid uid, MobCarriedComponent component, ThrowAttemptEvent args)
-    {
-        args.Cancel();
-    }
-
-    private void OnThrowItemAttempt(EntityUid uid, MobCarriedComponent component, ref ThrowItemAttemptEvent args)
-    {
-        args.Cancelled = true;
-    }
-
-    private void OnItemThrowAttemptBlockIfCarried(EntityUid uid, ItemComponent component, ThrowAttemptEvent args)
-    {
-        if (_entMan.HasComponent<MobCarriedComponent>(uid))
-        {
-            args.Cancel();
-        }
-    }
-
-    private void OnItemThrowItemAttemptBlockIfCarried(EntityUid uid, ItemComponent component, ref ThrowItemAttemptEvent args)
-    {
-        if (_entMan.HasComponent<MobCarriedComponent>(uid))
-        {
-            args.Cancelled = true;
-        }
-    }
 
     private void OnItemDropAttemptBlockIfCarried(EntityUid uid, ItemComponent component, DropAttemptEvent args)
     {
@@ -149,6 +139,24 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
     private void OnCarriedUpdateCanMove(EntityUid uid, MobCarriedComponent comp, UpdateCanMoveEvent args)
     {
         args.Cancel();
+    }
+
+    /// <summary>
+    /// When the carrier throws the virtual item (Ctrl+Q), detach the mob and throw it instead.
+    /// VirtualItemThrownEvent is raised early in the throw pipeline, before the actual item leaves the hand.
+    /// </summary>
+    private void OnVirtualItemThrown(EntityUid uid, VirtualItemComponent comp, VirtualItemThrownEvent args)
+    {
+        var mobUid = args.BlockingEntity;
+
+        if (!_entMan.EntityExists(mobUid) || !_entMan.TryGetComponent(mobUid, out MobCarriedComponent? carried))
+            return;
+
+        // Detach the mob and clean up virtual items (this also frees the hand).
+        StandUpCarriedMob(mobUid, carried);
+
+        // Finally, throw the mob in the intended direction.
+        _throwing.TryThrow(mobUid, args.Direction, user: args.User);
     }
 
     public void StandUpCarriedMob(EntityUid mobUid, MobCarriedComponent carried)
