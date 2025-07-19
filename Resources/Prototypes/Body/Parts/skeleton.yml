@@ -23,19 +23,19 @@
     - trigger:
         !type:DamageTypeTrigger
         damageType: Blunt
-        damage: 75
+        damage: 300
       behaviors:
       - !type:GibPartBehavior { }
     - trigger:
         !type:DamageTypeTrigger
         damageType: Slash
-        damage: 100
+        damage: 300
       behaviors:
       - !type:GibPartBehavior { }
     - trigger:
         !type:DamageTypeTrigger
         damageType: Heat
-        damage: 200
+        damage: 500
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawnInContainer: true

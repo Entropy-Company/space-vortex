@@ -172,6 +172,9 @@
           32:
             sprite: _CorvaxNext/Mobs/Species/Resomi/displacement.rsi
             state: belt
+  - type: SurgeryTarget
+  - type: Targeting
+
 - type: entity
   parent: BaseSpeciesDummy
   id: MobResomiDummy

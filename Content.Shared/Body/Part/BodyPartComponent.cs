@@ -119,7 +119,7 @@ public sealed partial class BodyPartComponent : Component, ISurgeryToolComponent
     ///     to make possible severing it.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float SeverIntegrity = 90;
+    public float SeverIntegrity = 130;
 
     /// <summary>
     ///     CorvaxNext Change: The ID of the base layer for this body part.
@@ -136,12 +136,12 @@ public sealed partial class BodyPartComponent : Component, ISurgeryToolComponent
     [DataField, AutoNetworkedField]
     public Dictionary<TargetIntegrity, float> IntegrityThresholds = new()
     {
-        { TargetIntegrity.CriticallyWounded, 75 },
-        { TargetIntegrity.HeavilyWounded, 60 },
-        { TargetIntegrity.ModeratelyWounded, 50 },
-        { TargetIntegrity.SomewhatWounded, 35 },
-        { TargetIntegrity.LightlyWounded, 20 },
-        { TargetIntegrity.Healthy, 10 },
+        { TargetIntegrity.CriticallyWounded, 150 },
+        { TargetIntegrity.HeavilyWounded, 120 },
+        { TargetIntegrity.ModeratelyWounded, 100 },
+        { TargetIntegrity.SomewhatWounded, 70 },
+        { TargetIntegrity.LightlyWounded, 40 },
+        { TargetIntegrity.Healthy, 20 },
     };
 
     [DataField, AutoNetworkedField, AlwaysPushInheritance]

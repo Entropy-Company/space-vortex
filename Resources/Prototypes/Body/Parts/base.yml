@@ -30,25 +30,25 @@
     - trigger:
         !type:DamageTypeTrigger
         damageType: Blunt
-        damage: 110
+        damage: 370
       behaviors:
       - !type:GibPartBehavior { }
     - trigger:
         !type:DamageTypeTrigger
         damageType: Piercing
-        damage: 120
+        damage: 340
       behaviors:
       - !type:GibPartBehavior { }
     - trigger:
         !type:DamageTypeTrigger
         damageType: Slash
-        damage: 100
+        damage: 300
       behaviors:
       - !type:GibPartBehavior { }
     - trigger:
         !type:DamageTypeTrigger
         damageType: Heat
-        damage: 400
+        damage: 900
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawnInContainer: true

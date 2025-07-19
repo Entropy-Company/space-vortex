@@ -98,6 +98,8 @@
   - type: MobCarry # Entropy-Zero-Carry
   - type: CanCarryMobs # Entropy-Zero-Carry
   - type: CanEscapeCarry # Entropy-Zero-Carry
+  - type: SurgeryTarget
+  - type: Targeting
 
 - type: entity
   save: false
