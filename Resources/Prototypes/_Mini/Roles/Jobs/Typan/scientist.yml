@@ -1,20 +1,20 @@
-- type: job
-  id: TypanScience
-  name: job-name-typan-science
-  playTimeTracker: TypanScience
-  description: Учёный из далёкого космоса.
-  startingGear: SyndicateScience
-  icon: "JobIconSyndicateScience"
-  supervisors: job-supervisors-typan-rd
-  canBeAntag: false
-  requirements:
-    - !type:DepartmentTimeRequirement
-      department: Science
-      time: 6000
-  access:
-  - TypanScience
-  - SyndicateAgent
-  - TypanMaint
+# - type: job
+  # id: TypanScience
+  # name: job-name-typan-science
+  # playTimeTracker: TypanScience
+  # description: Учёный из далёкого космоса.
+  # startingGear: SyndicateScience
+  # icon: "JobIconSyndicateScience"
+  # supervisors: job-supervisors-typan-rd
+  # canBeAntag: false
+  # requirements:
+    # - !type:DepartmentTimeRequirement
+      # department: Science
+      # time: 6000
+  # access:
+  # - TypanScience
+  # - SyndicateAgent
+  # - TypanMaint
 
 - type: startingGear
   id: SyndicateScience

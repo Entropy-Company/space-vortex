@@ -1,31 +1,31 @@
-- type: job
-  id: TypanCargotech
-  name: job-name-typan-cargotech
-  playTimeTracker: TypanCargotech
-  description: Карготехник из далёкого космоса.
-  startingGear: SyndicateCargotech
-  icon: "JobIconTypanCargotech"
-  supervisors: job-supervisors-typan-telecommunications-officer
-  canBeAntag: false
-  requirements:
-    - !type:DepartmentTimeRequirement
-      department: Cargo
-      time: 18000
-    - !type:OverallPlaytimeRequirement
-      time: 3600
-  access:
-  - TypanCargo
-  - TypanMaint
-  - SyndicateAgent
-  - TypanExternal
-  special:
-  - !type:AddComponentSpecial
-    components:
-      - type: Skills # Corvax-Next-Skills
-        skills:
-        - ShuttleControl
-        - Shooting
-        - Butchering
+# - type: job
+  # id: TypanCargotech
+  # name: job-name-typan-cargotech
+  # playTimeTracker: TypanCargotech
+  # description: Карготехник из далёкого космоса.
+  # startingGear: SyndicateCargotech
+  # icon: "JobIconTypanCargotech"
+  # supervisors: job-supervisors-typan-telecommunications-officer
+  # canBeAntag: false
+  # requirements:
+    # - !type:DepartmentTimeRequirement
+      # department: Cargo
+      # time: 18000
+    # - !type:OverallPlaytimeRequirement
+      # time: 3600
+  # access:
+  # - TypanCargo
+  # - TypanMaint
+  # - SyndicateAgent
+  # - TypanExternal
+  # special:
+  # - !type:AddComponentSpecial
+    # components:
+      # - type: Skills # Corvax-Next-Skills
+        # skills:
+        # - ShuttleControl
+        # - Shooting
+        # - Butchering
 
 - type: startingGear
   id: SyndicateCargotech

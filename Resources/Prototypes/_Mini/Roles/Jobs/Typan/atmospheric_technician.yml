@@ -1,21 +1,21 @@
-- type: job
-  id: TypanAtmosTech
-  name: job-name-typan-atmos-tech
-  playTimeTracker: TypanAtmosTech
-  description: Атмосферный инженер из далёкого космоса.
-  startingGear: SyndicateAtmos
-  icon: "JobIconSyndicateAtmos"
-  supervisors: job-supervisors-typan-telecommunications-officer
-  canBeAntag: false
-  requirements:
-    - !type:DepartmentTimeRequirement
-      department: Engineering
-      time: 7200
-  access:
-  - TypanEngineering
-  - TypanAtmospherics
-  - TypanMaint
-  - SyndicateAgent
+# - type: job
+  # id: TypanAtmosTech
+  # name: job-name-typan-atmos-tech
+  # playTimeTracker: TypanAtmosTech
+  # description: Атмосферный инженер из далёкого космоса.
+  # startingGear: SyndicateAtmos
+  # icon: "JobIconSyndicateAtmos"
+  # supervisors: job-supervisors-typan-telecommunications-officer
+  # canBeAntag: false
+  # requirements:
+    # - !type:DepartmentTimeRequirement
+      # department: Engineering
+      # time: 7200
+  # access:
+  # - TypanEngineering
+  # - TypanAtmospherics
+  # - TypanMaint
+  # - SyndicateAgent
 
 - type: startingGear
   id: SyndicateAtmos

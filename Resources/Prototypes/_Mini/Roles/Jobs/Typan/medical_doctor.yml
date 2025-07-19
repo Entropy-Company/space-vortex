@@ -1,36 +1,36 @@
-- type: job
-  id: TypanMedic
-  name: job-name-typan-medic
-  playTimeTracker: TypanMedic
-  description: Медик из далёкого космоса.
-  startingGear: SyndicateParamedic
-  icon: "JobIconSyndicateParamedic"
-  supervisors: job-supervisors-typan-telecommunications-officer
-  canBeAntag: false
-  requirements:
-    - !type:RoleTimeRequirement
-      role: JobChemist
-      time: 6000
-    - !type:DepartmentTimeRequirement
-      department: Medical
-      time: 18000
-  access:
-  - TypanMedical
-  - SyndicateAgent
-  - TypanMaint
-  special:
-  - !type:AddComponentSpecial
-    components:
-    - type: CommandStaff
-    #start-_CorvaxNext: surgery
-    #- type: CPRTraining
-    - type: SurgerySpeedModifier
-      speedModifier: 2.5
-    #end-_CorvaxNext: surgery
-    - type: Skills # Corvax-Next-Skills
-      skills:
-      - Surgery
-      - MedicalEquipment
+# - type: job
+  # id: TypanMedic
+  # name: job-name-typan-medic
+  # playTimeTracker: TypanMedic
+  # description: Медик из далёкого космоса.
+  # startingGear: SyndicateParamedic
+  # icon: "JobIconSyndicateParamedic"
+  # supervisors: job-supervisors-typan-telecommunications-officer
+  # canBeAntag: false
+  # requirements:
+    # - !type:RoleTimeRequirement
+      # role: JobChemist
+      # time: 6000
+    # - !type:DepartmentTimeRequirement
+      # department: Medical
+      # time: 18000
+  # access:
+  # - TypanMedical
+  # - SyndicateAgent
+  # - TypanMaint
+  # special:
+  # - !type:AddComponentSpecial
+    # components:
+    # - type: CommandStaff
+    # #start-_CorvaxNext: surgery
+    # #- type: CPRTraining
+    # - type: SurgerySpeedModifier
+      # speedModifier: 2.5
+    # #end-_CorvaxNext: surgery
+    # - type: Skills # Corvax-Next-Skills
+      # skills:
+      # - Surgery
+      # - MedicalEquipment
 
 - type: startingGear
   id: SyndicateParamedic

@@ -1,53 +1,53 @@
-- type: job
-  id: TypanTelecommunicationsOfficer
-  name: job-name-typan-telecommunications-officer
-  playTimeTracker: TypanTelecommunicationsOfficer
-  description: Офицер телекоммуникаций из далёкого космоса.
-  startingGear: SyndicateFormal
-  icon: "JobIconSyndicateFormal"
-  supervisors: job-supervisors-typan-syndicate
-  canBeAntag: false
-  requirements:
-    - !type:DepartmentTimeRequirement
-      department: Science
-      time: 7200
-    - !type:DepartmentTimeRequirement
-      department: Medical
-      time: 7200
-    - !type:DepartmentTimeRequirement
-      department: Command
-      time: 7200
-    - !type:DepartmentTimeRequirement
-      department: Security
-      time: 7200
-    - !type:OverallPlaytimeRequirement
-      time: 14400
-    - !type:AgeRequirement
-      requiredAge: 26
-  access:
-  - TypanArmory
-  - TypanAtmospherics
-  - TypanCargo
-  - TypanCommand
-  - TypanCommunicationsOfficer
-  - TypanEngineering
-  - TypanMaint
-  - TypanMedical
-  - TypanProtection
-  - TypanResearchDirector
-  - TypanScience
-  - TypanService
-  - TypanTechnicalOperationsSupervisor
-  - TypanVault
-  - TypanExternal
-  - SyndicateAgent
-  special:
-  - !type:AddComponentSpecial
-    components:
-      - type: Skills # Corvax-Next-Skills
-        skills:
-        - ShuttleControl
-        - Shooting
+# - type: job
+  # id: TypanTelecommunicationsOfficer
+  # name: job-name-typan-telecommunications-officer
+  # playTimeTracker: TypanTelecommunicationsOfficer
+  # description: Офицер телекоммуникаций из далёкого космоса.
+  # startingGear: SyndicateFormal
+  # icon: "JobIconSyndicateFormal"
+  # supervisors: job-supervisors-typan-syndicate
+  # canBeAntag: false
+  # requirements:
+    # - !type:DepartmentTimeRequirement
+      # department: Science
+      # time: 7200
+    # - !type:DepartmentTimeRequirement
+      # department: Medical
+      # time: 7200
+    # - !type:DepartmentTimeRequirement
+      # department: Command
+      # time: 7200
+    # - !type:DepartmentTimeRequirement
+      # department: Security
+      # time: 7200
+    # - !type:OverallPlaytimeRequirement
+      # time: 14400
+    # - !type:AgeRequirement
+      # requiredAge: 26
+  # access:
+  # - TypanArmory
+  # - TypanAtmospherics
+  # - TypanCargo
+  # - TypanCommand
+  # - TypanCommunicationsOfficer
+  # - TypanEngineering
+  # - TypanMaint
+  # - TypanMedical
+  # - TypanProtection
+  # - TypanResearchDirector
+  # - TypanScience
+  # - TypanService
+  # - TypanTechnicalOperationsSupervisor
+  # - TypanVault
+  # - TypanExternal
+  # - SyndicateAgent
+  # special:
+  # - !type:AddComponentSpecial
+    # components:
+      # - type: Skills # Corvax-Next-Skills
+        # skills:
+        # - ShuttleControl
+        # - Shooting
 
 - type: startingGear
   id: SyndicateFormal
