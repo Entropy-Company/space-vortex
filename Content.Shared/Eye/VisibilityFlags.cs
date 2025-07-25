@@ -11,5 +11,6 @@ namespace Content.Shared.Eye
         Ghost  = 1 << 1,
         Subfloor = 1 << 2,
         CosmicCultMonument = 1 << 4, // DeltaV - Cosmic Cult
+        Admin = 1 << 3, // Reserved for admins in stealth mode and admin tools.
     }
 }
