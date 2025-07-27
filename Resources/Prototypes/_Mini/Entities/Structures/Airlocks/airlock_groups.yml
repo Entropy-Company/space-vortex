@@ -1,30 +1,34 @@
-- type: AirlockGroup
+- type: paintableGroup
   id: TypanStandard
-  iconPriority: 60
-  stylePaths:
-    базовый тёмный:      _Mini/Structures/Doors/Airlocks/typan.rsi
-    атмосферный тёмный:  _Mini/Structures/Doors/Airlocks/typan_atmospherics.rsi
-    снабжение тёмный:    _Mini/Structures/Doors/Airlocks/typan_cargo.rsi
-    командование тёмный: _Mini/Structures/Doors/Airlocks/typan_command.rsi
-    инженерный тёмный:   _Mini/Structures/Doors/Airlocks/typan_engineering.rsi
-    морозильник тёмный:  _Mini/Structures/Doors/Airlocks/typan_freezer.rsi
-    технический тёмный:  _Mini/Structures/Doors/Airlocks/typan_maint.rsi
-    медицинский тёмный:  _Mini/Structures/Doors/Airlocks/typan_medical.rsi
-    научный тёмный:      _Mini/Structures/Doors/Airlocks/typan_science.rsi
-    сервисный тёмный:    _Mini/Structures/Doors/Airlocks/typan_service.rsi
-    вирусология тёмный:  _Mini/Structures/Doors/Airlocks/typan_virology.rsi
+  time: 3
+  cost: 3
+  defaultStyle: basic
+  styles:
+    basic: AirlockTypan
+    atmospherics: AirlockTypanAtmospherics
+    cargo: AirlockTypanCargo
+    command: AirlockTypanCommand
+    engineering: AirlockTypanEngineering
+    freezer: AirlockTypanFreezer
+    maintenance: AirlockTypanMaint
+    medical: AirlockTypanMedical
+    science: AirlockTypanScience
+    service: AirlockTypanService
+    virology: AirlockTypanVirology
 
-- type: AirlockGroup
+- type: paintableGroup
   id: TypanGlass
-  iconPriority: 50
-  stylePaths:
-    базовый тёмный:      _Mini/Structures/Doors/Airlocks/typan_glass.rsi
-    атмосферный тёмный:  _Mini/Structures/Doors/Airlocks/typan_glass_atmospherics.rsi
-    снабжение тёмный:    _Mini/Structures/Doors/Airlocks/typan_glass_cargo.rsi
-    командование тёмный: _Mini/Structures/Doors/Airlocks/typan_glass_command.rsi
-    инженерный тёмный:   _Mini/Structures/Doors/Airlocks/typan_glass_engineering.rsi
-    технический тёмный:  _Mini/Structures/Doors/Airlocks/typan_glass_maint.rsi
-    медицинский тёмный:  _Mini/Structures/Doors/Airlocks/typan_glass_medical.rsi
-    научный тёмный:      _Mini/Structures/Doors/Airlocks/typan_glass_science.rsi
-    сервисный тёмный:    _Mini/Structures/Doors/Airlocks/typan_glass_service.rsi
-    вирусология тёмный:  _Mini/Structures/Doors/Airlocks/typan_glass_virology.rsi
+  time: 3
+  cost: 3
+  defaultStyle: basic
+  styles:
+    basic: AirlockTypanGlass
+    atmospherics: AirlockTypanGlassAtmospherics
+    cargo: AirlockTypanGlassCargo
+    command: AirlockTypanGlassCommand
+    engineering: AirlockTypanGlassEngineering
+    maintenance: AirlockTypanGlassMaint
+    medical: AirlockTypanGlassMedical
+    science: AirlockTypanGlassScience
+    service: AirlockTypanGlassService
+    virology: AirlockTypanGlassVirology

@@ -38,7 +38,7 @@
   - type: ContainerFill
     containers:
       board: [ DoorElectronicsTypan ]
-  - type: PaintableAirlock
+  - type: Paintable
     group: TypanStandard
 
 - type: entity
@@ -50,7 +50,7 @@
   components:
   - type: Sprite
     sprite: _Mini/Structures/Doors/Airlocks/typan_glass.rsi
-  - type: PaintableAirlock
+  - type: Paintable
     group: TypanGlass
   - type: ContainerFill
     containers:
