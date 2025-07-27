@@ -131,6 +131,23 @@
     - Xenoborg
     - GenpopEnter
     - GenpopLeave
+    - BlueShield
+    # Typan accesses
+    - TypanArmory
+    - TypanAtmospherics
+    - TypanCargo
+    - TypanCommand
+    - TypanCommunicationsOfficer
+    - TypanEngineering
+    - TypanMaint
+    - TypanMedical
+    - TypanProtection
+    - TypanResearchDirector
+    - TypanScience
+    - TypanService
+    - TypanTechnicalOperationsSupervisor
+    - TypanVault
+    - TypanExternal
     privilegedIdSlot:
       name: id-card-console-privileged-id
       startingItem: UniversalIDCard
