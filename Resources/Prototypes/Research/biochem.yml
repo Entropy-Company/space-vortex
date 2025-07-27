@@ -1,0 +1,146 @@
+- type: technology
+  id: BasicBioChemical
+  name: Базовая химия
+  icon:
+    sprite: Objects/Specific/Chemistry/beaker_large.rsi
+    state: beakerlarge
+  cost: 3000
+  discipline: BioChemical
+  position: 2, 1
+  recipeUnlocks:
+    - Jug
+    - ChemistryEmptyBottle01
+    - ClothingEyesGlassesChemical
+    - LargeBeaker
+    - Syringe
+    - HotplateMachineCircuitboard
+- type: technology
+  id: BasicSurgery
+  name: Хирургические инструменты
+  icon:
+    sprite: Objects/Specific/Medical/Surgery/saw.rsi
+    state: saw
+  cost: 5000
+  discipline: BioChemical
+  position: 1, 1
+  requiredTech:
+    - BasicBioChemical
+  recipeUnlocks:
+    - Scalpel
+    - Retractor
+    - BoneSetter
+    - Cautery
+    - Drill
+    - Saw
+    - Hemostat
+    - BoneGel
+- type: technology
+  id: MechanizedTreatment
+  name: research-technology-mechanized-treatment
+  icon:
+    sprite: Mobs/Silicon/chassis.rsi
+    state: medical
+  discipline: BioChemical
+  cost: 5500
+  recipeUnlocks:
+    - BorgModuleAdvancedChemical
+  position: 2, 2
+  requiredTech:
+    - BasicBioChemical
+- type: technology
+  id: BiochemicalStasis
+  name: research-technology-biochemical-stasis
+  icon:
+    sprite: Structures/Machines/stasis_bed.rsi
+    state: icon
+  discipline: BioChemical
+  cost: 7500
+  recipeUnlocks:
+    - StasisBedMachineCircuitboard
+    - CryoPodMachineCircuitboard
+    - CryostasisBeaker
+    - SyringeCryostasis
+    - NTBodyBag
+    - PrisonerBodyBag
+    - RadiationBodyBag
+  position: 2, 0
+  requiredTech:
+    - BasicBioChemical
+- type: technology
+  id: BluespaceChemistry
+  name: research-technology-bluespace-chemistry
+  icon:
+    sprite: Objects/Specific/Chemistry/beaker_bluespace.rsi
+    state: beakerbluespace
+  discipline: BioChemical
+  cost: 15000
+  recipeUnlocks:
+    - BluespaceBeaker
+    - SyringeBluespace
+    - BluespaceBodyBag
+  position: 3, -2
+  requiredTech:
+    - BasicBioChemical
+- type: technology
+  id: LauncherSyringe
+  name: research-technology-launcher-syringe
+  icon:
+    sprite: Objects/Weapons/Guns/Cannons/syringe_gun.rsi
+    state: syringe_gun
+  discipline: BioChemical
+  cost: 12000
+  recipeUnlocks:
+    - LauncherSyringe
+    - MiniSyringe
+  position: 2, -1
+  requiredTech:
+    - BluespaceChemistry
+- type: technology
+  id: AdvancedTreatment
+  name: research-technology-advanced-treatment
+  icon:
+    sprite: _Shitmed/Objects/Specific/Medical/Surgery/e-scalpel.rsi
+    state: e-scalpel-on
+  discipline: BioChemical
+  cost: 10000
+  recipeUnlocks:
+    - EnergyScalpel
+    - EnergyCautery
+    - AdvancedRetractor
+    - BorgModuleAdvancedSurgery
+  position: 1, 0
+  requiredTech:
+    - BasicSurgery
+- type: technology
+  id: CyberneticEnhancements
+  name: research-technology-cybernetic-enhancements
+  icon:
+    sprite: _Shitmed/Mobs/Species/IPC/organs.rsi
+    state: eyes
+  discipline: BioChemical
+  cost: 15000
+  recipeUnlocks:
+    - JawsOfLifeLeftArm
+    - JawsOfLifeRightArm
+    - SpeedLeftLeg
+    - SpeedRightLeg
+    - BasicCyberneticEyes
+    - SecurityCyberneticEyes
+    - MedicalCyberneticEyes
+  position: 1, -1
+  requiredTech:
+    - AdvancedTreatment
+- type: technology
+  id: HighEndSurgery
+  name: research-technology-high-end-surgery
+  icon:
+    sprite: _Shitmed/Objects/Specific/Medical/Surgery/omnimed.rsi
+    state: omnimed
+  discipline: BioChemical
+  cost: 20000
+  recipeUnlocks:
+    - OmnimedTool
+  position: 1, -2
+  requiredTech:
+    - CyberneticEnhancements
+    - BluespaceChemistry

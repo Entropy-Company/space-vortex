@@ -1,5 +1,3 @@
-# Tier 1
-
 - type: technology
   id: BasicRobotics
   name: research-technology-basic-robotics
@@ -7,14 +5,12 @@
     sprite: Structures/Machines/exosuit_fabricator.rsi
     state: fab-idle
   discipline: Experimental
-  tier: 1
   cost: 5000
   recipeUnlocks:
-  - ProximitySensor
+    - ProximitySensor
   position: 1, -1
   requiredTech:
-  - AlternativeResearch
-
+    - AlternativeResearch
 - type: technology
   id: BasicAnomalousResearch
   name: research-technology-basic-anomalous-research
@@ -22,18 +18,16 @@
     sprite: Objects/Specific/Research/anomalyscanner.rsi
     state: icon
   discipline: Experimental
-  tier: 1
   cost: 5000
   recipeUnlocks:
-  - AnomalyScanner
-  - AnomalyLocator
-  - AnomalyLocatorWide
-  - APECircuitboard
-  - AnomalyVesselCircuitboard
+    - AnomalyScanner
+    - AnomalyLocator
+    - AnomalyLocatorWide
+    - APECircuitboard
+    - AnomalyVesselCircuitboard
   position: 3, -1
   requiredTech:
-  - AlternativeResearch
-
+    - AlternativeResearch
 - type: technology
   id: BasicXenoArcheology
   name: research-technology-basic-xenoarcheology
@@ -41,16 +35,14 @@
     sprite: Structures/Machines/artifact_analyzer.rsi
     state: display
   discipline: Experimental
-  tier: 1
   cost: 5000
   recipeUnlocks:
-  - NodeScanner
-  - AnalysisComputerCircuitboard
-  - ArtifactAnalyzerMachineCircuitboard
+    - NodeScanner
+    - AnalysisComputerCircuitboard
+    - ArtifactAnalyzerMachineCircuitboard
   position: 3, 1
   requiredTech:
-  - AlternativeResearch
-
+    - AlternativeResearch
 - type: technology
   id: AlternativeResearch
   name: research-technology-alternative-research
@@ -58,12 +50,10 @@
     sprite: Structures/Machines/tech_disk_printer.rsi
     state: display
   discipline: Experimental
-  tier: 1
   cost: 5000
   recipeUnlocks:
-  - TechDiskComputerCircuitboard
+    - TechDiskComputerCircuitboard
   position: 2, 0
-  
 - type: technology
   id: MagnetsTech
   name: research-technology-magnets-tech
@@ -71,15 +61,13 @@
     sprite: Clothing/Shoes/Boots/magboots-science.rsi
     state: icon
   discipline: Experimental
-  tier: 1
   cost: 7500
   recipeUnlocks:
-  - ClothingShoesBootsMagSci
-  - ClothingShoesBootsMoon
+    - ClothingShoesBootsMagSci
+    - ClothingShoesBootsMoon
   position: 1, 1
   requiredTech:
-  - AlternativeResearch
-
+    - AlternativeResearch
 - type: technology
   id: AnomalyCoreHarnessing
   name: research-technology-anomaly-harnessing
@@ -87,16 +75,12 @@
     sprite: Objects/Weapons/Melee/gorilla.rsi
     state: icon
   discipline: Experimental
-  tier: 1
   cost: 10000
   recipeUnlocks:
-  - WeaponGauntletGorilla
+    - WeaponGauntletGorilla
   position: 4, -1
-  isFinalLevelTech: 2
   requiredTech:
-  - BasicAnomalousResearch
-# Tier 2
-
+    - BasicAnomalousResearch
 - type: technology
   id: AbnormalArtifactManipulation
   name: research-technology-abnormal-artifact-manipulation
@@ -104,14 +88,12 @@
     sprite: Structures/Machines/artifact_crusher.rsi
     state: icon
   discipline: Experimental
-  tier: 2
   cost: 5000
   recipeUnlocks:
-  - ArtifactCrusherMachineCircuitboard
+    - ArtifactCrusherMachineCircuitboard
   position: 4, 1
   requiredTech:
-  - BasicXenoArcheology
-
+    - BasicXenoArcheology
 - type: technology
   id: AdvancedAnomalyResearch
   name: research-technology-advanced-anomaly-research
@@ -119,16 +101,14 @@
     sprite: Structures/Machines/anomaly_sync.rsi
     state: base
   discipline: Experimental
-  tier: 2
   cost: 10000
   recipeUnlocks:
-  - WeaponPistolCHIMP
-  - AnomalySynchronizerCircuitboard
-  - AnomalyVesselExperimentalCircuitboard
+    - WeaponPistolCHIMP
+    - AnomalySynchronizerCircuitboard
+    - AnomalyVesselExperimentalCircuitboard
   position: 4, -2
   requiredTech:
-  - AnomalyCoreHarnessing
-
+    - AnomalyCoreHarnessing
 - type: technology
   id: DeterrenceTechnologies
   name: research-technology-deterrence
@@ -136,16 +116,13 @@
     sprite: Objects/Weapons/Guns/Battery/particle_decelerator.rsi
     state: base
   discipline: Experimental
-  tier: 2
   cost: 7500
   recipeUnlocks:
-  - WeaponParticleDecelerator
-  - HoloprojectorField
-  position: 0, -1
+    - WeaponParticleDecelerator
+    - HoloprojectorField
+  position: -1, 1
   requiredTech:
-  - MagnetsTech
-
-# Corvax-Next-MutableLaws-Start
+    - MagnetsTech
 - type: technology
   id: AdvancedRobotics
   name: research-technology-advanced-robotics
@@ -153,29 +130,23 @@
     sprite: Mobs/Silicon/station_ai.rsi
     state: ai
   discipline: Experimental
-  tier: 2
   cost: 7500
   recipeUnlocks:
-  - AsimovCircuitBoard
-  - CorporateCircuitBoard
-  - NTDefaultCircuitBoard
-  - CommandmentCircuitBoard
-  - PaladinCircuitBoard
-  - LiveLetLiveCircuitBoard
-  - StationEfficiencyCircuitBoard
-  - RobocopCircuitBoard
-  - GameMasterCircuitBoard
-  - ArtistCircuitBoard
-  - NutimovCircuitBoard
-  - AiRemoteBrain # Corvax-Next-AiRemoteControl
-  position: 0, 0
-  isFinalLevelTech: 3
+    - AsimovCircuitBoard
+    - CorporateCircuitBoard
+    - NTDefaultCircuitBoard
+    - CommandmentCircuitBoard
+    - PaladinCircuitBoard
+    - LiveLetLiveCircuitBoard
+    - StationEfficiencyCircuitBoard
+    - RobocopCircuitBoard
+    - GameMasterCircuitBoard
+    - ArtistCircuitBoard
+    - NutimovCircuitBoard
+    - AiRemoteBrain
+  position: 0, -1
   requiredTech:
-  - MagnetsTech
-# Corvax-Next-MutableLaws-End
-
-# Tier 3
-
+    - BasicRobotics
 - type: technology
   id: GravityManipulation
   name: research-technology-gravity-manipulation
@@ -183,18 +154,14 @@
     sprite: Objects/Weapons/Guns/Launchers/tether_gun.rsi
     state: base
   discipline: Experimental
-  tier: 2
   cost: 10000
   recipeUnlocks:
     - WeaponForceGun
     - WeaponTetherGun
-  position: 5, 0
+  position: 4, 0
   requiredTech:
-  - AbnormalArtifactManipulation
-  - AnomalyCoreHarnessing
-
-# Tier 3
-
+    - AbnormalArtifactManipulation
+    - AnomalyCoreHarnessing
 - type: technology
   id: QuantumLeaping
   name: research-technology-quantum-leaping
@@ -202,14 +169,12 @@
     sprite: Objects/Devices/swapper.rsi
     state: icon
   discipline: Experimental
-  tier: 3
   cost: 10000
   recipeUnlocks:
-  - DeviceQuantumSpinInverter
+    - DeviceQuantumSpinInverter
   position: 4, -3
   requiredTech:
-  - AdvancedAnomalyResearch
-
+    - AdvancedAnomalyResearch
 - type: technology
   id: BluespaceTimeManipulation
   name: research-technology-bluespace-time-manipulation
@@ -217,10 +182,38 @@
     sprite: Objects/Devices/desynchronizer.rsi
     state: icon
   discipline: Experimental
-  tier: 3
   cost: 10000
   recipeUnlocks:
-  - DeviceDesynchronizer
-  position: 4, -4
+    - DeviceDesynchronizer
+  position: 2, -2
   requiredTech:
-  - QuantumLeaping
+    - QuantumLeaping
+- type: technology
+  id: Bluespace
+  name: research-technology-bluespace
+  icon:
+    sprite: Objects/Misc/stock_parts.rsi
+    state: ansible_crystal
+  discipline: Experimental
+  cost: 25000
+  recipeUnlocks:
+    - ArtificialBluespaceCrystal
+    - MachineBluespaceTransitorCircuitboard
+  position: -1, -1
+  requiredTech:
+    - DeterrenceTechnologies
+    - AdvancedRobotics
+- type: technology
+  id: BluespaceMining
+  name: research-technology-bluespace-mining
+  icon:
+    sprite: Objects/Misc/stock_parts.rsi
+    state: ansible_crystal
+  discipline: Experimental
+  cost: 30000
+  recipeUnlocks:
+    - MachineBluespaceHarvesterCircuitboard
+  position: -1, -3
+  requiredTech:
+    - Bluespace
+    - QuantumLeaping
