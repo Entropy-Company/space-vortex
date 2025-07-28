@@ -17,6 +17,8 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Content.Shared.CCVar;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.Stunnable;
 
@@ -38,6 +40,7 @@ public abstract partial class SharedStunSystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly StandingStateSystem _standingState = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
 
     public static readonly ProtoId<AlertPrototype> KnockdownAlert = "Knockdown";
 
@@ -82,6 +85,9 @@ public abstract partial class SharedStunSystem
         while (query.MoveNext(out var uid, out var knockedDown))
         {
             if (!knockedDown.AutoStand || knockedDown.DoAfterId.HasValue || knockedDown.NextUpdate > GameTiming.CurTime)
+                continue;
+
+            if (!_cfg.GetCVar(CCVars.KnockdownAutoStand))
                 continue;
 
             TryStanding(uid);

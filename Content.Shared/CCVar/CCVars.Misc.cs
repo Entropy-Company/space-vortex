@@ -96,6 +96,13 @@ public sealed partial class CCVars
         CVarDef.Create("pointing.cooldown_seconds", 0.5f, CVar.SERVERONLY);
 
     /// <summary>
+    ///     Enables or disables autostand after knockdown if the fall was not voluntary (not via C key).
+    ///     If false, персонаж не будет автоматически вставать после падения, если только не нажмет C.
+    /// </summary>
+    public static readonly CVarDef<bool> KnockdownAutoStand =
+        CVarDef.Create("knockdown.autostand", true, CVar.SERVERONLY);
+
+    /// <summary>
     ///     The last time the client recorded a valid connection to a game server.
     ///     Used in conjunction with <see cref="PlaytimeMinutesToday"/> to track how long the player has been playing for the given day.
     /// </summary>
