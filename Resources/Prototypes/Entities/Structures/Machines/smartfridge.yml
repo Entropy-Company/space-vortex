@@ -127,3 +127,55 @@
     flavorText: smart-fridge-request-chemistry
   - type: AccessReader
     access: [["Medical"]]
+
+- type: entity
+  parent: SmartFridge
+  id: SmartFridgeServiceFood
+  suffix: Service + Food
+  components:
+  - type: SmartFridge
+    flavorText: Храните свои блюда холодными!
+    whitelist:
+      components:
+      - FitsInDispenser
+      - Pill
+      - Produce
+      - Seed
+      - Food
+      tags:
+      - PillCanister
+      - Bottle
+      - Syringe
+      - ChemDispensable
+  - type: AccessReader
+    access: [["Service"]]
+    
+- type: entity
+  parent: SmartFridge
+  id: SmartFridgeFood
+  suffix: +Food
+  components:
+  - type: SmartFridge
+    flavorText: Храните свои блюда холодными!
+    whitelist:
+      components:
+      - FitsInDispenser
+      - Pill
+      - Produce
+      - Seed
+      - Food
+      tags:
+      - PillCanister
+      - Bottle
+      - Syringe
+      - ChemDispensable
+      
+- type: entity
+  parent: SmartFridge
+  id: SmartFridgeService
+  suffix: Service
+  components:
+  - type: SmartFridge
+    flavorText: Храните свои блюда холодными!
+  - type: AccessReader
+    access: [["Service"]]
