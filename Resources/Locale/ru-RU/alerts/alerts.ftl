@@ -18,6 +18,8 @@ alerts-weightless-name = Невесомость
 alerts-weightless-desc =
     Гравитация перестала воздействовать на вас, и вы свободно парите. Найдите за что можно ухватиться, или метните или выстрелите чем-нибудь в противоположном направлении.
     Магнитные ботинки и джетпак помогут вам передвигаться с большей эффективностью.
+alerts-knockdown-name = [color=yellow]Лежите[/color]
+alerts-knockdown-desc = Вы [color=yellow]лежите[/color]! Вас могли толкнуть или вы сами легли, из-за чего движение затруднено.
 alerts-walking-name = Шаг
 alerts-walking-desc = Вы идёте шагом, двигаясь в медленном темпе.
 alerts-stunned-name = [color=yellow]Оглушены[/color]
