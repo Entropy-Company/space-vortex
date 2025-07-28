@@ -11,11 +11,9 @@
   id: BasicChemistryStatic
   recipes:
   - Beaker
-  - LargeBeaker
   - Syringe
   - PillCanister
   - HandLabeler
-  - BaseChemistryEmptyVial
 
 - type: latheRecipePack
   parent: BasicChemistryStatic
@@ -24,6 +22,13 @@
   - Jug
   - ChemistryEmptyBottle01
   - ClothingEyesGlassesChemical
+
+- type: latheRecipePack
+  id: ChemistryDinamic
+  parent: ChemistryStatic
+  recipes:
+  - LargeBeaker
+  - BaseChemistryEmptyVial
 
 - type: latheRecipePack
   id: SurgeryStatic

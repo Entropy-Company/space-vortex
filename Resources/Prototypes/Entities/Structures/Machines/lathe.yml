@@ -192,10 +192,9 @@
     runningState: building
     unlitIdleState: unlit
     unlitRunningState: unlit-building
-    staticPacks:
-    - ChemistryStatic
-    - SurgeryStatic
     dynamicPacks:
+    - SurgeryStatic
+    - ChemistryDinamic
     - AdvancedTools
     - ScienceEquipment
     - ScienceExplosives
@@ -490,8 +489,9 @@
     - RollerBedsStatic
     - MedicalClothingStatic
     - EmptyMedkitsStatic
-    - SurgeryStatic
     dynamicPacks:
+    - ChemistryDinamic
+    - SurgeryStatic
     - Chemistry
     - BodyBagsDynamic
     - AdvancedTreatmentDynamic

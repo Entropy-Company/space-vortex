@@ -1,4 +1,5 @@
 research-discipline-none = Отсутствует
+research-discipline-biochemical = Био-химия
 research-discipline-industrial = Промышленность
 research-discipline-arsenal = Арсенал
 research-discipline-experimental = Экспериментальное
@@ -37,7 +38,7 @@ research-technology-kinetic-modifications = Кинетические модиф�
 research-technology-advanced-riot-control = Продвинутое противодействие беспорядкам
 research-technology-portable-microfusion-weaponry = Оруженый портативный микросинтез
 research-technology-thermal-weaponry = Термальное вооружение
-research-technology-dual-wielding-technology = Dual Wielding Technology
+research-technology-dual-wielding-technology = Дополнительные сервоприводы
 research-technology-experimental-battery-ammo = Экспериментальные батарейные боеприпасы
 research-technology-basic-shuttle-armament = Базовое корабельное вооружение
 research-technology-advanced-shuttle-weapon = Продвинутое корабельное оружие
