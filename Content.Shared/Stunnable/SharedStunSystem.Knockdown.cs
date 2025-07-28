@@ -86,6 +86,9 @@ public abstract partial class SharedStunSystem
         {
             if (!knockedDown.AutoStand || knockedDown.DoAfterId.HasValue || knockedDown.NextUpdate > GameTiming.CurTime)
                 continue;
+                
+            if (!_cfg.IsCVarRegistered("knockdown.autostand"))
+                continue;
 
             if (!_cfg.GetCVar(CCVars.KnockdownAutoStand))
                 continue;
