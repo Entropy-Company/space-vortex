@@ -348,7 +348,7 @@ public sealed class FoodSystem : EntitySystem
 
         if (component.Trash.Count == 0)
         {
-            QueueDel(food);
+            PredictedQueueDel(food);
             return;
         }
 
@@ -356,7 +356,7 @@ public sealed class FoodSystem : EntitySystem
         var trashes = component.Trash;
         var tryPickup = _hands.IsHolding(user, food, out _);
 
-        QueueDel(food);
+        PredictedQueueDel(food);
 
         foreach (var trash in trashes)
         {

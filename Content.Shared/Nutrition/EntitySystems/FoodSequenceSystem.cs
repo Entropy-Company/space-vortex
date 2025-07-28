@@ -10,6 +10,7 @@ using Content.Shared.Storage.Components;
 using Content.Shared.Tag;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Network;
 
 namespace Content.Shared.Nutrition.EntitySystems;
 
@@ -23,6 +24,7 @@ public sealed class FoodSequenceSystem : SharedFoodSequenceSystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly INetManager _netManager = default!;
 
     public override void Initialize()
     {
@@ -78,12 +80,17 @@ public sealed class FoodSequenceSystem : SharedFoodSequenceSystem
             return true;
 
         Metamorf(start, _random.Pick(availableRecipes)); //In general, if there's more than one recipe, the yml-guys screwed up. Maybe some kind of unit test is needed.
-        QueueDel(start);
+        
+        if (Exists(start))
+            PredictedQueueDel(start.Owner);
         return true;
     }
 
     private void Metamorf(Entity<FoodSequenceStartPointComponent> start, MetamorphRecipePrototype recipe)
     {
+        if (!_netManager.IsServer)
+            return;
+
         var result = SpawnAtPosition(recipe.Result, Transform(start).Coordinates);
 
         //Try putting in container
@@ -158,7 +165,8 @@ public sealed class FoodSequenceSystem : SharedFoodSequenceSystem
         var ev = new FoodSequenceIngredientAddedEvent(start, element, elementProto, user);
         RaiseLocalEvent(start, ev);
 
-        QueueDel(element);
+        if (Exists(element))
+            PredictedQueueDel(element.Owner);
         return true;
     }
 
