@@ -1,6 +1,7 @@
 using Content.Shared.DeviceNetwork;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
+using Color = Robust.Shared.Maths.Color;
 
 namespace Content.Server.SurveillanceCamera;
 

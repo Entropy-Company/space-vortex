@@ -8,6 +8,7 @@ using Content.Shared.Verbs;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 using Content.Shared.DeviceNetwork.Components;
+using System.Linq;
 
 namespace Content.Server.SurveillanceCamera;
 
@@ -158,7 +159,7 @@ public sealed class SurveillanceCameraRouterSystem : EntitySystem
         }
 
         var state = new SurveillanceCameraSetupBoundUiState(router.SubnetName, deviceNet.ReceiveFrequency ?? 0,
-            router.AvailableNetworks, true, router.SubnetFrequencyId != null);
+            router.AvailableNetworks.Select(network => new ProtoId<DeviceFrequencyPrototype>(network)).ToList(), true, router.SubnetFrequencyId != null);
         _userInterface.SetUiState(uid, SurveillanceCameraSetupUiKey.Router, state);
     }
 

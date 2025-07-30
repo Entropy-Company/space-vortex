@@ -1,5 +1,8 @@
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Maths;
+using Content.Shared.DeviceNetwork;
 
 namespace Content.Shared.SurveillanceCamera;
 
