@@ -4,26 +4,24 @@
   icon:
     sprite: Objects/Specific/Chemistry/beaker_large.rsi
     state: beakerlarge
-  cost: 3000
   discipline: BioChemical
-  position: 2, 1
+  cost: 3000
   recipeUnlocks:
     - Jug
     - ChemistryEmptyBottle01
     - ClothingEyesGlassesChemical
     - LargeBeaker
     - HotplateMachineCircuitboard
+  position: 2, 2
+  requiredTech: []
 - type: technology
   id: BasicSurgery
   name: Хирургические инструменты
   icon:
     sprite: Objects/Specific/Medical/Surgery/saw.rsi
     state: saw
-  cost: 5000
   discipline: BioChemical
-  position: 1, 1
-  requiredTech:
-    - BasicBioChemical
+  cost: 5000
   recipeUnlocks:
     - Scalpel
     - Retractor
@@ -33,6 +31,9 @@
     - Saw
     - Hemostat
     - BoneGel
+  position: 1, 2
+  requiredTech:
+    - BasicBioChemical
 - type: technology
   id: MechanizedTreatment
   name: research-technology-mechanized-treatment
@@ -43,7 +44,7 @@
   cost: 5500
   recipeUnlocks:
     - BorgModuleAdvancedChemical
-  position: 2, 2
+  position: 2, 1
   requiredTech:
     - BasicBioChemical
 - type: technology
@@ -59,10 +60,7 @@
     - CryoPodMachineCircuitboard
     - CryostasisBeaker
     - SyringeCryostasis
-    - NTBodyBag
-    - PrisonerBodyBag
-    - RadiationBodyBag
-  position: 2, 0
+  position: 3, 1
   requiredTech:
     - BasicBioChemical
 - type: technology
@@ -76,10 +74,9 @@
   recipeUnlocks:
     - BluespaceBeaker
     - SyringeBluespace
-    - BluespaceBodyBag
-  position: 3, -2
+  position: 3, -1
   requiredTech:
-    - BasicBioChemical
+    - LauncherSyringe
 - type: technology
   id: LauncherSyringe
   name: research-technology-launcher-syringe
@@ -91,9 +88,9 @@
   recipeUnlocks:
     - LauncherSyringe
     - MiniSyringe
-  position: 2, -1
+  position: 3, 0
   requiredTech:
-    - BluespaceChemistry
+    - BiochemicalStasis
 - type: technology
   id: AdvancedTreatment
   name: research-technology-advanced-treatment
@@ -107,26 +104,22 @@
     - EnergyCautery
     - AdvancedRetractor
     - BorgModuleAdvancedSurgery
-  position: 1, 0
+  position: 1, 1
   requiredTech:
     - BasicSurgery
 - type: technology
-  id: CyberneticEnhancements
-  name: research-technology-cybernetic-enhancements
+  id: CyberneticeEyesEnhancements
+  name: Протезирование глаз
   icon:
     sprite: _Shitmed/Mobs/Species/IPC/organs.rsi
     state: eyes
   discipline: BioChemical
-  cost: 15000
+  cost: 9000
   recipeUnlocks:
-    - JawsOfLifeLeftArm
-    - JawsOfLifeRightArm
-    - SpeedLeftLeg
-    - SpeedRightLeg
     - BasicCyberneticEyes
     - SecurityCyberneticEyes
     - MedicalCyberneticEyes
-  position: 1, -1
+  position: 1, 0
   requiredTech:
     - AdvancedTreatment
 - type: technology
@@ -141,5 +134,68 @@
     - OmnimedTool
   position: 1, -2
   requiredTech:
-    - CyberneticEnhancements
+    - CyberneticeEnhancements
+    - BasicRobotics
+- type: technology
+  id: CyberneticeEnhancements
+  name: research-technology-cybernetic-enhancements
+  icon:
+    sprite: Structures/Machines/exosuit_fabricator.rsi
+    state: fab-idle
+  discipline: BioChemical
+  cost: 12000
+  recipeUnlocks:
+    - JawsOfLifeLeftArm
+    - JawsOfLifeRightArm
+    - SpeedLeftLeg
+    - SpeedRightLeg
+  position: 1, -1
+  requiredTech:
+    - CyberneticeEyesEnhancements
+    - BasicRobotics
+- type: technology
+  id: BiochemicalStasisBodyBags
+  name: Хранение тел в стазисе
+  icon:
+    sprite: _CorvaxNext/Objects/Specific/Medical/BodyBags/nanotrasen.rsi
+    state: ntbag
+  discipline: BioChemical
+  cost: 10000
+  recipeUnlocks:
+    - NTBodyBag
+    - PrisonerBodyBag
+    - RadiationBodyBag
+  position: 4, 1
+  requiredTech:
+    - BiochemicalStasis
+- type: technology
+  id: BluespaceBodyBags
+  name: Блюспейс хранилище тел
+  icon:
+    sprite: _CorvaxNext/Objects/Specific/Medical/BodyBags/bluespace.rsi
+    state: bluespacebag
+  discipline: BioChemical
+  cost: 10000
+  recipeUnlocks:
+    - BluespaceBodyBag
+  position: 4, 0
+  requiredTech:
+    - BiochemicalStasisBodyBags
+- type: technology
+  id: CloningTech
+  name: Клонирование тел
+  icon:
+    sprite: Structures/Machines/cloning.rsi
+    state: pod_0
+  discipline: BioChemical
+  cost: 30000
+  recipeUnlocks:
+    - CloningConsoleComputerCircuitboard
+    - MedicalScannerMachineCircuitboard
+    - CloningPodMachineCircuitboard
+  position: 2, -2
+  requiredTech:
     - BluespaceChemistry
+    - HighEndSurgery
+    - IndustrialEngineering
+    - AtmosphericTech

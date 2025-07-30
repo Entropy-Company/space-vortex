@@ -9,8 +9,8 @@
             Orientation="Vertical"
             MinWidth="390"
             MaxWidth="390"
-            MinHeight="200"
-            MaxHeight="200"
+            MinHeight="150"
+            MaxHeight="150"
             Margin="5"
             VerticalExpand="False">
             <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
@@ -44,7 +44,7 @@
             <Button Name="ResearchButton" Text="{Loc 'research-console-menu-server-research-button'}" HorizontalAlignment="Left" Margin="0 4"/>
         </BoxContainer>
         <BoxContainer Orientation="Vertical" VerticalExpand="True" Margin="5 15 5 5">
-            <BoxContainer Name="PrereqsContainer" Orientation="Vertical" MinHeight="120" SizeFlagsStretchRatio="1" Margin="5 15 5 5">
+            <BoxContainer Name="PrereqsContainer" Orientation="Vertical" MinHeight="120" SizeFlagsStretchRatio="1" Margin="5 10 5 5">
                 <Label Text="{Loc 'research-console-required-text'}" HorizontalAlignment="Center"/>
                 <customControls:HSeparator StyleClasses="LowDivider" Margin="0 0 0 10"/>
                 <PanelContainer VerticalExpand="True">

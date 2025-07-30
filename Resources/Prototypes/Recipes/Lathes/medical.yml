@@ -243,3 +243,32 @@
     Glass: 100
     Plastic: 100
 
+- type: latheRecipe
+  id: CloningConsoleComputerCircuitboard
+  result: CloningConsoleComputerCircuitboard
+  completetime: 4
+  materials:
+    Steel: 100
+    Glass: 650
+    Plastic: 50
+    Gold: 100
+
+- type: latheRecipe
+  id: MedicalScannerMachineCircuitboard
+  result: MedicalScannerMachineCircuitboard
+  completetime: 4
+  materials:
+    Steel: 100
+    Glass: 500
+    Plastic: 50
+    Gold: 50
+
+- type: latheRecipe
+  id: CloningPodMachineCircuitboard
+  result: CloningPodMachineCircuitboard
+  completetime: 4
+  materials:
+    Steel: 150
+    Glass: 600
+    Plastic: 50
+    Gold: 100

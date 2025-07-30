@@ -35,6 +35,7 @@
   position: 1, 1
   requiredTech:
     - AdvancedEntertainment
+    - BasicRobotics
 - type: technology
   id: AudioVisualCommunication
   name: research-technology-audio-visual-communication
@@ -70,6 +71,7 @@
     - MassMediaCircuitboard
     - JukeboxCircuitBoard
   position: 1, 0
+  requiredTech: []
 - type: technology
   id: MeatManipulation
   name: research-technology-meat-manipulation
@@ -142,6 +144,7 @@
   position: 1, 2
   requiredTech:
     - CritterMechs
+    - BasicRobotics
 - type: technology
   id: AdvancedSpray
   name: research-technology-advanced-spray

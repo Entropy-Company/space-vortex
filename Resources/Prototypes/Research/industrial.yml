@@ -5,7 +5,7 @@
     sprite: Objects/Tools/handdrill.rsi
     state: handdrill
   discipline: Industrial
-  cost: 10000
+  cost: 8000
   recipeUnlocks:
     - MiningDrill
     - MineralScannerEmpty
@@ -13,7 +13,7 @@
     - OreProcessorIndustrialMachineCircuitboard
     - ClothingMaskWeldingGas
     - ClothingShoesBootsJump
-  position: 3, 0
+  position: -1, 1
   requiredTech:
     - SpaceScanning
 - type: technology
@@ -23,11 +23,12 @@
     sprite: Objects/Tools/handheld_mass_scanner.rsi
     state: icon
   discipline: Industrial
-  cost: 5000
+  cost: 6000
   recipeUnlocks:
+    - HandHeldMassScanner
     - RadarConsoleCircuitboard
     - BorgModuleGPS
-  position: 2, 0
+  position: -1, -1
   requiredTech:
     - PowerGeneration
 - type: technology
@@ -37,14 +38,14 @@
     sprite: Structures/Power/turbo_recharger.rsi
     state: empty
   discipline: Industrial
-  cost: 7500
+  cost: 8000
   recipeUnlocks:
     - PowerCellHigh
     - TurboItemRechargerCircuitboard
     - SMESAdvancedMachineCircuitboard
-  position: 0, 1
+  position: 4, -1
   requiredTech:
-    - MechanicalCompression
+    - PowerGeneration
 - type: technology
   id: MechanicalCompression
   name: research-technology-mechanical-compression
@@ -55,7 +56,7 @@
   cost: 10000
   recipeUnlocks:
     - FlatpackerMachineCircuitboard
-  position: 1, 1
+  position: 1, 0
   requiredTech:
     - PowerGeneration
 - type: technology
@@ -71,7 +72,7 @@
     - ProtolatheHyperConvectionMachineCircuitboard
     - CircuitImprinterHyperConvectionMachineCircuitboard
     - SheetifierMachineCircuitboard
-  position: 1, 2
+  position: 3, 2
   requiredTech:
     - MechanicalCompression
 - type: technology
@@ -81,7 +82,7 @@
     sprite: Structures/Power/Generation/portable_generator.rsi
     state: portgen0
   discipline: Industrial
-  cost: 7500
+  cost: 7000
   recipeUnlocks:
     - PortableGeneratorPacmanMachineCircuitboard
     - PortableGeneratorSuperPacmanMachineCircuitboard
@@ -89,7 +90,8 @@
     - SolarControlComputerCircuitboard
     - SolarTrackerElectronics
     - EmitterCircuitboard
-  position: 1, 0
+  position: 1, -1
+  requiredTech: []
 - type: technology
   id: AtmosphericTech
   name: research-technology-atmospheric-tech
@@ -97,11 +99,11 @@
     sprite: Structures/Piping/Atmospherics/thermomachine.rsi
     state: freezerOff
   discipline: Industrial
-  cost: 7500
+  cost: 8000
   recipeUnlocks:
     - ThermomachineFreezerMachineCircuitBoard
     - GasRecyclerMachineCircuitboard
-  position: 2, 1
+  position: 0, 0
   requiredTech:
     - MechanicalCompression
 - type: technology
@@ -121,7 +123,7 @@
     - RipleyCentralElectronics
     - RipleyPeripheralsElectronics
     - MechEquipmentGrabber
-  position: 1, 3
+  position: 3, 3
   requiredTech:
     - IndustrialEngineering
 - type: technology
@@ -131,15 +133,16 @@
     sprite: Structures/Shuttles/gyroscope.rsi
     state: base
   discipline: Industrial
-  cost: 10000
+  cost: 15000
   recipeUnlocks:
     - ShuttleConsoleCircuitboard
     - ThrusterMachineCircuitboard
     - GyroscopeMachineCircuitboard
     - MiniGravityGeneratorCircuitboard
-  position: 3, 3
+  position: 2, 1
   requiredTech:
     - AdvancedAtmospherics
+    - IndustrialEngineering
 - type: technology
   id: AdvancedAtmospherics
   name: research-technology-advanced-atmospherics
@@ -147,15 +150,15 @@
     sprite: Objects/Devices/Holoprojectors/atmos.rsi
     state: icon
   discipline: Industrial
-  cost: 7500
+  cost: 10000
   recipeUnlocks:
     - HellfireFreezerMachineCircuitBoard
     - PortableScrubberMachineCircuitBoard
     - HolofanProjector
+  position: 0, 1
   requiredTech:
     - AtmosphericTech
     - IndustrialEngineering
-  position: 3, 1
 - type: technology
   id: AdvancedToolsTechnology
   name: research-technology-advanced-tools
@@ -171,9 +174,9 @@
     - BorgModuleAdvancedTool
     - Fulton
     - FultonBeacon
+  position: 1, 3
   requiredTech:
     - IndustrialEngineering
-  position: 2, 3
 - type: technology
   id: MassExcavation
   name: research-technology-excavation
@@ -188,8 +191,9 @@
     - AdvancedMineralScannerEmpty
     - BorgModuleAdvancedMining
     - SalvageExpeditionsComputerCircuitboard
-  position: 4, 4
+  position: -1, 3
   requiredTech:
+    - IndustrialEngineering
     - SalvageEquipment
 - type: technology
   id: BluespaceStorage
@@ -203,10 +207,11 @@
     - ClothingBackpackHolding
     - ClothingBackpackSatchelHolding
     - ClothingBackpackDuffelHolding
+  position: 0, 3
   requiredTech:
     - MassExcavation
     - AdvancedToolsTechnology
-  position: 2, 4
+    - Bluespace
 - type: technology
   id: OptimizedMicrogalvanism
   name: research-technology-optimized-microgalvanism
@@ -214,11 +219,11 @@
     sprite: Objects/Power/power_cells.rsi
     state: microreactor
   discipline: Industrial
-  cost: 10000
+  cost: 12000
   recipeUnlocks:
     - PowerCellMicroreactor
     - PowerCellHyper
+  position: 4, 2
   requiredTech:
     - AdvancedPowercells
     - IndustrialEngineering
-  position: 0, 2

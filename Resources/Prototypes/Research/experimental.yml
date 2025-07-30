@@ -54,6 +54,7 @@
   recipeUnlocks:
     - TechDiskComputerCircuitboard
   position: 2, 0
+  requiredTech: []
 - type: technology
   id: MagnetsTech
   name: research-technology-magnets-tech
@@ -88,7 +89,7 @@
     sprite: Structures/Machines/artifact_crusher.rsi
     state: icon
   discipline: Experimental
-  cost: 5000
+  cost: 6000
   recipeUnlocks:
     - ArtifactCrusherMachineCircuitboard
   position: 4, 1
@@ -116,7 +117,7 @@
     sprite: Objects/Weapons/Guns/Battery/particle_decelerator.rsi
     state: base
   discipline: Experimental
-  cost: 7500
+  cost: 10000
   recipeUnlocks:
     - WeaponParticleDecelerator
     - HoloprojectorField
@@ -130,7 +131,7 @@
     sprite: Mobs/Silicon/station_ai.rsi
     state: ai
   discipline: Experimental
-  cost: 7500
+  cost: 9000
   recipeUnlocks:
     - AsimovCircuitBoard
     - CorporateCircuitBoard
@@ -154,7 +155,7 @@
     sprite: Objects/Weapons/Guns/Launchers/tether_gun.rsi
     state: base
   discipline: Experimental
-  cost: 10000
+  cost: 15000
   recipeUnlocks:
     - WeaponForceGun
     - WeaponTetherGun
@@ -169,12 +170,13 @@
     sprite: Objects/Devices/swapper.rsi
     state: icon
   discipline: Experimental
-  cost: 10000
+  cost: 12000
   recipeUnlocks:
     - DeviceQuantumSpinInverter
   position: 4, -3
   requiredTech:
     - AdvancedAnomalyResearch
+    - IndustrialEngineering
 - type: technology
   id: BluespaceTimeManipulation
   name: research-technology-bluespace-time-manipulation
@@ -182,12 +184,13 @@
     sprite: Objects/Devices/desynchronizer.rsi
     state: icon
   discipline: Experimental
-  cost: 10000
+  cost: 15000
   recipeUnlocks:
     - DeviceDesynchronizer
   position: 2, -2
   requiredTech:
     - QuantumLeaping
+    - IndustrialEngineering
 - type: technology
   id: Bluespace
   name: research-technology-bluespace
@@ -203,6 +206,8 @@
   requiredTech:
     - DeterrenceTechnologies
     - AdvancedRobotics
+    - IndustrialEngineering
+    - OptimizedMicrogalvanism
 - type: technology
   id: BluespaceMining
   name: research-technology-bluespace-mining
@@ -217,3 +222,5 @@
   requiredTech:
     - Bluespace
     - QuantumLeaping
+    - IndustrialEngineering
+    - OptimizedMicrogalvanism
