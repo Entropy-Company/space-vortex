@@ -400,9 +400,6 @@
 - type: Tag
   id: CantInteract
 
-- type: Tag
-  id: DockMining
-
 ### INTERACTION TAGS ###
 # Как одежда закрывает/не закрывает ту или иную область тела
 

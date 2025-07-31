@@ -37,14 +37,14 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
 
     #region Color Scheme
 
-    private static readonly Color PrimaryColor = new Color(0, 212, 255);      // #00d4ff
-    private static readonly Color SecondaryColor = new Color(184, 230, 255);   // #b8e6ff
-    private static readonly Color BackgroundMedium = new Color(26, 35, 50);    // #1a2332
-    private static readonly Color BackgroundLight = new Color(36, 51, 64);     // #243340
-    private static readonly Color BackgroundHighlight = new Color(44, 68, 85); // #2c4455
+    private static readonly Color PrimaryColor = new Color(203, 35, 254);      // #cb23fe
+    private static readonly Color SecondaryColor = new Color(230, 184, 255);   // #e6b8ff
+    private static readonly Color BackgroundMedium = new Color(35, 26, 50);    // #231a32
+    private static readonly Color BackgroundLight = new Color(51, 36, 64);     // #332440
+    private static readonly Color BackgroundHighlight = new Color(68, 44, 85); // #442c55
     private static readonly Color ErrorColor = new Color(255, 69, 58);         // #ff453a
     private static readonly Color SuccessColor = new Color(48, 209, 88);       // #30d158
-    private static readonly Color TextMuted = new Color(142, 142, 147);        // #8e8e93
+    private static readonly Color TextMuted = new Color(212, 163, 230);        // #d4a3e6
     private static readonly Color FavoriteColor = new Color(255, 214, 10);     // #ffd60a
     private static readonly Color FavoriteHoverColor = new Color(255, 180, 0); // #ffb400
 
@@ -72,8 +72,8 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
 
         _spriteSystem = _entityManager.System<SpriteSystem>();
 
-        MainTabContainer.SetTabTitle(0, "Интеракции");
-        MainTabContainer.SetTabTitle(1, "Кастом");
+        MainTabContainer.SetTabTitle(0, "Взаимодействия");
+        MainTabContainer.SetTabTitle(1, "Пользовательские");
         MainTabContainer.SetTabTitle(2, "Настройки");
 
         SearchInput.OnTextChanged += OnSearchTextChanged;

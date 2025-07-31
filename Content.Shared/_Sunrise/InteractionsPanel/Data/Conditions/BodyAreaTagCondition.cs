@@ -1,6 +1,7 @@
 using Robust.Shared.Containers;
 using Robust.Shared.Serialization;
 using Content.Shared.Tag;
+using System.Linq;
 
 namespace Content.Shared._Sunrise.InteractionsPanel.Data.Conditions;
 
@@ -73,49 +74,50 @@ public sealed partial class BodyAreaTagCondition : IAppearCondition
     private HashSet<string> GetCategoriesBySlotAndTags(string slot, TagComponent tags)
     {
         var set = new HashSet<string>();
+        var tagsSet = new HashSet<string>(tags.Tags.Select(t => t.ToString()));
 
         switch (slot)
         {
             case "jumpsuit":
                 set.UnionWith(new[] { "грудь", "ляжки", "попа" });
-                if (tags.Tags.Contains("NudeBottom")) set = new() { "грудь" };
-                if (tags.Tags.Contains("NudeTop")) set = new() { "ляжки", "попа" };
-                if (tags.Tags.Contains("CommandSuit")) set = new() { "грудь", "ляжки", "попа" };
+                if (tagsSet.Contains("NudeBottom")) set = new() { "грудь" };
+                if (tagsSet.Contains("NudeTop")) set = new() { "ляжки", "попа" };
+                if (tagsSet.Contains("CommandSuit")) set = new() { "грудь", "ляжки", "попа" };
                 break;
 
             case "outerClothing":
                 set.UnionWith(new[] { "грудь", "ляжки", "попа" });
-                if (tags.Tags.Contains("NudeBottom")) set = new() { "грудь" };
-                if (tags.Tags.Contains("NudeFull")) set.Clear();
-                if (tags.Tags.Contains("FullCovered")) set = new() {
+                if (tagsSet.Contains("NudeBottom")) set = new() { "грудь" };
+                if (tagsSet.Contains("NudeFull")) set.Clear();
+                if (tagsSet.Contains("FullCovered")) set = new() {
                     "щёки", "губы", "шея", "уши", "волосы",
                     "рот", "грудь", "ступни", "ляжки", "попа", "лицо", "хвост", "ладони", "гладкие перчатки"
                 };
-                if (tags.Tags.Contains("FullBodyOuter")) set = new() {
+                if (tagsSet.Contains("FullBodyOuter")) set = new() {
                     "грудь", "ступни", "ляжки", "попа", "шея", "ладони", "гладкие перчатки"
                 };
                 break;
 
             case "head":
                 set.UnionWith(new[] { "волосы" });
-                if (tags.Tags.Contains("TopCovered")) set = new() { "уши", "волосы" };
-                if (tags.Tags.Contains("FullCovered")) set = new() { "уши", "волосы", "рот", "лицо", "губы", "щёки" };
+                if (tagsSet.Contains("TopCovered")) set = new() { "уши", "волосы" };
+                if (tagsSet.Contains("FullCovered")) set = new() { "уши", "волосы", "рот", "лицо", "губы", "щёки" };
                 break;
 
             case "gloves":
                 set.UnionWith(new[] { "ладони", "гладкие перчатки" });
-                if (tags.Tags.Contains("SmoothGloves")) set = new() { "ладони" };
-                if (tags.Tags.Contains("Ring")) set.Clear();
+                if (tagsSet.Contains("SmoothGloves")) set = new() { "ладони" };
+                if (tagsSet.Contains("Ring")) set.Clear();
                 break;
 
             case "neck":
                 set.UnionWith(new[] { "шея" });
-                if (tags.Tags.Contains("OpenNeck")) set.Clear();
+                if (tagsSet.Contains("OpenNeck")) set.Clear();
                 break;
 
             case "mask":
                 set.UnionWith(new[] { "рот" });
-                if (tags.Tags.Contains("FaceCovered")) set = new() { "рот", "щёки", "лицо" };
+                if (tagsSet.Contains("FaceCovered")) set = new() { "рот", "щёки", "лицо" };
                 break;
 
             case "bra":
