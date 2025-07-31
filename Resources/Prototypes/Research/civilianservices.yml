@@ -145,6 +145,7 @@
   requiredTech:
     - CritterMechs
     - BasicRobotics
+    - IndustrialEngineering
 - type: technology
   id: AdvancedSpray
   name: research-technology-advanced-spray
@@ -172,6 +173,8 @@
   position: 2, -2
   requiredTech:
     - FauxAstroTiles
+    - IndustrialEngineering
+    - Bluespace
 - type: technology
   id: PushHorn
   name: research-technology-clowning-utilities

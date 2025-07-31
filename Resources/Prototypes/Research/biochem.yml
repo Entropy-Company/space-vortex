@@ -77,6 +77,7 @@
   position: 3, -1
   requiredTech:
     - LauncherSyringe
+    - Bluespace
 - type: technology
   id: LauncherSyringe
   name: research-technology-launcher-syringe
@@ -98,7 +99,7 @@
     sprite: _Shitmed/Objects/Specific/Medical/Surgery/e-scalpel.rsi
     state: e-scalpel-on
   discipline: BioChemical
-  cost: 10000
+  cost: 9000
   recipeUnlocks:
     - EnergyScalpel
     - EnergyCautery
@@ -160,7 +161,7 @@
     sprite: _CorvaxNext/Objects/Specific/Medical/BodyBags/nanotrasen.rsi
     state: ntbag
   discipline: BioChemical
-  cost: 10000
+  cost: 5000
   recipeUnlocks:
     - NTBodyBag
     - PrisonerBodyBag
@@ -175,7 +176,7 @@
     sprite: _CorvaxNext/Objects/Specific/Medical/BodyBags/bluespace.rsi
     state: bluespacebag
   discipline: BioChemical
-  cost: 10000
+  cost: 7000
   recipeUnlocks:
     - BluespaceBodyBag
   position: 4, 0

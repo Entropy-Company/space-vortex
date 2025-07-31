@@ -146,6 +146,7 @@
   position: 1, -2
   requiredTech:
     - WeaponizedLaserManipulation
+    - AdvancedPowercells
 - type: technology
   id: WaveParticleHarnessing
   name: research-technology-wave-particle-harnessing
@@ -159,6 +160,7 @@
   position: 0, -1
   requiredTech:
     - WeaponizedLaserManipulation
+    - AdvancedPowercells
 - type: technology
   id: KineticModifications
   name: research-technology-kinetic-modifications
@@ -227,6 +229,7 @@
   requiredTech:
     - ConcentratedLaserWeaponry
     - IndustrialEngineering
+    - AdvancedPowercells
 - type: technology
   id: ThermalWeaponry
   name: research-technology-thermal-weaponry
@@ -241,6 +244,7 @@
   requiredTech:
     - WaveParticleHarnessing
     - IndustrialEngineering
+    - AdvancedPowercells
 - type: technology
   id: AdvancedShuttleWeapon
   name: research-technology-advanced-shuttle-weapon
@@ -256,3 +260,4 @@
   position: 3, -2
   requiredTech:
     - BasicShuttleArmament
+    - AdvancedPowercells

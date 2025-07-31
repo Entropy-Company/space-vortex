@@ -117,7 +117,7 @@
     sprite: Objects/Weapons/Guns/Battery/particle_decelerator.rsi
     state: base
   discipline: Experimental
-  cost: 10000
+  cost: 90000
   recipeUnlocks:
     - WeaponParticleDecelerator
     - HoloprojectorField
@@ -198,7 +198,7 @@
     sprite: Objects/Misc/stock_parts.rsi
     state: ansible_crystal
   discipline: Experimental
-  cost: 25000
+  cost: 20000
   recipeUnlocks:
     - ArtificialBluespaceCrystal
     - MachineBluespaceTransitorCircuitboard

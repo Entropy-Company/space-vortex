@@ -43,7 +43,7 @@
     - PowerCellHigh
     - TurboItemRechargerCircuitboard
     - SMESAdvancedMachineCircuitboard
-  position: 4, -1
+  position: 3, -1
   requiredTech:
     - PowerGeneration
 - type: technology
@@ -56,7 +56,7 @@
   cost: 10000
   recipeUnlocks:
     - FlatpackerMachineCircuitboard
-  position: 1, 0
+  position: 2, 0
   requiredTech:
     - PowerGeneration
 - type: technology
@@ -72,7 +72,7 @@
     - ProtolatheHyperConvectionMachineCircuitboard
     - CircuitImprinterHyperConvectionMachineCircuitboard
     - SheetifierMachineCircuitboard
-  position: 3, 2
+  position: 2, 2
   requiredTech:
     - MechanicalCompression
 - type: technology
@@ -90,7 +90,7 @@
     - SolarControlComputerCircuitboard
     - SolarTrackerElectronics
     - EmitterCircuitboard
-  position: 1, -1
+  position: 2, -1
   requiredTech: []
 - type: technology
   id: AtmosphericTech
@@ -103,7 +103,7 @@
   recipeUnlocks:
     - ThermomachineFreezerMachineCircuitBoard
     - GasRecyclerMachineCircuitboard
-  position: 0, 0
+  position: 1, 0
   requiredTech:
     - MechanicalCompression
 - type: technology
@@ -123,7 +123,7 @@
     - RipleyCentralElectronics
     - RipleyPeripheralsElectronics
     - MechEquipmentGrabber
-  position: 3, 3
+  position: 2, 3
   requiredTech:
     - IndustrialEngineering
 - type: technology
@@ -139,7 +139,7 @@
     - ThrusterMachineCircuitboard
     - GyroscopeMachineCircuitboard
     - MiniGravityGeneratorCircuitboard
-  position: 2, 1
+  position: 0, 1
   requiredTech:
     - AdvancedAtmospherics
     - IndustrialEngineering
@@ -155,7 +155,7 @@
     - HellfireFreezerMachineCircuitBoard
     - PortableScrubberMachineCircuitBoard
     - HolofanProjector
-  position: 0, 1
+  position: 1, 1
   requiredTech:
     - AtmosphericTech
     - IndustrialEngineering
@@ -184,7 +184,7 @@
     sprite: Objects/Tools/handdrilldiamond.rsi
     state: handdrill
   discipline: Industrial
-  cost: 12500
+  cost: 12000
   recipeUnlocks:
     - OreBagOfHolding
     - MiningDrillDiamond
@@ -223,7 +223,7 @@
   recipeUnlocks:
     - PowerCellMicroreactor
     - PowerCellHyper
-  position: 4, 2
+  position: 3, 2
   requiredTech:
     - AdvancedPowercells
     - IndustrialEngineering
