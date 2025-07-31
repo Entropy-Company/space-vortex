@@ -282,7 +282,7 @@ binds:
   mod1: Shift
 - function: Interact # default: FlipObject (но он что-то не работает, поэтому бинд для панели будет)
   type: State
-  key: F
+  key: O
 - function: TextCursorLeft
   type: State
   key: Left
