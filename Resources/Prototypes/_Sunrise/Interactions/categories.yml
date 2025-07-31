@@ -4,7 +4,7 @@
 
 - type: interactionCategory
   id: Friendly
-  name: Дружба
+  name: Дружелюбные
 
 - type: interactionCategory
   id: Tail
@@ -13,3 +13,7 @@
 - type: interactionCategory
   id: Neck
   name: Шея
+
+- type: interactionCategory
+  id: Hands
+  name: Руки/Запястья
