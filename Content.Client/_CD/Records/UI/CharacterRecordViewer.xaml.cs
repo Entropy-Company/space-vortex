@@ -25,11 +25,13 @@ public sealed partial class CharacterRecordViewer : FancyWindow
 
     public event Action<CharacterListMetadata?>? OnListingItemSelected;
     public event Action<StationRecordFilterType, string?>? OnFiltersChanged;
+    public event Action<RecordConsoleType>? OnTabChanged;
 
     private bool _isPopulating;
     private StationRecordFilterType _filterType;
 
     private RecordConsoleType? _type;
+    private RecordConsoleType _currentTab = RecordConsoleType.Employment;
 
     private readonly RecordEntryViewPopup _entryView = new();
     private List<PlayerProvidedCharacterRecords.RecordEntry>? _entries;
@@ -51,6 +53,8 @@ public sealed partial class CharacterRecordViewer : FancyWindow
     public event Action<SecurityStatus, string?>? OnSetSecurityStatus;
 
     public uint? SecurityWantedStatusMaxLength;
+
+    private CharacterRecordConsoleState? _lastState;
 
     public CharacterRecordViewer()
     {
@@ -99,8 +103,25 @@ public sealed partial class CharacterRecordViewer : FancyWindow
 
         RecordFiltersReset.OnPressed += _ =>
         {
-            OnFiltersChanged?.Invoke(StationRecordFilterType.Name, null);
-            RecordFiltersValue.Clear();
+            RecordFiltersValue.SetText("");
+            OnFiltersChanged?.Invoke(_filterType, "");
+        };
+
+        // Tab button handlers
+        EmploymentTabButton.OnPressed += _ =>
+        {
+            _currentTab = RecordConsoleType.Employment;
+            _selectedListingKey = null;
+            CharacterListing.ClearSelected();
+            OnTabChanged?.Invoke(_currentTab);
+        };
+
+        SecurityTabButton.OnPressed += _ =>
+        {
+            _currentTab = RecordConsoleType.Security;
+            _selectedListingKey = null; 
+            CharacterListing.ClearSelected();
+            OnTabChanged?.Invoke(_currentTab);
         };
 
         RecordFiltersValue.OnTextEntered += text =>
@@ -148,6 +169,8 @@ public sealed partial class CharacterRecordViewer : FancyWindow
             // This is a hack to get the server to send us another packet with the new entries
             OnFiltersChanged?.Invoke(_filterType, RecordFiltersValue.Text);
         };
+
+        StatusOptionButton.Disabled = true;
     }
 
     // If we are using wizden's class we might as well use their localization.
@@ -208,6 +231,7 @@ public sealed partial class CharacterRecordViewer : FancyWindow
 
     public void UpdateState(CharacterRecordConsoleState state)
     {
+        _lastState = state;
         #region Visibility
 
         RecordEntryViewType.Visible = false;
@@ -233,22 +257,33 @@ public sealed partial class CharacterRecordViewer : FancyWindow
             case RecordConsoleType.Employment:
                 RecordFilterType.Visible = false;
                 RecordFilterType.SelectId((int)StationRecordFilterType.Name);
+                TabSelector.Visible = true;
+                
+                // Update current tab from state if available
+                if (state.CurrentTab.HasValue)
+                    _currentTab = state.CurrentTab.Value;
+                
+                EmploymentTabButton.Pressed = _currentTab == RecordConsoleType.Employment;
+                SecurityTabButton.Pressed = _currentTab == RecordConsoleType.Security;
 
                 Title = Loc.GetString("cd-character-records-viewer-title-employ");
                 break;
             case RecordConsoleType.Medical:
                 RecordFilterType.Visible = false;
                 RecordFilterType.SelectId((int)StationRecordFilterType.Name);
+                TabSelector.Visible = false;
 
                 Title = Loc.GetString("cd-character-records-viewer-title-med");
                 break;
             case RecordConsoleType.Security:
                 RecordFilterType.Visible = true;
+                TabSelector.Visible = false;
 
                 Title = Loc.GetString("cd-character-records-viewer-title-sec");
                 break;
             case RecordConsoleType.Admin:
                 RecordFilterType.Visible = true;
+                TabSelector.Visible = false;
                 Title = "Admin records console";
                 RecordEntryViewType.Visible = true;
 
@@ -290,6 +325,12 @@ public sealed partial class CharacterRecordViewer : FancyWindow
 
         #region FillRecordContainer
 
+        if (state.SelectedIndex == _openRecordKey && _type == state.ConsoleType && _currentTab == state.CurrentTab)
+            return;
+        _openRecordKey = state.SelectedIndex;
+        _type = state.ConsoleType;
+        _currentTab = state.CurrentTab ?? _currentTab;
+
         // Enable container if we have a record selected
         if (state.SelectedRecord == null)
         {
@@ -300,11 +341,6 @@ public sealed partial class CharacterRecordViewer : FancyWindow
 
         RecordContainerStatus.Visible = false;
         RecordContainer.Visible = true;
-
-        // Do not needlessly reload the record if not needed. This is mainly done to prevent a bug in the admin record viewer.
-        if (state.SelectedIndex == _openRecordKey)
-            return;
-        _openRecordKey = state.SelectedIndex;
 
         var record = state.SelectedRecord!;
         var cr = record.PRecords;
@@ -326,8 +362,18 @@ public sealed partial class CharacterRecordViewer : FancyWindow
         switch (_type)
         {
             case RecordConsoleType.Employment:
-                SetEntries(cr.EmploymentEntries);
-                UpdateRecordBoxEmployment(record);
+                // Handle tab switching for employment console
+                switch (_currentTab)
+                {
+                    case RecordConsoleType.Employment:
+                        SetEntries(cr.EmploymentEntries);
+                        UpdateRecordBoxEmployment(record);
+                        break;
+                    case RecordConsoleType.Security:
+                        SetEntries(cr.SecurityEntries);
+                        UpdateRecordBoxSecurity(record, state.SelectedSecurityStatus);
+                        break;
+                }
                 break;
             case RecordConsoleType.Medical:
                 SetEntries(cr.MedicalEntries);
@@ -434,9 +480,85 @@ public sealed partial class CharacterRecordViewer : FancyWindow
 
         _wantedReasonDialog.OnClose += () => { _wantedReasonDialog = null; };
     }
+
+    // Новый метод для обновления только панели выбранного сотрудника без полного сброса
+    private void UpdateSelectedInfoPanel(CharacterRecordConsoleState state, uint selectedKey)
+    {
+        // Найти выбранную запись
+        if (state.CharacterList == null || !state.CharacterList.ContainsKey(selectedKey))
+            return;
+        var selectedInfo = state.CharacterList[selectedKey];
+        // Получаем правильную запись для выбранного сотрудника
+        var record = state.SelectedRecord;
+        if (record == null || state.SelectedIndex != selectedKey)
+            return;
+        var cr = record.PRecords;
+
+        RecordContainerStatus.Visible = false;
+        RecordContainer.Visible = true;
+
+        RecordContainerName.Text = record.Name;
+        RecordContainerAge.Text = record.Age.ToString();
+        RecordContainerJob.Text = record.JobTitle;
+        RecordContainerGender.Text = record.Gender.ToString();
+        RecordContainerSpecies.Text = record.Species;
+        RecordContainerHeight.Text = cr.Height + " " + UnitConversion.GetImperialDisplayLength(cr.Height);
+        RecordContainerWeight.Text = cr.Weight + " " + UnitConversion.GetImperialDisplayMass(cr.Weight);
+        RecordContainerContactName.SetValue(cr.EmergencyContactName);
+
+        RecordContainerEmployment.Visible = false;
+        RecordContainerMedical.Visible = false;
+        RecordContainerSecurity.Visible = false;
+
+        // Исправлено: при выборе вкладки Employment/Security показываем только соответствующие записи
+        if (_type == RecordConsoleType.Employment)
+        {
+            switch (_currentTab)
+            {
+                case RecordConsoleType.Employment:
+                    SetEntries(cr.EmploymentEntries);
+                    UpdateRecordBoxEmployment(record);
+                    break;
+                case RecordConsoleType.Security:
+                    SetEntries(cr.SecurityEntries);
+                    UpdateRecordBoxSecurity(record, state.SelectedSecurityStatus);
+                    break;
+            }
+        }
+        else if (_type == RecordConsoleType.Security)
+        {
+            SetEntries(cr.SecurityEntries);
+            UpdateRecordBoxSecurity(record, state.SelectedSecurityStatus);
+        }
+        else if (_type == RecordConsoleType.Medical)
+        {
+            SetEntries(cr.MedicalEntries);
+            UpdateRecordBoxMedical(record);
+        }
+        else if (_type == RecordConsoleType.Admin)
+        {
+            UpdateRecordBoxEmployment(record);
+            UpdateRecordBoxMedical(record);
+            UpdateRecordBoxSecurity(record, state.SelectedSecurityStatus);
+            switch ((RecordConsoleType) RecordEntryViewType.SelectedId)
+            {
+            case RecordConsoleType.Employment:
+                SetEntries(cr.EmploymentEntries, true);
+                break;
+            case RecordConsoleType.Medical:
+                SetEntries(cr.MedicalEntries, true);
+                break;
+            case RecordConsoleType.Security:
+                SetEntries(cr.SecurityEntries, true);
+                break;
+            }
+        }
+    }
+
     public bool IsSecurity()
     {
-        return _type == RecordConsoleType.Security || _type == RecordConsoleType.Admin;
+        return _type == RecordConsoleType.Security || _type == RecordConsoleType.Admin || 
+               (_type == RecordConsoleType.Employment && _currentTab == RecordConsoleType.Security);
     }
 
     public void SetSecurityStatusEnabled(bool setting)
@@ -447,4 +569,3 @@ public sealed partial class CharacterRecordViewer : FancyWindow
         }
     }
 }
-

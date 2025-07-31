@@ -14,4 +14,10 @@ public sealed partial class CharacterRecordConsoleComponent : Component
 
     [DataField(required: true), ViewVariables(VVAccess.ReadOnly)]
     public RecordConsoleType ConsoleType;
+
+    /// <summary>
+    /// Current active tab for employment console
+    /// </summary>
+    [ViewVariables(VVAccess.ReadOnly)]
+    public RecordConsoleType CurrentTab = RecordConsoleType.Employment;
 }

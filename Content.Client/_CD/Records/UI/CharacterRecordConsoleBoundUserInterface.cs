@@ -10,6 +10,7 @@ namespace Content.Client._CD.Records.UI;
 public sealed class CharacterRecordConsoleBoundUserInterface(EntityUid owner, Enum key) : BoundUserInterface(owner, key)
 {
     [ViewVariables] private CharacterRecordViewer? _window;
+    private CharacterRecordConsoleState? _lastState;
 
     protected override void UpdateState(BoundUserInterfaceState baseState)
     {
@@ -17,10 +18,15 @@ public sealed class CharacterRecordConsoleBoundUserInterface(EntityUid owner, En
         if (baseState is not CharacterRecordConsoleState state)
             return;
 
+        _lastState = state;
+
         if (_window?.IsSecurity() ?? false)
         {
-            var comp = EntMan.GetComponent<CriminalRecordsConsoleComponent>(Owner);
-            _window!.SecurityWantedStatusMaxLength = comp.MaxStringLength;
+            if (EntMan.HasComponent<CriminalRecordsConsoleComponent>(Owner))
+            {
+                var comp = EntMan.GetComponent<CriminalRecordsConsoleComponent>(Owner);
+                _window!.SecurityWantedStatusMaxLength = comp.MaxStringLength;
+            }
         }
 
         _window?.UpdateState(state);
@@ -53,14 +59,19 @@ public sealed class CharacterRecordConsoleBoundUserInterface(EntityUid owner, En
 
         _window.OnFiltersChanged += (ty, txt) =>
         {
-            SendMessage(txt == null
-                ? new CharacterRecordsConsoleFilterMsg(null)
-                : new CharacterRecordsConsoleFilterMsg(new StationRecordsFilter(ty, txt)));
+            SendMessage(new CharacterRecordsConsoleFilterMsg(new StationRecordsFilter(ty, txt ?? "")));
+        };
+
+        _window.OnTabChanged += tabType =>
+        {
+            SendMessage(new CharacterRecordConsoleTabChangedMsg(tabType));
+            // УДАЛЕНО: обновление UI старыми данными — теперь ждем новое состояние от сервера!
         };
 
         _window.OnSetSecurityStatus += (status, reason) =>
         {
             SendMessage(new CriminalRecordChangeStatus(status, reason));
+            // УДАЛЕНО: обновление UI старыми данными — теперь ждем новое состояние от сервера!
         };
 
         _window.OpenCentered();

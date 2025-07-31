@@ -1,6 +1,8 @@
 cd-character-records-viewer-title-employ = Трудовые записи
-cd-character-records-viewer-title-sec = Записи службы безопасности
 cd-character-records-viewer-title-med = Медицинские записи
+cd-character-records-viewer-title-sec = Записи службы безопасности
+cd-character-records-viewer-employment-tab = Служебные записи
+cd-character-records-viewer-security-tab = Записи службы безопасности
 
 cd-record-viewer-empty-state = Не удалось получить записи.
 cd-record-viewer-no-record-selected = Пожалуйста, выберите запись.

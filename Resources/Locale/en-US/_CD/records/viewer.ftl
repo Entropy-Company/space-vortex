@@ -1,6 +1,8 @@
 cd-character-records-viewer-title-employ = Employment Records
-cd-character-records-viewer-title-sec = Security Records
 cd-character-records-viewer-title-med = Medical Records
+cd-character-records-viewer-title-sec = Security Records
+cd-character-records-viewer-employment-tab = Employment Records
+cd-character-records-viewer-security-tab = Security Records
 
 cd-record-viewer-empty-state = Cannot fetch records.
 cd-record-viewer-no-record-selected = Please select record.

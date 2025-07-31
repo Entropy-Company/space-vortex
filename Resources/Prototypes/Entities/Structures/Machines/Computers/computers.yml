@@ -380,18 +380,12 @@
   - type: CriminalRecordsConsole
   - type: UserInterface
     interfaces:
-      # Begin CD - Character Records
-      enum.CharacterRecordConsoleKey.Key:
-        type: CharacterRecordConsoleBoundUserInterface
-      # End CD - Character Records
+      enum.CriminalRecordsConsoleKey.Key:
+        type: CriminalRecordsConsoleBoundUserInterface
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
-  # Begin CD - Character Records
-  - type: CharacterRecordConsole
-    consoleType: Security
   - type: ActivatableUI
-    key: enum.CharacterRecordConsoleKey.Key
-  # End CD - Character Records
+    key: enum.CriminalRecordsConsoleKey.Key
   - type: Sprite
     layers:
     - map: ["computerLayerBody"]

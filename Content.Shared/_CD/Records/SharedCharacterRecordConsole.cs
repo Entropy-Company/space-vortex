@@ -55,6 +55,11 @@ public sealed class CharacterRecordConsoleState : BoundUserInterfaceState
     /// Security status of the selected record
     /// </summary>
     public (SecurityStatus, string?)? SelectedSecurityStatus = null;
+
+    /// <summary>
+    /// Current active tab for employment console
+    /// </summary>
+    public RecordConsoleType? CurrentTab = null;
 }
 
 [Serializable, NetSerializable]
@@ -76,5 +81,16 @@ public sealed class CharacterRecordConsoleSelectMsg : BoundUserInterfaceMessage
     public CharacterRecordConsoleSelectMsg(uint? characterRecordKey)
     {
         CharacterRecordKey = characterRecordKey;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class CharacterRecordConsoleTabChangedMsg : BoundUserInterfaceMessage
+{
+    public readonly RecordConsoleType TabType;
+
+    public CharacterRecordConsoleTabChangedMsg(RecordConsoleType tabType)
+    {
+        TabType = tabType;
     }
 }

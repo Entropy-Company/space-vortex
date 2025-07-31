@@ -30,6 +30,7 @@ public sealed class CharacterRecordConsoleSystem : EntitySystem
                 subr.Event<BoundUIOpenedEvent>((uid, component, _) => UpdateUi(uid, component));
                 subr.Event<CharacterRecordConsoleSelectMsg>(OnKeySelect);
                 subr.Event<CharacterRecordsConsoleFilterMsg>(OnFilterApplied);
+                subr.Event<CharacterRecordConsoleTabChangedMsg>(OnTabChanged);
             });
     }
 
@@ -45,31 +46,40 @@ public sealed class CharacterRecordConsoleSystem : EntitySystem
         UpdateUi(ent);
     }
 
+    private void OnTabChanged(Entity<CharacterRecordConsoleComponent> ent, ref CharacterRecordConsoleTabChangedMsg msg)
+    {
+        if (ent.Comp.ConsoleType == RecordConsoleType.Employment)
+            ent.Comp.CurrentTab = msg.TabType;
+        UpdateUi(ent);
+    }
+
     private void UpdateUi(EntityUid entity, CharacterRecordConsoleComponent? console = null)
     {
         if (!Resolve(entity, ref console))
             return;
 
+        var state = PrepareUiState(entity, console);
+        _ui.SetUiState(entity, CharacterRecordConsoleKey.Key, state);
+    }
+
+    private CharacterRecordConsoleState PrepareUiState(EntityUid entity, CharacterRecordConsoleComponent console)
+    {
         var station = _station.GetOwningStation(entity);
         if (!HasComp<StationRecordsComponent>(station) ||
             !HasComp<CharacterRecordsComponent>(station))
         {
-            SendState(entity, new CharacterRecordConsoleState { ConsoleType = console.ConsoleType });
-            return;
+            return new CharacterRecordConsoleState { ConsoleType = console.ConsoleType };
         }
 
         var characterRecords = _characterRecords.QueryRecords(station.Value);
-        // Get the name and station records key display from the list of records
         var names = new Dictionary<uint, CharacterRecordConsoleState.CharacterInfo>();
         foreach (var (i, r) in characterRecords)
         {
             var netEnt = _entity.GetNetEntity(r.Owner!.Value);
-            // Admins get additional info to make it easier to run commands
             var nameJob = console.ConsoleType != RecordConsoleType.Admin
                 ? $"{r.Name} ({r.JobTitle})"
                 : $"{r.Name} ({netEnt}, {r.JobTitle}";
 
-            // Apply any filter the user has set
             if (console.Filter != null)
             {
                 if (IsSkippedRecord(console.Filter, r, nameJob))
@@ -86,32 +96,30 @@ public sealed class CharacterRecordConsoleSystem : EntitySystem
                 { CharacterDisplayName = nameJob, StationRecordKey = r.StationRecordsKey };
         }
 
-        var record =
-            console.SelectedIndex == null || !characterRecords.TryGetValue(console.SelectedIndex!.Value, out var value)
-                ? null
-                : value;
-        (SecurityStatus, string?)? securityStatus = null;
+        FullCharacterRecords? record = null;
+        if (console.SelectedIndex != null && characterRecords.TryGetValue(console.SelectedIndex.Value, out var recSel))
+            record = recSel;
 
-        // If we need the character's security status, gather it from the criminal records
-        if ((console.ConsoleType == RecordConsoleType.Admin ||
-             console.ConsoleType == RecordConsoleType.Security)
-            && record?.StationRecordsKey != null)
+        (SecurityStatus, string?)? securityStatus = null;
+        if (record != null && record.StationRecordsKey != null)
         {
             var key = new StationRecordKey(record.StationRecordsKey.Value, station.Value);
             if (_records.TryGetRecord<CriminalRecord>(key, out var entry))
                 securityStatus = (entry.Status, entry.Reason);
         }
 
-        SendState(entity,
-            new CharacterRecordConsoleState
-            {
-                ConsoleType = console.ConsoleType,
-                CharacterList = names,
-                SelectedIndex = console.SelectedIndex,
-                SelectedRecord = record,
-                Filter = console.Filter,
-                SelectedSecurityStatus = securityStatus,
-            });
+        RecordConsoleType? currentTab = console.ConsoleType == RecordConsoleType.Employment ? console.CurrentTab : null;
+
+        return new CharacterRecordConsoleState
+        {
+            ConsoleType = console.ConsoleType,
+            CharacterList = names,
+            SelectedIndex = console.SelectedIndex,
+            SelectedRecord = record,
+            Filter = console.Filter,
+            SelectedSecurityStatus = securityStatus,
+            CurrentTab = currentTab,
+        };
     }
 
     private void SendState(EntityUid entity, CharacterRecordConsoleState state)
@@ -119,9 +127,6 @@ public sealed class CharacterRecordConsoleSystem : EntitySystem
         _ui.SetUiState(entity, CharacterRecordConsoleKey.Key, state);
     }
 
-    /// <summary>
-    /// Almost exactly the same as <see cref="StationRecordsSystem.IsSkipped"/>
-    /// </summary>
     private static bool IsSkippedRecord(StationRecordsFilter filter,
         FullCharacterRecords record,
         string nameJob)
