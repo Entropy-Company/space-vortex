@@ -38,7 +38,6 @@ public partial class InteractionsPanel
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.Interact, new PointerInputCmdHandler(HandleInteract))
             .Bind(ContentKeyFunctions.Interact, InputCmdHandler.FromDelegate(enabled: TryAutoInteraction))
-            .Bind(ContentKeyFunctions.OpenInteractionsMenu, InputCmdHandler.FromDelegate(enabled: TryOpenInteractionsMenu))
             .Register<InteractionsPanel>();
     }
 
