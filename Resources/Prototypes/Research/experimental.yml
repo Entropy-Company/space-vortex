@@ -117,7 +117,7 @@
     sprite: Objects/Weapons/Guns/Battery/particle_decelerator.rsi
     state: base
   discipline: Experimental
-  cost: 90000
+  cost: 9000
   recipeUnlocks:
     - WeaponParticleDecelerator
     - HoloprojectorField
