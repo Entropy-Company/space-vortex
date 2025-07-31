@@ -38,6 +38,7 @@ public partial class InteractionsPanel
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.Interact, new PointerInputCmdHandler(HandleInteract))
             .Bind(ContentKeyFunctions.Interact, InputCmdHandler.FromDelegate(enabled: TryAutoInteraction))
+            .Bind(ContentKeyFunctions.OpenInteractionsMenu, InputCmdHandler.FromDelegate(enabled: TryOpenInteractionsMenu))
             .Register<InteractionsPanel>();
     }
 
@@ -80,6 +81,23 @@ public partial class InteractionsPanel
         {
             OpenUI(player, player);
         }
+    }
+
+    private void TryOpenInteractionsMenu(ICommonSession? session)
+    {
+        if (session?.AttachedEntity is not { Valid: true } player || !Exists(player))
+            return;
+
+        if (!HasComp<InteractionsComponent>(player))
+            return;
+
+        if (_ui.IsUiOpen(player, InteractionWindowUiKey.Key))
+        {
+            _ui.CloseUi(player, InteractionWindowUiKey.Key);
+            return;
+        }
+
+        OpenUI(player, player);
     }
 
     public bool HandleInteract(ICommonSession? playerSession, EntityCoordinates coordinates, EntityUid entity)
@@ -182,7 +200,7 @@ public partial class InteractionsPanel
         var rawMsg = _random.Pick(interactionPrototype.InteractionMessages);
         var msg = FormatInteractionMessage(rawMsg, ent.Owner, target.Value);
 
-        if (userPref && targetPref && targetIsPlayer)
+        if (userPref && targetPref)
         {
             _chatSystem.SendInVoiceRange(ChatChannel.Emotes, msg, msg, ent.Owner, ChatTransmitRange.Normal, color: Color.Pink);
         }
@@ -247,12 +265,14 @@ public partial class InteractionsPanel
 
         var msg = FormatInteractionMessage(data.InteractionMessage, user, target);
 
-        if (userPref && targetPref && targetIsPlayer)
+        if (userPref && targetPref)
         {
+            // Настройка включена - отправляем всем в голосовом диапазоне
             _chatSystem.SendInVoiceRange(ChatChannel.Emotes, msg, msg, user, ChatTransmitRange.Normal, color: Color.Pink);
         }
         else
         {
+            // Настройка выключена - отправляем только пользователю и цели
             var filter = Filter.Empty();
             filter.AddPlayer(userSession);
 
