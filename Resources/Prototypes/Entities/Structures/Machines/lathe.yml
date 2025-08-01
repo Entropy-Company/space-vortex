@@ -262,6 +262,7 @@
     - EngineeringBoardsStatic
     - CircuitFloorsStatic
     dynamicPacks:
+    - ClonDinamic
     - EngineeringBoards
     - CargoBoards
     - MedicalBoards
