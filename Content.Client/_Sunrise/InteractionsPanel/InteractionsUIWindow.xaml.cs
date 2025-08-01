@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 using Content.Client._Sunrise.InteractionsPanel.Models;
 using Content.Shared._Sunrise.InteractionsPanel.Data.Components;
 using Content.Shared._Sunrise.InteractionsPanel.Data.Prototypes;
@@ -76,15 +77,83 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
         MainTabContainer.SetTabTitle(1, "Пользовательские");
         MainTabContainer.SetTabTitle(2, "Настройки");
 
-        SearchInput.OnTextChanged += OnSearchTextChanged;
+        SavedInteractionsContainer.AddChild(new Label { Text = "Загрузка..." });
+        CategoriesContainer.AddChild(new Label { Text = "Загрузка..." });
 
+        SearchInput.OnTextChanged += OnSearchTextChanged;
         CustomInteractionSearchInput.OnTextChanged += OnCustomInteractionSearchTextChanged;
         NewCustomInteractionButton.OnPressed += OnNewCustomInteractionPressed;
 
-        LoadSavedInteractions();
-        LoadOpenCategories();
-        LoadFavoriteInteractions();
+        _ = InitializeAsync();
+    }
+
+    private async Task InitializeAsync()
+    {
+        await LoadSavedInteractionsAsync();
+        await LoadOpenCategoriesAsync();
+        await LoadFavoriteInteractionsAsync();
         InitializeSettings();
+    }
+
+    private async Task LoadSavedInteractionsAsync()
+    {
+        SavedInteractionsContainer.DisposeAllChildren();
+        var interactions = await _customInteractionService.GetInteractionsAsync();
+        if (!string.IsNullOrEmpty(_customSearchText))
+        {
+            interactions = interactions
+                .Where(i => i.Name.ToLowerInvariant().Contains(_customSearchText) ||
+                          i.Description.ToLowerInvariant().Contains(_customSearchText))
+                .ToList();
+        }
+        if (interactions.Count == 0)
+        {
+            var emptyLabel = new Label
+            {
+                Text = string.IsNullOrEmpty(_customSearchText)
+                    ? "У вас нет сохраненных взаимодействий"
+                    : "Ничего не найдено",
+                HorizontalAlignment = HAlignment.Center,
+                VerticalAlignment = VAlignment.Center,
+                FontColorOverride = TextMuted,
+                Margin = new Thickness(0, 10, 0, 0)
+            };
+            SavedInteractionsContainer.AddChild(emptyLabel);
+            return;
+        }
+        foreach (var interaction in interactions)
+        {
+            SavedInteractionsContainer.AddChild(CreateSavedInteractionCard(interaction));
+        }
+    }
+
+    private async Task LoadOpenCategoriesAsync()
+    {
+        _openCategories.Clear();
+        var saved = _cfg.GetCVar(InteractionsCVars.OpenInteractionCategories);
+        if (!string.IsNullOrEmpty(saved))
+        {
+            foreach (var cat in saved.Split(','))
+            {
+                _openCategories.Add(cat);
+            }
+        }
+    }
+
+    private async Task LoadFavoriteInteractionsAsync()
+    {
+        _favoriteInteractions.Clear();
+        var saved = _cfg.GetCVar(InteractionsCVars.FavoriteInteractions);
+        if (!string.IsNullOrEmpty(saved))
+        {
+            foreach (var interactionId in saved.Split(','))
+            {
+                if (!string.IsNullOrEmpty(interactionId))
+                {
+                    _favoriteInteractions.Add(interactionId);
+                }
+            }
+        }
     }
 
     private void InitializeSettings()
@@ -237,11 +306,11 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
 
     #region UI Population
 
-    private void PopulateCategories(List<string> interactionIds)
+    private async Task PopulateCategories(List<string> interactionIds)
     {
         CategoriesContainer.DisposeAllChildren();
 
-        var customInteractions = _customInteractionService.GetInteractions();
+        var customInteractions = await _customInteractionService.GetInteractionsAsync();
 
         if (!string.IsNullOrEmpty(_searchText))
         {
@@ -867,7 +936,7 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
     private void OnCustomInteractionSearchTextChanged(LineEdit.LineEditEventArgs args)
     {
         _customSearchText = args.Text.ToLowerInvariant();
-        LoadSavedInteractions();
+        LoadSavedInteractionsAsync();
     }
 
     private void OnNewCustomInteractionPressed(BaseButton.ButtonEventArgs args)
@@ -877,7 +946,7 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
         {
             if (saved)
             {
-                LoadSavedInteractions();
+                LoadSavedInteractionsAsync();
                 if (_currentInteractionIds != null)
                 {
                     _buttonInteractions.Clear();
@@ -887,43 +956,6 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
             }
         });
         editor.OpenCentered();
-    }
-
-    private void LoadSavedInteractions()
-    {
-        SavedInteractionsContainer.DisposeAllChildren();
-
-        var interactions = _customInteractionService.GetInteractions();
-
-        if (!string.IsNullOrEmpty(_customSearchText))
-        {
-            interactions = interactions
-                .Where(i => i.Name.ToLowerInvariant().Contains(_customSearchText) ||
-                            i.Description.ToLowerInvariant().Contains(_customSearchText))
-                .ToList();
-        }
-
-        if (interactions.Count == 0)
-        {
-            var emptyLabel = new Label
-            {
-                Text = string.IsNullOrEmpty(_customSearchText)
-                    ? "У вас нет сохраненных взаимодействий"
-                    : "Ничего не найдено",
-                HorizontalAlignment = HAlignment.Center,
-                VerticalAlignment = VAlignment.Center,
-                FontColorOverride = TextMuted,
-                Margin = new Thickness(0, 10, 0, 0)
-            };
-
-            SavedInteractionsContainer.AddChild(emptyLabel);
-            return;
-        }
-
-        foreach (var interaction in interactions)
-        {
-            SavedInteractionsContainer.AddChild(CreateSavedInteractionCard(interaction));
-        }
     }
 
     private Control CreateSavedInteractionCard(CustomInteraction interaction)
@@ -1057,7 +1089,7 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
         {
             if (saved)
             {
-                LoadSavedInteractions();
+                LoadSavedInteractionsAsync();
                 if (_currentInteractionIds != null)
                 {
                     _buttonInteractions.Clear();
@@ -1145,7 +1177,7 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
         confirmButton.OnPressed += _ =>
         {
             _customInteractionService.RemoveInteraction(interaction.Id);
-            LoadSavedInteractions();
+            LoadSavedInteractionsAsync();
             if (_currentInteractionIds != null)
             {
                 _buttonInteractions.Clear();

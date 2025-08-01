@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Utility;
 
@@ -54,13 +55,14 @@ public sealed class CustomInteractionService
         }
     }
 
-    public List<CustomInteraction> GetInteractions()
+    public async Task<List<CustomInteraction>> GetInteractionsAsync()
     {
-        if (_customInteractions.Count == 0)
+        return await Task.Run(() =>
         {
-            LoadInteractions();
-        }
-        return _customInteractions.Values.ToList();
+            if (_customInteractions.Count == 0)
+                LoadInteractions();
+            return _customInteractions.Values.ToList();
+        });
     }
 
     public CustomInteraction? GetInteraction(string id)
