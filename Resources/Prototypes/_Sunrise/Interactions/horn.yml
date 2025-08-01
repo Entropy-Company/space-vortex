@@ -13,7 +13,7 @@
   - !type:HasMarkingCondition
     checkInitiator: false
     checkTarget: true
-    markingWhitelist: # TODO добавить ВСЕ рожки которые есть
+    markingWhitelist:
     - DemonHornsDeer
     - DemonCowHorns
     - DemonHornsSmall

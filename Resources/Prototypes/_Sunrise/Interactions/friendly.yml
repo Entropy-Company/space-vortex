@@ -17,7 +17,7 @@
 - type: interaction
   id: FriendlySniff
   name: "Обнюхать"
-  icon: FriendlyHandshakeIcon # TODO новый спрайт
+  icon: FriendlyHandshakeIcon
   category: Friendly
   appearConditions:
   - !type:HasTargetCondition
@@ -73,7 +73,7 @@
     - !type:SpeciesCondition
       checkTarget: false
       checkInitiator: true
-      allowedSpecies: [Vulpkanin, Slime, Felinid, Demon, Reptilian]
+      allowedSpecies: [Vulpkanin, Slime, Felinid, Demon, Reptilian, Tajaran]
     - !type:HasVisualLayerCondition
       checkTarget: false
       checkInitiator: true
@@ -94,7 +94,7 @@
     - !type:SpeciesCondition
       checkTarget: true
       checkInitiator: false
-      allowedSpecies: [Human, Vulpkanin, Slime, Felinid, Demon, Reptilian]
+      allowedSpecies: [Human, Vulpkanin, Slime, Felinid, Demon, Reptilian, Tajaran]
     - !type:HasVisualLayerCondition
       checkTarget: true
       checkInitiator: false
@@ -143,23 +143,6 @@
   - FriendlyXZ
 
 - type: interaction
-  id: NeckСhoke
-  name: "Душить"
-  icon: FriendlyHandshakeIcon # TODO новый спрайт
-  category: Friendly
-  appearConditions:
-  - !type:HasTargetCondition
-    allowSelfTargeting: false
-  interactionMessages:
-  - "%user сильно сдавливает шею %target своими пальцами"
-  - "%user обхатывает шею %target рукой, сдавливая её"
-  - "%user схватил за горло %target и с силой сжал его своими пальцами"
-  - "%user хватает рукой шею %target и, сдавливая её, заставляет %target задыхаться"
-  interactionSounds:
-  - FriendlyNeckChockSound1
-  - FriendlyNeckChockSound2
-
-- type: interaction
   id: TailIntertwine
   name: "Сплестись хвостами"
   icon: FriendlyTailHugIcon
@@ -170,7 +153,7 @@
     - !type:SpeciesCondition
       checkTarget: true
       checkInitiator: true
-      allowedSpecies: [Vulpkanin, Slime, Felinid, Demon, Reptilian]
+      allowedSpecies: [Vulpkanin, Slime, Felinid, Demon, Reptilian, Tajaran]
     - !type:HasVisualLayerCondition
       checkTarget: true
       checkInitiator: true
@@ -184,7 +167,7 @@
 - type: interaction
   id: EarsMrrr
   name: "Помурчать на ушко"
-  icon: FriendlyHandshakeIcon # TODO новый спрайт
+  icon: FriendlyHandshakeIcon
   category: Friendly
   appearConditions:
     - !type:HasTargetCondition
@@ -192,7 +175,7 @@
     - !type:SpeciesCondition
       checkTarget: false
       checkInitiator: true
-      allowedSpecies: [Felinid]
+      allowedSpecies: [Felinid, Tajaran]
   interactionMessages:
   - "%user нежно мурчит на ушко %target"
   - "%user поднося свою голову ближе к %target, начинает мурчать на ушко"
@@ -215,25 +198,9 @@
   - "%user открывает рот и высовывает язык на всю длину"
 
 - type: interaction
-  id: FriendlyVulpaBreath
-  name: "Дышать по-собачьи"
-  icon: FriendlyHandshakeIcon # TODO новый спрайт
-  category: Friendly
-  appearConditions:
-    - !type:SelfOnlyCondition
-    - !type:BodyAreaTagCondition
-      checkInitiator: true
-      checkTarget: false
-      categories: [ "рот" ]
-      requireExposed: true
-  interactionMessages:
-  - "%user быстро дышит с высунутым языком"
-  - "%user быстро дышит с открытой пастью"
-
-- type: interaction
   id: FriendlyGrimace
   name: "Скорчить рожу"
-  icon: FriendlyHandshakeIcon # TODO новый спрайт
+  icon: FriendlyHandshakeIcon
   category: Friendly
   appearConditions:
     - !type:SelfOnlyCondition
