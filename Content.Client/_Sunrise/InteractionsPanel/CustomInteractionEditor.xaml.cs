@@ -43,7 +43,6 @@ public sealed partial class CustomInteractionEditor : DefaultWindow
     private Action<bool>? _onClose;
 
     private readonly Dictionary<int, string> _categoryIds = new();
-    private readonly Dictionary<int, string> _iconIds = new();
     private readonly Dictionary<int, string> _effectIds = new();
     private readonly Dictionary<int, string> _soundIds = new();
 
@@ -65,7 +64,6 @@ public sealed partial class CustomInteractionEditor : DefaultWindow
             Id = string.Empty,
             Name = string.Empty,
             Description = string.Empty,
-            IconId = string.Empty,
             CategoryId = string.Empty,
             InteractionMessages = new List<string>(),
             SoundIds = new List<string>(),
@@ -100,7 +98,6 @@ public sealed partial class CustomInteractionEditor : DefaultWindow
         SpawnsEffectCheckBox.OnToggled += OnSpawnsEffectToggled;
 
         CategoryOption.OnItemSelected += OnCategorySelected;
-        IconOption.OnItemSelected += OnIconSelected;
         EffectOption.OnItemSelected += OnEffectSelected;
         SoundOption.OnItemSelected += OnSoundSelected;
 
@@ -113,11 +110,7 @@ public sealed partial class CustomInteractionEditor : DefaultWindow
         CategoryOption.SelectId(args.Id);
     }
 
-    private void OnIconSelected(OptionButton.ItemSelectedEventArgs args)
-    {
-        IconOption.SelectId(args.Id);
-        UpdateIconPreview();
-    }
+    
 
     private void OnEffectSelected(OptionButton.ItemSelectedEventArgs args)
     {
@@ -137,7 +130,6 @@ public sealed partial class CustomInteractionEditor : DefaultWindow
     private void LoadData()
     {
         _categoryIds.Clear();
-        _iconIds.Clear();
         _effectIds.Clear();
         _soundIds.Clear();
 
@@ -160,24 +152,7 @@ public sealed partial class CustomInteractionEditor : DefaultWindow
             categoryId++;
         }
 
-        IconOption.Clear();
-        int iconId = 0;
-        IconOption.AddItem("Нет");
-        _iconIds[iconId] = string.Empty;
-
-        iconId++;
-        foreach (var icon in _prototypeManager.EnumeratePrototypes<InteractionIconPrototype>().OrderBy(i => i.Name))
-        {
-            _iconIds[iconId] = icon.ID;
-            IconOption.AddItem(icon.Name, iconId);
-
-            if (icon.ID == _interaction.IconId)
-            {
-                IconOption.SelectId(iconId);
-            }
-
-            iconId++;
-        }
+        
 
         EffectOption.Clear();
         int effectId = 0;
@@ -234,7 +209,6 @@ public sealed partial class CustomInteractionEditor : DefaultWindow
         }
 
         UpdateEffectControlsEnabled();
-        UpdateIconPreview();
     }
 
     #endregion
@@ -260,19 +234,7 @@ public sealed partial class CustomInteractionEditor : DefaultWindow
         EffectChanceLabel.Modulate = enabled ? Color.White : TextMuted;
     }
 
-    private void UpdateIconPreview()
-    {
-        if (!_iconIds.TryGetValue(IconOption.SelectedId, out var iconId) || string.IsNullOrEmpty(iconId))
-        {
-            IconPreview.Texture = null;
-            return;
-        }
-
-        if (_prototypeManager.TryIndex<InteractionIconPrototype>(iconId, out var iconProto))
-        {
-            IconPreview.Texture = iconProto.Icon.Frame0();
-        }
-    }
+    
 
     #endregion
 
@@ -350,9 +312,6 @@ public sealed partial class CustomInteractionEditor : DefaultWindow
         _interaction.Name = NameInput.Text.Trim();
         _interaction.Description = DescriptionInput.Text.Trim();
         _interaction.CategoryId = categoryId;
-
-        _iconIds.TryGetValue(IconOption.SelectedId, out var iconId);
-        _interaction.IconId = iconId ?? string.Empty;
 
         _interaction.SpawnsEffect = SpawnsEffectCheckBox.Pressed;
         _interaction.EffectChance = EffectChanceSlider.Value;

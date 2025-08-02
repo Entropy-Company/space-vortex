@@ -5,7 +5,6 @@ public sealed class CustomInteraction
     public string Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public string IconId { get; set; } = string.Empty;
     public string CategoryId { get; set; } = string.Empty;
     public List<string> InteractionMessages { get; set; } = new();
     public List<string> SoundIds { get; set; } = new();

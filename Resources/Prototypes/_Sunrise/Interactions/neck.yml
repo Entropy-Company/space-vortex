@@ -1,7 +1,6 @@
 - type: interaction
   id: NeckNuzzle
   name: "Потереться мордочкой о шею"
-  icon: FriendlyHandshakeIcon # TODO новый спрайт
   category: Neck
   interactionMessages:
   - "%user нежно трётся мордочкой о шею %target"

@@ -1,7 +1,6 @@
 - type: interaction
   id: FriendlyHandshake
   name: "Пожать руку"
-  icon: FriendlyHandshakeIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
@@ -15,7 +14,6 @@
 - type: interaction
   id: FriendlyPatShoulder
   name: "Похлопать по плечу"
-  icon: FriendlyPatShoulderIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
@@ -29,7 +27,6 @@
 - type: interaction
   id: FriendlyHighfive
   name: "Дать пять"
-  icon: FriendlyHignFiveIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
@@ -45,7 +42,6 @@
 - type: interaction
   id: FriendlyPatHead
   name: "Погладить по голове"
-  icon: FacePatsIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
@@ -59,7 +55,6 @@
 - type: interaction
   id: FriendlyShoulderMassage
   name: "Помассировать плечи"
-  icon: FriendlyShoulderMassageIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
@@ -73,15 +68,12 @@
 - type: interaction
   id: FriendlyBlowSlap
   name: "Дать пощечину"
-  icon: FriendlyBlowSlapIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
     allowSelfTargeting: false
   interactionMessages:
   - "%user резко бьет ладонью по щеке %target"
-  - "%user сильно шлепает %target по лицу ладонью"
-  - "%user с громким хлопком ударяет %target по щеке ладонью"
   - "%user дает ладонью звонкую пощечину %target"
   interactionSounds:
   - FriendlySlap1
@@ -90,7 +82,6 @@
 - type: interaction
   id: FriendlyNoseBoop
   name: "Тронуть кончик носа пальцем"
-  icon: FriendlyNoseBoopIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
@@ -101,7 +92,6 @@
 - type: interaction
   id: FriendlyFingerTap
   name: "Потрогать спину пальцем"
-  icon: FriendlyFingerTapIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
@@ -112,7 +102,6 @@
 - type: interaction
   id: FriendlyBackMassage
   name: "Помассировать спину"
-  icon: FriendlyShoulderMassageIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
@@ -125,7 +114,6 @@
 - type: interaction
   id: FriendlyPushups
   name: "Делать отжимания"
-  icon: FriendlyHandshakeIcon 
   category: Hands
   appearConditions:
     - !type:SelfOnlyCondition
@@ -137,33 +125,27 @@
 - type: interaction
   id: FriendlyFuck
   name: "Показать фак"
-  icon: FriendlyHandshakeIcon 
   category: Hands
   appearConditions:
     - !type:SelfOnlyCondition
   interactionMessages:
-  - "%user показывает фак"
-  - "%user элегантно показывает фак"
+  - "%user показывает средний палец"
   interactionSounds:
   - FriendlySalute
 
 - type: interaction
   id: FriendlyFingerIntertwine
   name: "Сплестись пальчиками"
-  icon: FriendlyIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
     allowSelfTargeting: false
   interactionMessages:
   - "%user слетается своим пальцем с пальцем %target"
-  - "%user нежно берёт палец %target и сплетает со своим"
-  - "%user аккуратно сплетает пальцы с %target"
 
 - type: interaction
   id: FriendlyFofan
   name: "Дать фофан"
-  icon: FriendlyBlowSlapIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
@@ -171,8 +153,6 @@
   interactionMessages:
   - "%user натягивает средний палец, после со всей силы дает по лбу %target"
   - "%user натягивает указательный палец, после со всей силы дает по лбу %target"
-  - "%user натягивает средний палец, удерживая его большим пальцем, после бьёт по лбу %target"
-  - "%user натягивает указательный палец, удерживая его большим пальцем, после бьёт по лбу %target"
   interactionSounds:
     - FriendlySlap1
     - FriendlySlap2
@@ -180,7 +160,6 @@
 - type: interaction
   id: HandsLeanOnElbows
   name: "Опереться локтями на стол"
-  icon: FriendlyIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
@@ -193,7 +172,6 @@
 - type: interaction
   id: FriendlyShoulderMassageSelf
   name: "Размять плечи"
-  icon: FriendlyShoulderMassageIcon
   category: Hands
   appearConditions:
   - !type:HasTargetCondition
@@ -201,3 +179,36 @@
   interactionMessages:
   - "%user разминает себе плечи"
   - "%user массирует собственные плечи"
+
+- type: interaction
+  id: HandLeanOnWall
+  name: "Опереться на стену спиной"
+  category: Hands
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: true
+  interactionMessages:
+  - "%user облокачивается спиной о стену"
+  - "%user слегка откидывается назад, упираясь спиной в стену"
+  - "%user облокачивается на стену."
+
+- type: interaction
+  id: HandRubHands
+  name: "Потереть ладони"
+  category: Hands
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: true
+  interactionMessages:
+  - "%user потирает ладони друг о друга"
+  - "%user потирает ладони."
+
+- type: interaction
+  id: HandRubNeck
+  name: "Потереть шею рукой"
+  category: Hands
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: true
+  interactionMessages:
+  - "%user потирает ладонью шею"

@@ -81,43 +81,6 @@
                                                  HorizontalExpand="True"
                                                  MinHeight="24"/>
                                 </BoxContainer>
-
-                                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="4 0 0 0">
-                                    <Label Text="Иконка:"
-                                           FontColorOverride="#e6b8ff"
-                                           Margin="0 0 0 2"/>
-                                    <OptionButton Name="IconOption"
-                                                 HorizontalExpand="True"
-                                                 MinHeight="24"/>
-                                </BoxContainer>
-                            </BoxContainer>
-
-                            <!-- Preview Section -->
-                            <BoxContainer Orientation="Horizontal" Margin="0 8 0 4" HorizontalExpand="True">
-                                <PanelContainer Margin="0 0 4 0" HorizontalExpand="True">
-                                    <PanelContainer.PanelOverride>
-                                        <gfx:StyleBoxFlat BackgroundColor="#3e2440" BorderColor="#cb23fe" BorderThickness="1"/>
-                                    </PanelContainer.PanelOverride>
-
-                                    <BoxContainer Orientation="Vertical" Margin="8" HorizontalAlignment="Center">
-                                        <Label Text="Превью иконки"
-                                               FontColorOverride="#e6b8ff"
-                                               HorizontalAlignment="Center"
-                                               StyleClasses="LabelSubText"
-                                               Margin="0 0 0 4"/>
-
-                                        <PanelContainer MinSize="48 48" MaxSize="48 48" Margin="0 4">
-                                            <PanelContainer.PanelOverride>
-                                                <gfx:StyleBoxFlat BackgroundColor="#2c4455"/>
-                                            </PanelContainer.PanelOverride>
-
-                                            <TextureRect Name="IconPreview"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"
-                                                        Stretch="KeepAspectCentered"/>
-                                        </PanelContainer>
-                                    </BoxContainer>
-                                </PanelContainer>
                             </BoxContainer>
                         </BoxContainer>
                     </PanelContainer>

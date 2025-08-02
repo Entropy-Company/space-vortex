@@ -468,18 +468,6 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
 
         var collapsible = new Collapsible(heading, body);
 
-        heading.OnPressed += _ =>
-        {
-            collapsible.BodyVisible = !collapsible.BodyVisible;
-
-            if (collapsible.BodyVisible)
-                _openCategories.Add(categoryName);
-            else
-                _openCategories.Remove(categoryName);
-
-            SaveOpenCategories();
-        };
-
         var interactionsContainer = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
@@ -537,21 +525,6 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
             Disabled = isOnCooldown
         };
 
-        if (interaction.Icon.HasValue && _prototypeManager.TryIndex(interaction.Icon.Value, out InteractionIconPrototype? iconProto))
-        {
-            var iconRect = new TextureRect
-            {
-                TextureScale = new Vector2(1.0f, 1.0f),
-                Stretch = TextureRect.StretchMode.KeepAspectCentered,
-                Texture = _spriteSystem.Frame0(iconProto.Icon),
-                HorizontalAlignment = HAlignment.Left,
-                VerticalAlignment = VAlignment.Center,
-                Margin = new Thickness(10, 0, 10, 0),
-                // MinSize = new Vector2(64, 64),
-                // MaxSize = new Vector2(64, 64)
-            };
-            button.AddChild(iconRect);
-        }
 
         if (isOnCooldown)
         {
@@ -679,22 +652,6 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
             Disabled = isOnCooldown,
         };
 
-        if (!string.IsNullOrEmpty(interaction.IconId) &&
-            _prototypeManager.TryIndex<InteractionIconPrototype>(interaction.IconId, out var iconProto))
-        {
-            var iconRect = new TextureRect
-            {
-                TextureScale = new Vector2(1.0f, 1.0f),
-                Stretch = TextureRect.StretchMode.KeepAspectCentered,
-                Texture = _spriteSystem.Frame0(iconProto.Icon),
-                HorizontalAlignment = HAlignment.Left,
-                VerticalAlignment = VAlignment.Center,
-                Margin = new Thickness(10, 0, 10, 0),
-                // MinSize = new Vector2(64, 64),
-                // MaxSize = new Vector2(64, 64)
-            };
-            button.AddChild(iconRect);
-        }
 
         if (isOnCooldown)
         {
@@ -738,6 +695,7 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
         };
 
         buttonBox.AddChild(button);
+
 
         var favoriteButton = new Button
         {
@@ -1074,7 +1032,6 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
             Id = interaction.Id,
             Name = interaction.Name,
             Description = interaction.Description,
-            IconId = interaction.IconId,
             CategoryId = interaction.CategoryId,
             InteractionMessages = new List<string>(interaction.InteractionMessages),
             SoundIds = new List<string>(interaction.SoundIds),

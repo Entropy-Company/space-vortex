@@ -2,7 +2,6 @@
   id: FaceCheeksPull
   name: "Потискать за щёчки"
   category: Face
-  icon: FaceCheeksPullIcon
   appearConditions:
   - !type:HasTargetCondition
     allowSelfTargeting: false
@@ -21,7 +20,6 @@
   id: FacePats
   name: "Погладить по лицу"
   category: Face
-  icon: FacePatsIcon
   appearConditions:
     - !type:HasTargetCondition
       allowSelfTargeting: false
@@ -38,3 +36,38 @@
     - FacePatsSound
   cooldown: 3
 
+- type: interaction
+  id: FacePats
+  name: "Изобразить тошноту"
+  category: Face
+  appearConditions:
+    - !type:HasTargetCondition
+      allowSelfTargeting: false
+  interactionMessages:
+    - "%user бледнеет в лице хватаясь за свой живот"
+    - "%user хватается за свой живот"
+  cooldown: 3
+
+- type: interaction
+  id: FacePats
+  name: "Рыгнуть"
+  category: Face
+  appearConditions:
+    - !type:HasTargetCondition
+      allowSelfTargeting: false
+  interactionMessages:
+    - "%user издает отрыжку"
+    - "%user отрыгнул"
+  cooldown: 3
+
+- type: interaction
+  id: FacePats
+  name: "Подмигнуть"
+  category: Face
+  appearConditions:
+    - !type:HasTargetCondition
+      allowSelfTargeting: false
+  interactionMessages:
+    - "%user подмигивает одним глазом"
+    - "%user подмигивает"
+  cooldown: 3

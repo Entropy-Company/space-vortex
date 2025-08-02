@@ -1,7 +1,6 @@
 - type: interaction
   id: FriendlyHug
   name: "Обнять"
-  icon: FriendlyIcon
   category: Friendly
   appearConditions:
   - !type:HasTargetCondition
@@ -17,7 +16,6 @@
 - type: interaction
   id: FriendlySniff
   name: "Обнюхать"
-  icon: FriendlyHandshakeIcon
   category: Friendly
   appearConditions:
   - !type:HasTargetCondition
@@ -39,7 +37,6 @@
 - type: interaction
   id: FaceRubCat
   name: "Потереться как котик"
-  icon: FriendlyFaceRubCatIcon
   category: Friendly
   appearConditions:
     - !type:HasTargetCondition
@@ -60,7 +57,6 @@
 - type: interaction
   id: FriendlyHeadTailpats
   name: "Погладить хвостиком"
-  icon: FriendlyTailIcon
   category: Friendly
   appearConditions:
     - !type:HasTargetCondition
@@ -86,7 +82,6 @@
 - type: interaction
   id: FriendlyTailPull
   name: "Дернуть за хвост"
-  icon: FriendlyTailPullIcon
   category: Friendly
   appearConditions:
     - !type:HasTargetCondition
@@ -108,7 +103,6 @@
 - type: interaction
   id: FriendlyWristSlap
   name: "Дать подзатыльник"
-  icon: FriendlyBlowSlapIcon
   category: Friendly
   appearConditions:
   - !type:HasTargetCondition
@@ -130,7 +124,6 @@
 - type: interaction
   id: FriendlyJojoPosing
   name: "Принять крутую позу"
-  icon: FriendlyFingerTapIcon
   category: Friendly
   appearConditions:
   - !type:SelfOnlyCondition
@@ -145,7 +138,6 @@
 - type: interaction
   id: TailIntertwine
   name: "Сплестись хвостами"
-  icon: FriendlyTailHugIcon
   category: Friendly
   appearConditions:
     - !type:HasTargetCondition
@@ -167,7 +159,6 @@
 - type: interaction
   id: EarsMrrr
   name: "Помурчать на ушко"
-  icon: FriendlyHandshakeIcon
   category: Friendly
   appearConditions:
     - !type:HasTargetCondition
@@ -185,7 +176,6 @@
 - type: interaction
   id: FriendlyShowTongue
   name: Высунуть язык
-  icon: FriendlyHandshakeIcon # TODO новый спрайт
   category: Friendly
   appearConditions:
     - !type:SelfOnlyCondition
@@ -200,7 +190,6 @@
 - type: interaction
   id: FriendlyGrimace
   name: "Скорчить рожу"
-  icon: FriendlyHandshakeIcon
   category: Friendly
   appearConditions:
     - !type:SelfOnlyCondition
@@ -210,10 +199,30 @@
 - type: interaction
   id: FriendlyNoseClick
   name: "Дать по носу"
-  icon: FriendlyNoseBoopIcon
   category: Friendly
   appearConditions:
   - !type:HasTargetCondition
     allowSelfTargeting: false
   interactionMessages:
   - "%user бьёт пальцем по носу %target"
+
+- type: interaction
+  id: FriendlyPullTo
+  name: "Прижать к себе"
+  category: Friendly
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: false
+  interactionMessages:
+  - "%user прижимает к себе %target"
+
+- type: interaction
+  id: FriendlyFrr
+  name: "Фыркнуть"
+  category: Friendly
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: true
+  interactionMessages:
+  - "%user фыркает"
+  - "%user фыркнул"

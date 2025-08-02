@@ -145,9 +145,6 @@ public sealed class CustomInteractionService
                     case "DESCRIPTION":
                         currentInteraction.Description = value;
                         break;
-                    case "ICON":
-                        currentInteraction.IconId = value;
-                        break;
                     case "CATEGORY":
                         currentInteraction.CategoryId = value;
                         break;
@@ -198,7 +195,6 @@ public sealed class CustomInteractionService
                 writer.WriteLine($"ID:{interaction.Id}");
                 writer.WriteLine($"NAME:{interaction.Name}");
                 writer.WriteLine($"DESCRIPTION:{interaction.Description}");
-                writer.WriteLine($"ICON:{interaction.IconId}");
                 writer.WriteLine($"CATEGORY:{interaction.CategoryId}");
 
                 foreach (var message in interaction.InteractionMessages)

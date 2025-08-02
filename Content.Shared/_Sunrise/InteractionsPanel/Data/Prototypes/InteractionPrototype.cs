@@ -16,8 +16,6 @@ public sealed partial class InteractionPrototype : IPrototype
     [DataField]
     public string? Description { get; private set; }
 
-    [DataField]
-    public ProtoId<InteractionIconPrototype>? Icon { get; private set; }
 
     [DataField(required: true)]
     public ProtoId<InteractionCategoryPrototype> Category { get; private set; }
