@@ -1,8 +1,10 @@
 using System.Linq;
+
 using Content.Server.Cargo.Components;
+using Content.Shared.Cargo.Components;
 using Content.Shared.Cargo;
 using Content.Shared.Cargo.BUI;
-using Content.Shared.Cargo.Components;
+// using Content.Shared.Cargo.Components; // Commented out to avoid ambiguity
 using Content.Shared.Cargo.Events;
 using Content.Shared.Cargo.Prototypes;
 using Content.Shared.CCVar;
@@ -217,7 +219,8 @@ public sealed partial class CargoSystem
         var xform = Transform(uid);
 
         if (_station.GetOwningStation(uid) is not { } station ||
-            !TryComp<StationBankAccountComponent>(station, out var bankAccount))
+            !TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var bankAccount) ||
+            !TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var sharedAccount))
         {
             return;
         }
@@ -233,17 +236,17 @@ public sealed partial class CargoSystem
         if (!SellPallets(gridUid, station, out var goods))
             return;
 
-        var baseDistribution = CreateAccountDistribution((station, bankAccount));
+        var baseDistribution = CreateAccountDistribution(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, sharedAccount));
         foreach (var (_, sellComponent, value) in goods)
         {
             Dictionary<ProtoId<CargoAccountPrototype>, double> distribution;
             if (sellComponent != null)
             {
-                var cut = _lockboxCutEnabled ? bankAccount.LockboxCut : bankAccount.PrimaryCut;
+                var cut = _lockboxCutEnabled ? sharedAccount.LockboxCut : sharedAccount.PrimaryCut;
                 distribution = new Dictionary<ProtoId<CargoAccountPrototype>, double>
                 {
                     { sellComponent.OverrideAccount, cut },
-                    { bankAccount.PrimaryAccount, 1.0 - cut },
+                    { sharedAccount.PrimaryAccount, 1.0 - cut },
                 };
             }
             else
@@ -251,10 +254,18 @@ public sealed partial class CargoSystem
                 distribution = baseDistribution;
             }
 
-            UpdateBankAccount((station, bankAccount), (int) Math.Round(value), distribution, false);
+            UpdateBankAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, bankAccount), (int)Math.Round(value), distribution, false);
         }
 
-        Dirty(station, bankAccount);
+        // Determine the last sellComponent used in the goods loop, or null if none exist
+OverrideSellComponent? lastSellComponent = null;
+foreach (var (_, sellComp, _) in goods)
+{
+    if (sellComp != null)
+        lastSellComponent = sellComp;
+}
+var accountBalance = GetBalanceFromAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(station, sharedAccount), lastSellComponent != null ? lastSellComponent.OverrideAccount : sharedAccount.PrimaryAccount);
+        Dirty(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, bankAccount)); // balance update, sharedAccount used for cuts/accounts
         _audio.PlayPvs(ApproveSound, uid);
         UpdatePalletConsoleInterface(uid);
     }

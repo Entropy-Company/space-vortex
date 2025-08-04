@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared.Cargo.Components;
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
 using Content.Server.Radio.EntitySystems;
@@ -169,12 +170,16 @@ public sealed class SalvageJobBoardSystem : EntitySystem
         var newRank = GetRank(ent);
 
         // Add reward
-        if (TryComp<StationBankAccountComponent>(ent, out var stationBankAccount))
+        if (TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent, out var stationBankAccount))
         {
-            _cargo.UpdateBankAccount(
-                (ent.Owner, stationBankAccount),
-                jobProto.Reward,
-                _cargo.CreateAccountDistribution((ent,  stationBankAccount)));
+            if (TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent, out var sharedAccount))
+            {
+                var bankAccountEnt = new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent.Owner, stationBankAccount);
+                _cargo.UpdateBankAccount(
+                    bankAccountEnt,
+                    jobProto.Reward,
+                    sharedAccount.PrimaryAccount);
+            }
         }
 
         // We ranked up!

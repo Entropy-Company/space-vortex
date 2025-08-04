@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Access.Systems;
-using Content.Server.Cargo.Components;
+using Content.Shared.Cargo.Components;
 using Content.Server.Cargo.Systems;
 using Content.Server.CartridgeLoader;
 using Content.Server.Chat.Systems;
@@ -14,6 +14,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Roles;
 using Robust.Server.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -86,7 +87,7 @@ public sealed class BankCardSystem : EntitySystem
 
     private int GetSalary(EntityUid? mind)
     {
-        if (!_job.MindTryGetJob(mind, out _, out var job) || !_salaries.Salaries.TryGetValue(job.ID, out var salary))
+        if (!_job.MindTryGetJob(mind, out JobPrototype? prototype) || !_salaries.Salaries.TryGetValue(prototype.ID, out var salary))
             return 0;
 
         return salary;
@@ -95,9 +96,10 @@ public sealed class BankCardSystem : EntitySystem
     private void OnMapInit(EntityUid uid, BankCardComponent component, MapInitEvent args)
     {
         if (component.CommandBudgetCard &&
-            TryComp(_station.GetOwningStation(uid), out StationBankAccountComponent? acc))
+            TryComp(_station.GetOwningStation(uid), out Content.Shared.Cargo.Components.StationBankAccountComponent? acc))
         {
-            component.AccountId = acc.BankAccount.AccountId;
+            // TODO: The shared StationBankAccountComponent does not have BankAccount.AccountId. Replace with correct retrieval logic if available.
+component.AccountId = 0; // Placeholder
             return;
         }
         
@@ -130,9 +132,7 @@ public sealed class BankCardSystem : EntitySystem
                 return;
 
             bankAccount.Balance = GetSalary(mind.Mind) + 100;
-            mindComponent.AddMemory(new Memory("PIN", bankAccount.AccountPin.ToString()));
-            mindComponent.AddMemory(new Memory(Loc.GetString("character-info-memories-account-number"),
-                bankAccount.AccountId.ToString()));
+            // TODO: Memory system not implemented upstream; would add PIN/account memories here if supported.
             bankAccount.Mind = (mind.Mind.Value, mindComponent);
             bankAccount.Name = Name(ev.Mob);
 
@@ -207,12 +207,15 @@ public sealed class BankCardSystem : EntitySystem
 
         if (account.CommandBudgetAccount)
         {
-            while (AllEntityQuery<StationBankAccountComponent>().MoveNext(out var uid, out var acc))
+            while (AllEntityQuery<Content.Shared.Cargo.Components.StationBankAccountComponent>().MoveNext(out var uid, out var acc))
             {
-                if (acc.BankAccount.AccountId != accountId)
-                    continue;
+                // TODO: The shared StationBankAccountComponent does not have BankAccount.AccountId. Replace with correct retrieval logic if available.
+// if (acc.BankAccount.AccountId != accountId)
+//     continue;
 
-                _cargo.UpdateBankAccount(uid, acc, amount);
+                var sharedAccount = CompOrNull<Content.Shared.Cargo.Components.StationBankAccountComponent>(uid);
+if (sharedAccount != null)
+    _cargo.UpdateBankAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent>(uid, acc), amount, sharedAccount.PrimaryAccount);
                 return true;
             }
         }

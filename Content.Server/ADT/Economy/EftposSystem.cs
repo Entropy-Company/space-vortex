@@ -1,3 +1,4 @@
+using Content.Server.Hands.Systems;
 using Content.Shared.ADT.Economy;
 using Content.Shared.Access.Components;
 using Content.Shared.Hands.Components;
@@ -14,6 +15,7 @@ public sealed class EftposSystem : EntitySystem
     [Dependency] private readonly BankCardSystem _bankCardSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+    [Dependency] private readonly HandsSystem _sharedHandsSystem = default!;
 
     public override void Initialize()
     {
@@ -44,8 +46,14 @@ public sealed class EftposSystem : EntitySystem
 
     private void OnLock(EntityUid uid, EftposComponent component, EftposLockMessage args)
     {
-        if (!TryComp(args.Actor, out HandsComponent? hands) ||
-            !TryComp(hands.ActiveHandEntity, out BankCardComponent? bankCard))
+        if (!TryComp(args.Actor, out HandsComponent? hands))
+            return;
+        var activeHandId = hands.ActiveHandId;
+        if (activeHandId == null)
+            return;
+        if (!_sharedHandsSystem.TryGetHeldItem((args.Actor, hands), activeHandId, out var activeEntity))
+            return;
+        if (!TryComp(activeEntity, out BankCardComponent? bankCard))
             return;
 
         if (component.BankAccountId == null)
@@ -59,8 +67,11 @@ public sealed class EftposSystem : EntitySystem
             component.Amount = 0;
         }
 
+        EntityUid? ownerEntity = null;
+        if (activeHandId != null && _sharedHandsSystem.TryGetHeldItem((args.Actor, hands), activeHandId, out var ent))
+            ownerEntity = ent;
         UpdateUiState(uid, component.BankAccountId != null, component.Amount,
-            GetOwner(hands.ActiveHandEntity.Value, component.BankAccountId));
+            GetOwner(ownerEntity ?? EntityUid.Invalid, component.BankAccountId));
     }
 
     private string GetOwner(EntityUid uid, int? bankAccountId)

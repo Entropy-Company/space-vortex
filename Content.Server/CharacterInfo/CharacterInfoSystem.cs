@@ -1,4 +1,4 @@
-﻿using Content.Server.Mind;
+using Content.Server.Mind;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
 using Content.Shared.CharacterInfo;
@@ -57,11 +57,12 @@ public sealed class CharacterInfoSystem : EntitySystem
             briefing = _roles.MindGetBriefing(mindId);
 
             //ADT-Economy-Start || Get memories
-            foreach (var memory in mind.AllMemories)
-            {
-                memories[memory.Name] = memory.Value;
-            }
-            //ADT-Economy-End
+// TODO: Implement mind memory storage and retrieval. mind.AllMemories does not exist.
+// foreach (var memory in mind.AllMemories)
+// {
+//     memories[memory.Name] = memory.Value;
+// }
+//ADT-Economy-End
         }
 
         RaiseNetworkEvent(new CharacterInfoEvent(GetNetEntity(entity), jobTitle, objectives, briefing, memories), args.SenderSession); //ADT-Economy

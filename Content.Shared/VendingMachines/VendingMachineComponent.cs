@@ -197,7 +197,8 @@ namespace Content.Shared.VendingMachines
         [DataField, ViewVariables(VVAccess.ReadWrite)]
         public double PriceMultiplier = 0.25;
 
-        public ProtoId<StackPrototype> CreditStackPrototype = "Credit";
+        [DataField]
+        public string CreditStackPrototype = "Credit";
 
         [DataField]
         public string CurrencyType = "SpaceCash";

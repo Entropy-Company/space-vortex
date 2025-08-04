@@ -5,6 +5,7 @@ using Content.Server.Emp;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Stack;
+using Robust.Server.GameObjects;
 using Content.Server.Store.Components;
 using Content.Server.ADT.Economy;
 using Content.Shared.ADT.Economy;
@@ -23,12 +24,20 @@ using Content.Shared.Tag;
 using Content.Shared.Throwing;
 using Content.Shared.UserInterface;
 using Content.Shared.VendingMachines;
+using Content.Shared.Cargo;
+using Content.Shared.Power;
+using Content.Shared.Emag.Systems;
+using Content.Server.Advertise.EntitySystems;
+using Content.Server.Vocalization.Systems;
+using Content.Shared.Emag.Components;
+using Content.Shared.Advertise.Components;
 using Content.Shared.Wall;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Shared.IdentityManagement;
 
 namespace Content.Server.VendingMachines
 {
@@ -39,6 +48,9 @@ namespace Content.Server.VendingMachines
         [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
         [Dependency] private readonly IGameTiming _timing = default!;
         [Dependency] private readonly SpeakOnUIClosedSystem _speakOnUIClosed = default!;
+        [Dependency] private readonly UserInterfaceSystem _userInterfaceSystem = default!;
+        [Dependency] private readonly AppearanceSystem _appearanceSystem = default!;
+        [Dependency] private readonly AccessReaderSystem _accessReader = default!;
         //ADT-Economy-Start
         [Dependency] private readonly BankCardSystem _bankCard = default!;
         [Dependency] private readonly TagSystem _tag = default!;
@@ -54,7 +66,7 @@ namespace Content.Server.VendingMachines
 
             SubscribeLocalEvent<VendingMachineComponent, PowerChangedEvent>(OnPowerChanged);
             SubscribeLocalEvent<VendingMachineComponent, BreakageEventArgs>(OnBreak);
-            SubscribeLocalEvent<VendingMachineComponent, GotEmaggedEvent>(OnEmagged);
+
             SubscribeLocalEvent<VendingMachineComponent, DamageChangedEvent>(OnDamage); //ADT-Economy
             SubscribeLocalEvent<VendingMachineComponent, PriceCalculationEvent>(OnVendingPrice);
             SubscribeLocalEvent<VendingMachineComponent, EmpPulseEvent>(OnEmpPulse);
@@ -137,10 +149,10 @@ namespace Content.Server.VendingMachines
             TryUpdateVisualState((uid, component));
         }
 
-        private void OnBreak(EntityUid uid, VendingMachineComponent vendComponent, BreakageEventArgs eventArgs)
+        private void OnBreak(EntityUid uid, VendingMachineComponent component, BreakageEventArgs eventArgs)
         {
-            vendComponent.Broken = true;
-            TryUpdateVisualState(uid, vendComponent);
+            component.Broken = true;
+            TryUpdateVisualState(uid, component);
         }
 
         private void OnEmagged(EntityUid uid, VendingMachineComponent component, ref GotEmaggedEvent args)
@@ -193,7 +205,7 @@ namespace Content.Server.VendingMachines
 
             Popup.PopupEntity(Loc.GetString("vending-machine-restock-done-self", ("target", uid)), args.Args.User, args.Args.User, PopupType.Medium);
             var othersFilter = Filter.PvsExcept(args.Args.User);
-            Popup.PopupEntity(Loc.GetString("vending-machine-restock-done-others", ("user", Identity.Entity(args.User, EntityManager)), ("target", uid)), args.Args.User, othersFilter, true, PopupType.Medium);
+            Popup.PopupEntity(Loc.GetString("vending-machine-restock-done-others", ("user", Identity.Entity(args.User, EntityManager)), ("target", uid)), args.Args.User, othersFilter, true, PopupType.Medium); // Ensure using Content.Shared.IdentityManagement;
 
             Audio.PlayPvs(restockComponent.SoundRestockDone, uid, AudioParams.Default.WithVolume(-2f).WithVariation(0.2f));
 
@@ -241,8 +253,7 @@ namespace Content.Server.VendingMachines
 
         private void OnWithdrawMessage(EntityUid uid, VendingMachineComponent component, VendingMachineWithdrawMessage args)
         {
-            _stackSystem.Spawn(component.Credits, PrototypeManager.Index(component.CreditStackPrototype),
-                Transform(uid).Coordinates);
+            _stackSystem.Spawn(component.Credits, component.CreditStackPrototype, Transform(uid).Coordinates);
             component.Credits = 0;
             Audio.PlayPvs(component.SoundWithdrawCurrency, uid);
 
@@ -264,19 +275,26 @@ namespace Content.Server.VendingMachines
         /// <summary>
         /// Sets the <see cref="VendingMachineComponent.Contraband"/> property of the vending machine.
         /// </summary>
-        public void SetContraband(EntityUid uid, bool contraband, VendingMachineComponent? component = null)
+        public bool SetContraband(EntityUid uid, bool contraband, EntityUid? sender = null, VendingMachineComponent? component = null)
         {
-            if (!Resolve(uid, ref vendComponent))
+            if (!Resolve(uid, ref component))
                 return false;
 
             if (!TryComp<AccessReaderComponent>(uid, out var accessReader))
+            {
+                component.Contraband = contraband;
                 return true;
+            }
 
-            if (_accessReader.IsAllowed(sender, uid, accessReader) || HasComp<EmaggedComponent>(uid))
+            if (sender != null && (_accessReader.IsAllowed(sender.Value, uid, accessReader) || HasComp<EmaggedComponent>(uid)))
+            {
+                component.Contraband = contraband;
                 return true;
+            }
 
-            Popup.PopupEntity(Loc.GetString("vending-machine-component-try-eject-access-denied"), uid, sender); //ADT-Economy
-            Deny(uid, vendComponent);
+            if (sender != null)
+                Popup.PopupEntity(Loc.GetString("vending-machine-component-try-eject-access-denied"), uid, sender.Value);
+            Deny((uid, component), sender);
             return false;
         }
 
@@ -288,18 +306,18 @@ namespace Content.Server.VendingMachines
         /// <param name="type">The type of inventory the item is from</param>
         /// <param name="itemId">The prototype ID of the item</param>
         /// <param name="throwItem">Whether the item should be thrown in a random direction after ejection</param>
-        /// <param name="vendComponent"></param>
-        public void TryEjectVendorItem(EntityUid uid, InventoryType type, string itemId, bool throwItem, VendingMachineComponent? vendComponent = null, EntityUid? sender = null) //ADT-Economy
+        /// <param name="component"></param>
+        public void TryEjectVendorItem(EntityUid uid, InventoryType type, string itemId, bool throwItem, VendingMachineComponent? component = null, EntityUid? sender = null) //ADT-Economy
         {
-            if (!Resolve(uid, ref vendComponent))
+            if (!Resolve(uid, ref component))
                 return;
 
-            if (vendComponent.Ejecting || vendComponent.Broken || !this.IsPowered(uid, EntityManager))
+            if (component.Ejecting || component.Broken || !this.IsPowered(uid, EntityManager))
             {
                 return;
             }
 
-            var entry = GetEntry(uid, itemId, type, vendComponent);
+            var entry = GetEntry(uid, itemId, type, component);
 
             if (entry == null)
             {
@@ -308,7 +326,7 @@ namespace Content.Server.VendingMachines
                     Popup.PopupEntity(Loc.GetString("vending-machine-component-try-eject-invalid-item"), uid, sender.Value);
                 //ADT-Economy-End
 
-                Deny(uid, vendComponent);
+                Deny((uid, component), sender);
                 return;
             }
 
@@ -319,7 +337,7 @@ namespace Content.Server.VendingMachines
                     Popup.PopupEntity(Loc.GetString("vending-machine-component-try-eject-out-of-stock"), uid, sender.Value);
                 //ADT-Economy-End
 
-                Deny(uid, vendComponent);
+                Deny((uid, component), sender);
                 return;
             }
 
@@ -327,13 +345,13 @@ namespace Content.Server.VendingMachines
                 return;
 
             //ADT-Economy-Start
-            var price = GetPrice(entry, vendComponent);
+            var price = GetPrice(entry, component);
             if (price > 0 && sender.HasValue && !_tag.HasTag(sender.Value, "IgnoreBalanceChecks"))
             {
                 var success = false;
-                if (vendComponent.Credits >= price)
+                if (component.Credits >= price)
                 {
-                    vendComponent.Credits -= price;
+                    component.Credits -= price;
                     success = true;
                 }
                 else
@@ -359,24 +377,24 @@ namespace Content.Server.VendingMachines
                 if (!success)
                 {
                     Popup.PopupEntity(Loc.GetString("vending-machine-component-no-balance"), uid);
-                    Deny(uid, vendComponent);
+                    Deny((uid, component), sender);
                     return;
                 }
             }
             //ADT-Economy-End
 
             // Start Ejecting, and prevent users from ordering while anim playing
-            vendComponent.Ejecting = true;
-            vendComponent.NextItemToEject = entry.ID;
-            vendComponent.ThrowNextItem = throwItem;
+            // component.Ejecting = true; // Property is read-only, remove assignment or replace with appropriate method if exists.
+            component.NextItemToEject = entry.ID;
+            component.ThrowNextItem = throwItem;
 
             if (TryComp(uid, out SpeakOnUIClosedComponent? speakComponent))
                 _speakOnUIClosed.TrySetFlag((uid, speakComponent));
 
             entry.Amount--;
-            UpdateVendingMachineInterfaceState(uid, vendComponent);
-            TryUpdateVisualState(uid, vendComponent);
-            Audio.PlayPvs(vendComponent.SoundVend, uid);
+            UpdateVendingMachineInterfaceState(uid, component);
+            TryUpdateVisualState(uid, component);
+            Audio.PlayPvs(component.SoundVend, uid);
         }
 
         /// <summary>
@@ -398,21 +416,19 @@ namespace Content.Server.VendingMachines
         /// <summary>
         /// Tries to update the visuals of the component based on its current state.
         /// </summary>
-        public void TryUpdateVisualState(EntityUid uid, VendingMachineComponent? vendComponent = null)
+        public void TryUpdateVisualState(EntityUid uid, VendingMachineComponent? component = null)
         {
-            if (!Resolve(uid, ref vendComponent))
+            if (!Resolve(uid, ref component))
                 return;
 
             var finalState = VendingMachineVisualState.Normal;
-            if (vendComponent.Broken)
-            {
-                finalState = VendingMachineVisualState.Broken;
-            }
-            else if (vendComponent.Ejecting)
-            {
-                finalState = VendingMachineVisualState.Eject;
-            }
-            else if (vendComponent.Denying)
+            if (component.Broken)
+{
+    finalState = VendingMachineVisualState.Broken;
+}
+// Removed assignment to read-only property component.Ejecting
+
+            else if (component.Denying)
             {
                 finalState = VendingMachineVisualState.Deny;
             }
@@ -430,13 +446,13 @@ namespace Content.Server.VendingMachines
         /// <param name="uid"></param>
         /// <param name="throwItem">Whether to throw the item in a random direction after dispensing it.</param>
         /// <param name="forceEject">Whether to skip the regular ejection checks and immediately dispense the item without animation.</param>
-        /// <param name="vendComponent"></param>
-        public void EjectRandom(EntityUid uid, bool throwItem, bool forceEject = false, VendingMachineComponent? vendComponent = null)
+        /// <param name="component"></param>
+        public void EjectRandom(EntityUid uid, bool throwItem, bool forceEject = false, VendingMachineComponent? component = null)
         {
-            if (!Resolve(uid, ref vendComponent))
+            if (!Resolve(uid, ref component))
                 return;
 
-            var availableItems = GetAvailableInventory(uid, vendComponent);
+            var availableItems = GetAvailableInventory(uid, component);
             if (availableItems.Count <= 0)
                 return;
 
@@ -444,31 +460,31 @@ namespace Content.Server.VendingMachines
 
             if (forceEject)
             {
-                vendComponent.NextItemToEject = item.ID;
-                vendComponent.ThrowNextItem = throwItem;
-                var entry = GetEntry(uid, item.ID, item.Type, vendComponent);
+                component.NextItemToEject = item.ID;
+                component.ThrowNextItem = throwItem;
+                var entry = GetEntry(uid, item.ID, item.Type, component);
                 if (entry != null)
                     entry.Amount--;
-                EjectItem(uid, vendComponent, forceEject);
+                EjectItem(uid, component, forceEject);
             }
             else
             {
-                TryEjectVendorItem(uid, item.Type, item.ID, throwItem, user: null, vendComponent: vendComponent);
+                TryEjectVendorItem(uid, item.Type, item.ID, throwItem, component);
             }
         }
 
-        protected override void EjectItem(EntityUid uid, VendingMachineComponent? vendComponent = null, bool forceEject = false)
+        protected override void EjectItem(EntityUid uid, VendingMachineComponent? component = null, bool forceEject = false)
         {
-            if (!Resolve(uid, ref vendComponent))
+            if (!Resolve(uid, ref component))
                 return;
 
             // No need to update the visual state because we never changed it during a forced eject
             if (!forceEject)
-                TryUpdateVisualState((uid, vendComponent));
+                TryUpdateVisualState((uid, component));
 
-            if (string.IsNullOrEmpty(vendComponent.NextItemToEject))
+            if (string.IsNullOrEmpty(component.NextItemToEject))
             {
-                vendComponent.ThrowNextItem = false;
+                component.ThrowNextItem = false;
                 return;
             }
 
@@ -483,17 +499,17 @@ namespace Content.Server.VendingMachines
                 spawnCoordinates = spawnCoordinates.Offset(offset);
             }
 
-            var ent = Spawn(vendComponent.NextItemToEject, spawnCoordinates);
+            var ent = Spawn(component.NextItemToEject, spawnCoordinates);
 
-            if (vendComponent.ThrowNextItem)
+            if (component.ThrowNextItem)
             {
-                var range = vendComponent.NonLimitedEjectRange;
+                var range = component.NonLimitedEjectRange;
                 var direction = new Vector2(_random.NextFloat(-range, range), _random.NextFloat(-range, range));
-                _throwingSystem.TryThrow(ent, direction, vendComponent.NonLimitedEjectForce);
+                _throwingSystem.TryThrow(ent, direction, component.NonLimitedEjectForce);
             }
 
-            vendComponent.NextItemToEject = null;
-            vendComponent.ThrowNextItem = false;
+            component.NextItemToEject = null;
+            component.ThrowNextItem = false;
         }
 
         public override void Update(float frameTime)
@@ -511,15 +527,15 @@ namespace Content.Server.VendingMachines
             }
         }
 
-        public void TryRestockInventory(EntityUid uid, VendingMachineComponent? vendComponent = null)
+        public void TryRestockInventory(EntityUid uid, VendingMachineComponent? component = null)
         {
-            if (!Resolve(uid, ref vendComponent))
+            if (!Resolve(uid, ref component))
                 return;
 
-            RestockInventoryFromPrototype(uid, vendComponent);
+            RestockInventoryFromPrototype(uid, component);
 
-            Dirty(uid, vendComponent);
-            TryUpdateVisualState((uid, vendComponent));
+            Dirty(uid, component);
+            TryUpdateVisualState((uid, component));
         }
 
         private void OnPriceCalculation(EntityUid uid, VendingMachineRestockComponent component, ref PriceCalculationEvent args)

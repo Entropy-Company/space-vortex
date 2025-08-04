@@ -1,4 +1,5 @@
 using Content.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.Controls;
 using Content.Client.VendingMachines.UI;
 using Content.Shared.VendingMachines;
 using Robust.Client.UserInterface;
@@ -14,6 +15,9 @@ namespace Content.Client.VendingMachines
 
         [ViewVariables]
         private List<VendingMachineInventoryEntry> _cachedInventory = new();
+
+        // ADT-Economy: Store filtered indices for UI
+        private List<int> _cachedFilteredIndex = new();
 
         public VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
         {
@@ -47,7 +51,9 @@ namespace Content.Client.VendingMachines
             var system = EntMan.System<VendingMachineSystem>();
             _cachedInventory = system.GetAllInventory(Owner);
 
-            _menu?.Populate(_cachedInventory, enabled);
+            // Retrieve VendingMachineComponent for priceMultiplier and credits
+            var component = EntMan.GetComponent<VendingMachineComponent>(Owner);
+            _menu?.Populate(_cachedInventory, out _cachedFilteredIndex, component.PriceMultiplier, component.Credits); //ADT-Economy
         }
 
         public void UpdateAmounts()
@@ -67,13 +73,21 @@ namespace Content.Client.VendingMachines
             if (data is not VendorItemsListData { ItemIndex: var itemIndex })
                 return;
 
-            _menu?.Populate(_cachedInventory, out _cachedFilteredIndex, newState.PriceMultiplier, newState.Credits); //ADT-Economy
+            // Use current VendingMachineComponent for state
+            var component = EntMan.GetComponent<VendingMachineComponent>(Owner);
+            _menu?.Populate(_cachedInventory, out _cachedFilteredIndex, component.PriceMultiplier, component.Credits); //ADT-Economy
         }
 
         private void OnItemSelected(ItemList.ItemListSelectedEventArgs args)
         {
             if (_cachedInventory.Count == 0)
                 return;
+
+            // Get selected index from args
+            var itemIndex = args.ItemIndex;
+            // If filtered, map to inventory index
+            if (_cachedFilteredIndex != null && itemIndex >= 0 && itemIndex < _cachedFilteredIndex.Count)
+                itemIndex = _cachedFilteredIndex[itemIndex];
 
             var selectedItem = _cachedInventory.ElementAtOrDefault(itemIndex);
 

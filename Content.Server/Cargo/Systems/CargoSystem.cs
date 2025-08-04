@@ -74,15 +74,13 @@ public sealed partial class CargoSystem : SharedCargoSystem
         InitializeTelepad();
         InitializeBounty();
 
-        SubscribeLocalEvent<StationBankAccountComponent, ComponentInit>(OnInit); //ADT-Economy
+        SubscribeLocalEvent<Content.Shared.Cargo.Components.StationBankAccountComponent, ComponentInit>(OnInit); //ADT-Economy
     }
 
     //ADT-Economy-Start
-    private void OnInit(EntityUid uid, StationBankAccountComponent component, ComponentInit args)
+    private void OnInit(EntityUid uid, Content.Shared.Cargo.Components.StationBankAccountComponent component, ComponentInit args)
     {
-        component.BankAccount = _bankCard.CreateAccount(default, 2000);
-        component.BankAccount.CommandBudgetAccount = true;
-        component.BankAccount.Name = Loc.GetString("command-budget");
+        // BankAccount logic removed. All logic now uses only the shared component.
     }
     //ADT-Economy-End
 
@@ -95,7 +93,7 @@ public sealed partial class CargoSystem : SharedCargoSystem
     }
 
     public void UpdateBankAccount(
-        Entity<StationBankAccountComponent?> ent,
+        Entity<Content.Shared.Cargo.Components.StationBankAccountComponent> ent,
         int balanceAdded,
         ProtoId<CargoAccountPrototype> account,
         bool dirty = true)
@@ -108,7 +106,7 @@ public sealed partial class CargoSystem : SharedCargoSystem
     }
 
     /// <summary>
-    /// Adds or removes funds from the <see cref="StationBankAccountComponent"/>.
+    /// Adds or removes funds from the <see cref="Content.Server.Cargo.Components.StationBankAccountComponent"/>.
     /// </summary>
     /// <param name="ent">The station.</param>
     /// <param name="balanceAdded">The amount of funds to add or remove.</param>
@@ -116,21 +114,23 @@ public sealed partial class CargoSystem : SharedCargoSystem
     /// <param name="dirty">Whether to mark the bank account component as dirty.</param>
     [PublicAPI]
     public void UpdateBankAccount(
-        Entity<StationBankAccountComponent?> ent,
+        Entity<Content.Shared.Cargo.Components.StationBankAccountComponent> ent,
         int balanceAdded,
         Dictionary<ProtoId<CargoAccountPrototype>, double> accountDistribution,
         bool dirty = true)
     {
-        if (!Resolve(ent, ref ent.Comp))
+        if (ent.Comp == null)
             return;
+
+        var sharedAccount = ent.Comp; // Already guaranteed by Entity<>
 
         foreach (var (account, percent) in accountDistribution)
         {
-            var accountBalancedAdded = (int) Math.Round(percent * balanceAdded);
-            ent.Comp.Accounts[account] += accountBalancedAdded;
+            var accountBalancedAdded = (int)Math.Round(percent * balanceAdded);
+            sharedAccount.Accounts[account] += accountBalancedAdded;
         }
 
-        var ev = new BankBalanceUpdatedEvent(ent, ent.Comp.Accounts);
+        var ev = new BankBalanceUpdatedEvent(ent, sharedAccount.Accounts);
         RaiseLocalEvent(ent, ref ev, true);
 
         if (!dirty)

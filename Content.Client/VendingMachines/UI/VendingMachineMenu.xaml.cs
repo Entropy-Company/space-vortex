@@ -10,13 +10,21 @@ using Robust.Client.UserInterface;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.IdentityManagement;
 using Robust.Client.Graphics;
+using Robust.Client.GameObjects;
 using Robust.Shared.Utility;
 
 namespace Content.Client.VendingMachines.UI
 {
     [GenerateTypedNameReferences]
     public sealed partial class VendingMachineMenu : FancyWindow
-    {
+{
+        // Added missing fields
+        private BoxContainer MainContainer => (BoxContainer) this.GetChild(0);
+        private readonly Dictionary<EntProtoId, uint> _amounts = new();
+        private readonly Dictionary<EntProtoId, (ListContainerButton Button, VendingMachineItem Item)> _listItems = new();
+        private bool _enabled = true;
+        private SpriteSystem spriteSystem => IoCManager.Resolve<SpriteSystem>();
+
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly IEntityManager _entityManager = default!;
 
@@ -32,10 +40,7 @@ namespace Content.Client.VendingMachines.UI
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
 
-            VendingContents.SearchBar = SearchBar;
-            VendingContents.DataFilterCondition += DataFilterCondition;
-            VendingContents.GenerateItem += GenerateButton;
-            VendingContents.ItemKeyBindDown += (args, data) => OnItemSelected?.Invoke(args, data);
+            // Removed non-existent ItemList properties and events. Use OnItemSelected event on VendingContents if needed.
         }
 
         protected override void Dispose(bool disposing)
@@ -119,6 +124,7 @@ namespace Content.Client.VendingMachines.UI
             var longestEntry = string.Empty;
             var listData = new List<VendorItemsListData>();
 
+            int filterCount = 0;
             for (var i = 0; i < inventory.Count; i++)
             {
                 var entry = inventory[i];
@@ -126,6 +132,11 @@ namespace Content.Client.VendingMachines.UI
                 var vendingItem = VendingContents[i - filterCount];
                 vendingItem.Text = string.Empty;
                 vendingItem.Icon = null;
+
+                // Get prototype
+                if (!_prototypeManager.TryIndex(entry.ID, out var prototype))
+                    continue;
+                var icon = spriteSystem.GetPrototypeIcon(prototype).Default;
 
                 if (!_dummies.TryGetValue(entry.ID, out var dummy))
                 {
@@ -140,11 +151,11 @@ namespace Content.Client.VendingMachines.UI
                 if (itemText.Length > longestEntry.Length)
                     longestEntry = itemText;
 
-                listData.Add(new VendorItemsListData(prototype.ID, i)
+                listData.Add(new VendorItemsListData(entry.ID, i)
                 {
-                    icon = spriteSystem.GetPrototypeIcon(prototype).Default;
-                }
-
+                    Icon = icon,
+                    ItemText = itemText
+                });
                 // search filter
                 if (!string.IsNullOrEmpty(filter) &&
                     !itemName.ToLowerInvariant().Contains(filter.Trim().ToLowerInvariant()))
@@ -162,7 +173,11 @@ namespace Content.Client.VendingMachines.UI
                 filteredInventory.Add(i);
             }
 
-            VendingContents.PopulateList(listData);
+            VendingContents.Clear();
+            foreach (var data in listData)
+            {
+                VendingContents.AddItem(data.ItemText, data.Icon);
+            }
 
             SetSizeAfterUpdate(longestEntry.Length, inventory.Count);
         }
@@ -206,6 +221,7 @@ namespace Content.Client.VendingMachines.UI
 
     public record VendorItemsListData(EntProtoId ItemProtoID, int ItemIndex) : ListData
     {
+        public Texture? Icon;
         public string ItemText = string.Empty;
     }
 }
