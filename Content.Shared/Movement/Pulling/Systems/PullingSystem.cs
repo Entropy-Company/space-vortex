@@ -20,7 +20,7 @@ using Content.Shared.Item;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components; // Goobstation
 using Content.Shared.Mobs.Systems;
-using Content.Shared.CombatMode.Pacification;
+using Content.Shared._Eternal.MobCarry;
 using Content.Shared.Popups;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Movement.Components;
@@ -52,6 +52,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.CombatMode;
 using Content.Shared.Effects;
 using Content.Shared.Cuffs;
+using Content.Shared.CombatMode.Pacification;
 
 namespace Content.Shared.Movement.Pulling.Systems;
 
@@ -577,6 +578,12 @@ public sealed class PullingSystem : EntitySystem
             return false;
         }
 
+        // Prevent pulling carried mobs
+        if (HasComp<MobCarriedComponent>(pullableUid))
+        {
+            return false;
+        }
+
         if (pullerComp.NeedsHands
             && !_handsSystem.TryGetEmptyHand(puller, out _)
             && pullerComp.Pulling == null)
@@ -619,7 +626,7 @@ public sealed class PullingSystem : EntitySystem
     // Goobstation - Grab Intent
     public bool TogglePull(Entity<PullableComponent?> pullable, EntityUid pullerUid)
     {
-        if (!Resolve(pullable, ref pullable.Comp, false))
+        if (!Resolve(pullable.Owner, ref pullable.Comp))
             return false;
 
         if (pullable.Comp.Puller != pullerUid)

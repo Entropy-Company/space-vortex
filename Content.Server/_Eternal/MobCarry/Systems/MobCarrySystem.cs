@@ -1,4 +1,3 @@
-using Content.Shared._Eternal.MobCarry.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Standing;
@@ -9,17 +8,18 @@ using Robust.Shared.Timing;
 using Content.Server.Wieldable;
 using Content.Shared.Wieldable.Components;
 using Content.Shared.Item;
-using Robust.Shared.Log;
-using Content.Shared.Wieldable;
-using Content.Shared.Hands;
 using Content.Shared.Throwing;
+using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Hands.Components;
-using Content.Shared.Follower.Components;
-using Content.Shared.Hands;
-using System.Numerics;
-using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
+using System.Numerics;
+using Content.Shared.Hands;
+using Content.Shared._Eternal.MobCarry.Systems;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory.VirtualItem;
+using Content.Shared.Movement.Events;
+using Content.Shared.Pulling.Events;
 
 namespace Content.Server._Eternal.MobCarry.Systems;
 
@@ -32,10 +32,10 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly WieldableSystem _wieldable = default!;
     [Dependency] private readonly SharedItemSystem _itemSystem = default!;
+    [Dependency] private readonly Content.Shared.Movement.Pulling.Systems.PullingSystem _pullingSystem = default!;
     [Dependency] private readonly SharedVirtualItemSystem _virtualItem = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
-    private static readonly ISawmill Sawmill = Logger.GetSawmill("mobcarry");
 
     public override void Initialize()
     {
@@ -46,6 +46,9 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
         SubscribeLocalEvent<VirtualItemComponent, DropAttemptEvent>(OnVirtualItemDropAttemptForceDelete);
         SubscribeLocalEvent<MobCarriedComponent, UpdateCanMoveEvent>(OnCarriedUpdateCanMove);
         SubscribeLocalEvent<VirtualItemComponent, VirtualItemThrownEvent>(OnVirtualItemThrown);
+        SubscribeLocalEvent<PullableComponent, Content.Shared.Pulling.Events.StartPullAttemptEvent>(OnPullableStartPullAttemptBlockIfCarried);
+        SubscribeLocalEvent<MobCarriedComponent, Content.Shared.Pulling.Events.StartPullAttemptEvent>(OnMobCarriedStartPullAttemptBlock);
+        SubscribeLocalEvent<MobCarriedComponent, ComponentInit>(OnMobCarriedComponentInit);
     }
 
     protected override void OnCarryVerbActivated(EntityUid target, EntityUid user, MobCarryComponent component)
@@ -128,6 +131,44 @@ public sealed class MobCarrySystem : SharedMobCarrySystem
         StandUpCarriedMob(uid, comp);
         if (comp.Carrier != null)
             _virtualItem.DeleteInHandsMatching(comp.Carrier.Value, uid);
+    }
+
+    /// <summary>
+    /// Prevents pulling of entities that are currently being carried.
+    /// </summary>
+    private void OnPullableStartPullAttemptBlockIfCarried(EntityUid uid, PullableComponent component, ref Content.Shared.Pulling.Events.StartPullAttemptEvent args)
+    {
+        // uid is the entity being pulled
+        if (_entMan.HasComponent<MobCarriedComponent>(uid))
+        {
+            args.Cancel();
+            if (_entMan.EntityExists(args.Puller))
+            {
+                _popup.PopupEntity(Loc.GetString("mob-carry-pull-blocked"), args.Puller, args.Puller);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Prevents pulling attempts on any mob that is currently being carried (regardless of component order).
+    /// </summary>
+    private void OnMobCarriedStartPullAttemptBlock(EntityUid uid, MobCarriedComponent comp, ref Content.Shared.Pulling.Events.StartPullAttemptEvent args)
+    {
+        // uid is the carried mob, args.Puller is the one trying to pull
+        args.Cancel();
+        if (_entMan.EntityExists(args.Puller))
+        {
+            _popup.PopupEntity(Loc.GetString("mob-carry-pull-blocked"), args.Puller, args.Puller);
+        }
+    }
+
+    /// <summary>
+    /// When a mob becomes carried, forcibly stop any pulls involving it (as puller or pullable).
+    /// </summary>
+    private void OnMobCarriedComponentInit(EntityUid uid, MobCarriedComponent comp, ComponentInit args)
+    {
+        // Use PullingSystem API to forcibly stop any pulls involving this entity (as puller or pullable)
+        _pullingSystem.StopAllPulls(uid);
     }
 
     private void OnVirtualItemDropAttemptForceDelete(EntityUid uid, VirtualItemComponent comp, DropAttemptEvent args)

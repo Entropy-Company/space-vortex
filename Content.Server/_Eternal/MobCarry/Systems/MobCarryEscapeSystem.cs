@@ -1,7 +1,6 @@
 using Content.Shared.DoAfter;
 using Robust.Shared.GameObjects;
 using Content.Shared.Hands.EntitySystems;
-using Robust.Shared.Player;
 using Content.Shared.Movement.Events;
 using Content.Shared._Eternal.MobCarry;
 using Content.Shared.Item;
