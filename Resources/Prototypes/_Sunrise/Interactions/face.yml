@@ -42,7 +42,7 @@
   category: Face
   appearConditions:
     - !type:HasTargetCondition
-      allowSelfTargeting: false
+      allowSelfTargeting: true
   interactionMessages:
     - "%user бледнеет в лице хватаясь за свой живот"
     - "%user хватается за свой живот"
@@ -54,7 +54,7 @@
   category: Face
   appearConditions:
     - !type:HasTargetCondition
-      allowSelfTargeting: false
+      allowSelfTargeting: true
   interactionMessages:
     - "%user издает отрыжку"
     - "%user отрыгнул"
@@ -66,7 +66,7 @@
   category: Face
   appearConditions:
     - !type:HasTargetCondition
-      allowSelfTargeting: false
+      allowSelfTargeting: true
   interactionMessages:
     - "%user подмигивает одним глазом"
     - "%user подмигивает"
