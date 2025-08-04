@@ -37,7 +37,7 @@
   cooldown: 3
 
 - type: interaction
-  id: FacePats
+  id: FacePuke
   name: "Изобразить тошноту"
   category: Face
   appearConditions:
@@ -49,7 +49,7 @@
   cooldown: 3
 
 - type: interaction
-  id: FacePats
+  id: FaceNod
   name: "Рыгнуть"
   category: Face
   appearConditions:
@@ -61,7 +61,7 @@
   cooldown: 3
 
 - type: interaction
-  id: FacePats
+  id: FaceBlush
   name: "Подмигнуть"
   category: Face
   appearConditions:
