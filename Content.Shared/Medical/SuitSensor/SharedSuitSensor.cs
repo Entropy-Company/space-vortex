@@ -7,7 +7,7 @@ namespace Content.Shared.Medical.SuitSensor;
 [Serializable, NetSerializable]
 public sealed class SuitSensorStatus
 {
-    public SuitSensorStatus(NetEntity ownerUid, NetEntity suitSensorUid, string name, string job, string jobIcon, List<string> jobDepartments, SuitSensorMode sensorMode) // ADT-Tweak
+    public SuitSensorStatus(NetEntity ownerUid, NetEntity suitSensorUid, string name, string job, string jobIcon, List<string> jobDepartments, SuitSensorMode sensorMode) // Tweak
     {
         OwnerUid = ownerUid;
         SuitSensorUid = suitSensorUid;
@@ -15,7 +15,7 @@ public sealed class SuitSensorStatus
         Job = job;
         JobIcon = jobIcon;
         JobDepartments = jobDepartments;
-        Mode = sensorMode; // ADT-Tweak
+        Mode = sensorMode; // Tweak
     }
 
     public TimeSpan Timestamp;
@@ -30,7 +30,7 @@ public sealed class SuitSensorStatus
     public int? TotalDamageThreshold;
     public float? DamagePercentage => TotalDamageThreshold == null || TotalDamage == null ? null : TotalDamage / (float)TotalDamageThreshold;
     public NetCoordinates? Coordinates;
-    public SuitSensorMode Mode; // ADT-Tweak
+    public SuitSensorMode Mode; // Tweak
 }
 
 [Serializable, NetSerializable]

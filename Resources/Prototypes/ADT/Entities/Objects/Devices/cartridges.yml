@@ -1,7 +1,7 @@
 - type: entity
   parent: BaseItem
-  id: ADTWalletCartridge
-  name: virtual wallet cartridge
+  id: EZ_WalletCartridge
+  name: NanoBank картридж
   description: A program for managing bank account
   components:
   - type: Sprite
@@ -12,6 +12,6 @@
   - type: Cartridge
     programName: bank-program-name
     icon:
-      sprite: ADT/Structures/Machines/atm.rsi
-      state: off
+      sprite: _Eternal/Structures/Machines/atm.rsi
+      state: icon
   - type: BankCartridge

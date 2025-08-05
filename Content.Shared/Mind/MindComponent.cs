@@ -26,6 +26,33 @@ namespace Content.Shared.Mind;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class MindComponent : Component
 {
+
+        /// <summary>
+    ///     The session ID of the original owner, if any.
+    ///     May end up used for round-end information (as the owner may have abandoned Mind since)
+    /// </summary>
+    [DataField, AutoNetworkedField, Access(typeof(SharedMindSystem))]
+    public NetUserId? OriginalOwnerUserId { get; set; }
+    
+    [DataField, AutoNetworkedField]
+    public HashSet<Memory> Memories = new(); //Economy
+
+    /// <summary>
+    ///     Add a memory to the mind.
+    /// </summary>
+    [ViewVariables]
+    public IEnumerable<Memory> AllMemories => Memories;
+
+    public void AddMemory(Memory memory)
+    {
+        if (Memories.Contains(memory))
+        {
+            return;
+        }
+
+        Memories.Add(memory);
+    }
+
     [DataField, AutoNetworkedField]
     public List<EntityUid> Objectives = new();
 
@@ -34,13 +61,6 @@ public sealed partial class MindComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField, Access(typeof(SharedMindSystem))]
     public NetUserId? UserId { get; set; }
-
-    /// <summary>
-    ///     The session ID of the original owner, if any.
-    ///     May end up used for round-end information (as the owner may have abandoned Mind since)
-    /// </summary>
-    [DataField, AutoNetworkedField, Access(typeof(SharedMindSystem))]
-    public NetUserId? OriginalOwnerUserId { get; set; }
 
     /// <summary>
     ///     The first entity that this mind controlled. Used for round end information.

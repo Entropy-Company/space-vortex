@@ -52,7 +52,7 @@ namespace Content.Server.Cargo.Systems
                 return;
 
             _audio.PlayPvs(ApproveSound, uid);
-            var bankAccountEnt = new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent>(stationUid.Value, sharedAccount);
+            var bankAccountEnt = new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(stationUid.Value, sharedAccount);
             UpdateBankAccount(bankAccountEnt, (int) price, component.Account);
             QueueDel(args.Used);
             args.Handled = true;
@@ -158,7 +158,7 @@ namespace Content.Server.Cargo.Systems
                 var balanceToAdd = (int)Math.Round(bank.IncreasePerSecond * bank.IncomeDelay.TotalSeconds);
                 try
                 {
-                    UpdateBankAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent>(uid, bank), balanceToAdd, bank.RevenueDistribution);
+                    UpdateBankAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(uid, bank), balanceToAdd, bank.RevenueDistribution);
                 }
                 catch (Exception ex)
                 {
@@ -288,7 +288,7 @@ namespace Content.Server.Cargo.Systems
                 $"{ToPrettyString(player):user} approved order [orderId:{order.OrderId}, quantity:{order.OrderQuantity}, product:{order.ProductId}, requester:{order.Requester}, reason:{order.Reason}] on account {order.Account} with balance at {accountBalance}");
 
             orderDatabase.Orders[component.Account].Remove(order);
-            UpdateBankAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent>(station.Value, bank), -cost, order.Account);
+            UpdateBankAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(station.Value, bank), -cost, order.Account);
             UpdateOrders(station.Value);
         }
 

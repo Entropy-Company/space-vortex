@@ -1,5 +1,5 @@
 - type: entity
-  id: ADTATM
+  id: EZ_ATM
   name: ATM
   description: For all your monetary needs!
   placement:
@@ -14,15 +14,18 @@
   - type: Clickable
   - type: InteractionOutline
   - type: Sprite
-    sprite: ADT/Structures/Machines/atm.rsi
-    snapCardinals: true
-    state:
+    sprite: _Eternal/Structures/Machines/atm.rsi
     layers:
-    - state: "off"
-      map: ["enum.ATMVisualLayers.Base"]
-    - state: "on"
-      map: ["enum.ATMVisualLayers.BaseUnshaded"]
+    - map: ["atmLayerBody"]
+      state: icon
+      directional: true
+    - map: ["atmLayerScreen"]
+      state: off
+      directional: true
+    - map: ["atmLayerScreenOn"]
+      state: on
       shader: unshaded
+      directional: true
   - type: ATM
     idCardSlot:
       ejectSound: /Audio/Machines/id_swipe.ogg
@@ -46,7 +49,7 @@
       path: /Audio/Ambience/Objects/vending_machine_hum.ogg
   - type: ActivatableUI
     key: enum.ATMUiKey.Key
-    singleUser: true
+  - type: Rotatable
   - type: ActivatableUIRequiresPower
   - type: UserInterface
     interfaces:

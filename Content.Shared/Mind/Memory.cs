@@ -1,5 +1,8 @@
+using Robust.Shared.Serialization;
+
 namespace Content.Shared.Mind;
 
+[Serializable, NetSerializable]
 public sealed class Memory
 {
     [ViewVariables(VVAccess.ReadWrite)]

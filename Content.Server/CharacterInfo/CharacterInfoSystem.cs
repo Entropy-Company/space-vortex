@@ -32,7 +32,7 @@ public sealed class CharacterInfoSystem : EntitySystem
 
         var objectives = new Dictionary<string, List<ObjectiveInfo>>();
         var jobTitle = Loc.GetString("character-info-no-profession");
-        var memories = new Dictionary<string, string>(); //ADT-Economy
+        var memories = new Dictionary<string, string>(); //Economy
         string? briefing = null;
         if (_minds.TryGetMind(entity, out var mindId, out var mind))
         {
@@ -56,15 +56,14 @@ public sealed class CharacterInfoSystem : EntitySystem
             // Get briefing
             briefing = _roles.MindGetBriefing(mindId);
 
-            //ADT-Economy-Start || Get memories
-// TODO: Implement mind memory storage and retrieval. mind.AllMemories does not exist.
-// foreach (var memory in mind.AllMemories)
-// {
-//     memories[memory.Name] = memory.Value;
-// }
-//ADT-Economy-End
+            //Economy-Start || Get memories
+            foreach (var memory in mind.Memories)
+            {
+                memories[memory.Name] = memory.Value;
+            }
+            //Economy-End
         }
 
-        RaiseNetworkEvent(new CharacterInfoEvent(GetNetEntity(entity), jobTitle, objectives, briefing, memories), args.SenderSession); //ADT-Economy
+        RaiseNetworkEvent(new CharacterInfoEvent(GetNetEntity(entity), jobTitle, objectives, briefing, memories), args.SenderSession); //Economy
     }
 }

@@ -6,26 +6,38 @@ namespace Content.Shared.VendingMachines
     public sealed class VendingMachineInterfaceState : BoundUserInterfaceState
     {
         public List<VendingMachineInventoryEntry> Inventory;
-        //ADT-Economy-Start
+        //Economy-Start
         public double PriceMultiplier;
         public int Credits;
-        public VendingMachineInterfaceState(List<VendingMachineInventoryEntry> inventory, double priceMultiplier,
-            int credits)
-        //ADT-Economy-End
+        //Economy-End
+        public VendingMachineInterfaceState(List<VendingMachineInventoryEntry> inventory, double priceMultiplier, int credits) //Economy
         {
             Inventory = inventory;
-            //ADT-Economy-Start
+            //Economy-Start
             PriceMultiplier = priceMultiplier;
             Credits = credits;
-            //ADT-Economy-End
+            //Economy-End
         }
     }
-    //ADT-Economy-Start
+    //Economy-Start
     [Serializable, NetSerializable]
     public sealed class VendingMachineWithdrawMessage : BoundUserInterfaceMessage
     {
     }
-    //ADT-Economy-End
+
+    [Serializable, NetSerializable]
+    public sealed class VendingMachineEjectCountMessage : BoundUserInterfaceMessage
+    {
+        public readonly VendingMachineInventoryEntry Entry;
+        public readonly int Count;
+        public VendingMachineEjectCountMessage(VendingMachineInventoryEntry entry, int count)
+        {
+            Entry = entry;
+            Count = count;
+        }
+    }
+
+    //Economy-End
 
     [Serializable, NetSerializable]
     public sealed class VendingMachineEjectMessage : BoundUserInterfaceMessage

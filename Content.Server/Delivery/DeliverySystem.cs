@@ -2,6 +2,7 @@ using Content.Server.Cargo.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Station.Systems;
 using Content.Server.StationRecords.Systems;
+using Content.Shared.Cargo;
 using Content.Shared.Cargo.Components;
 using Content.Shared.Cargo.Prototypes;
 using Content.Shared.Delivery;
@@ -79,7 +80,7 @@ public sealed partial class DeliverySystem : SharedDeliverySystem
         if (!TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent.Comp.RecipientStation, out var account))
             return;
 
-        var stationAccountEnt = new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent.Comp.RecipientStation.Value, account);
+        var stationAccountEnt = new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(ent.Comp.RecipientStation.Value, account);
 
         var multiplier = GetDeliveryMultiplier(ent!); // Resolve so we know it's got the component
 
@@ -128,7 +129,7 @@ public sealed partial class DeliverySystem : SharedDeliverySystem
         if (calculatedPenalty > penaltyAccountBalance )
             calculatedPenalty = Math.Max(0, penaltyAccountBalance);
 
-        var penaltyAccountEnt = new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent.Comp.RecipientStation.Value, stationAccount);
+        var penaltyAccountEnt = new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(ent.Comp.RecipientStation.Value, stationAccount);
         _cargo.UpdateBankAccount(
             penaltyAccountEnt,
             -calculatedPenalty,

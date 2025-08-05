@@ -24,7 +24,7 @@ public sealed partial class SiliconLawBoundComponent : Component
     /// </summary>
     [DataField]
     public SoundSpecifier? LawUploadSound = new SoundPathSpecifier("/Audio/Misc/cryo_warning.ogg");
-    // ADT-END
+    // END
 }
 
 /// <summary>

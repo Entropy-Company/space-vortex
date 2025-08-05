@@ -130,7 +130,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             return;
         }
 
-        var (entity, job, objectives, briefing, entityName, memories) = data; //ADT-Economy
+        var (entity, job, objectives, briefing, entityName, memories) = data; //Economy
 
         _window.SpriteView.SetEntity(entity);
 
@@ -140,7 +140,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         _window.SubText.Text = job;
         _window.Objectives.RemoveAllChildren();
         _window.ObjectivesLabel.Visible = objectives.Any();
-        _window.Memories.RemoveAllChildren(); //ADT-Economy
+        _window.Memories.RemoveAllChildren(); //Economy
 
         foreach (var (groupId, conditions) in objectives)
         {
@@ -181,7 +181,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             _window.Objectives.AddChild(objectiveControl);
         }
 
-        //ADT-Economy-Start
+        //Economy-Start
         foreach (var (memoryName, memoryValue) in memories)
         {
             var memoryControl = new BoxContainer()
@@ -199,7 +199,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             });
             _window.Memories.AddChild(memoryControl);
         }
-        //ADT-Economy-End
+        //Economy-End
 
         if (briefing != null)
         {

@@ -1,5 +1,4 @@
 using Content.Client.UserInterface.Controls;
-using Robust.Client.UserInterface.Controls;
 using Content.Client.VendingMachines.UI;
 using Content.Shared.VendingMachines;
 using Robust.Client.UserInterface;
@@ -16,9 +15,6 @@ namespace Content.Client.VendingMachines
         [ViewVariables]
         private List<VendingMachineInventoryEntry> _cachedInventory = new();
 
-        // ADT-Economy: Store filtered indices for UI
-        private List<int> _cachedFilteredIndex = new();
-
         public VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
         {
         }
@@ -27,42 +23,58 @@ namespace Content.Client.VendingMachines
         {
             base.Open();
 
-            var vendingMachineSys = EntMan.System<VendingMachineSystem>();
-
-            var component = EntMan.GetComponent<VendingMachineComponent>(Owner); //ADT-Economy
-            _cachedInventory = vendingMachineSys.GetAllInventory(Owner, component); //ADT-Economy
-
-            _menu = this.CreateWindow<VendingMachineMenu>();
-            _menu.OpenCenteredLeft();
+            _menu = new VendingMachineMenu();
+            var component = EntMan.GetComponent<VendingMachineComponent>(Owner); //Economy
+            var system = EntMan.System<VendingMachineSystem>(); //Economy
+            _cachedInventory = system.GetAllInventory(Owner, component); //Economy
             _menu.Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
 
-            _menu.OnClose += Close; //ADT-Economy
-            _menu.OnItemSelected += OnItemSelected;
-            _menu.OnSearchChanged += OnSearchChanged;
-            _menu.OnWithdraw += SendMessage; //ADT-Economy
+            _menu.OnClose += Close; //Economy
+            _menu.OnItemCountSelected += OnItemSelected;    // ADT vending eject count
+            _menu.OnWithdraw += SendMessage; //Economy
+            _menu.Populate(_cachedInventory, component.PriceMultiplier, component.Credits); //Economy-Tweak
 
-            _menu.Populate(_cachedInventory, out _cachedFilteredIndex, component.PriceMultiplier, component.Credits); //ADT-Economy
+            _menu.OpenCentered();
         }
 
         public void Refresh()
         {
-            var enabled = EntMan.TryGetComponent(Owner, out VendingMachineComponent? bendy) && !bendy.Ejecting;
-
             var system = EntMan.System<VendingMachineSystem>();
+            var component = EntMan.GetComponent<VendingMachineComponent>(Owner); //Economy
             _cachedInventory = system.GetAllInventory(Owner);
 
-            // Retrieve VendingMachineComponent for priceMultiplier and credits
-            var component = EntMan.GetComponent<VendingMachineComponent>(Owner);
-            _menu?.Populate(_cachedInventory, out _cachedFilteredIndex, component.PriceMultiplier, component.Credits); //ADT-Economy
+            _menu?.Populate(_cachedInventory, component.PriceMultiplier, component.Credits); //Economy-Tweak
         }
+
+
+        // START-TWEAK
+        protected override void UpdateState(BoundUserInterfaceState state)
+        {
+            base.UpdateState(state);
+
+            var system = EntMan.System<VendingMachineSystem>();
+
+            if (state is not VendingMachineInterfaceState newState)
+                return;
+
+            _cachedInventory = system.GetAllInventory(Owner);
+
+            _menu?.Populate(_cachedInventory, newState.PriceMultiplier, newState.Credits); //Economy-Tweak
+        }
+
+        private void OnItemSelected(VendingMachineInventoryEntry entry, VendingMachineItem item)
+        {
+            SendPredictedMessage(new VendingMachineEjectCountMessage(entry, item.Count.SelectedId + 1));
+        }
+
+        // END-TWEAK
 
         public void UpdateAmounts()
         {
-            var enabled = EntMan.TryGetComponent(Owner, out VendingMachineComponent? bendy) && !bendy.Ejecting;
-
             var system = EntMan.System<VendingMachineSystem>();
+            var component = EntMan.GetComponent<VendingMachineComponent>(Owner);
             _cachedInventory = system.GetAllInventory(Owner);
-            _menu?.UpdateAmounts(_cachedInventory, enabled);
+            _menu?.Populate(_cachedInventory, component.PriceMultiplier, component.Credits);
         }
 
         private void OnItemSelected(GUIBoundKeyEventArgs args, ListData data)
@@ -73,21 +85,8 @@ namespace Content.Client.VendingMachines
             if (data is not VendorItemsListData { ItemIndex: var itemIndex })
                 return;
 
-            // Use current VendingMachineComponent for state
-            var component = EntMan.GetComponent<VendingMachineComponent>(Owner);
-            _menu?.Populate(_cachedInventory, out _cachedFilteredIndex, component.PriceMultiplier, component.Credits); //ADT-Economy
-        }
-
-        private void OnItemSelected(ItemList.ItemListSelectedEventArgs args)
-        {
             if (_cachedInventory.Count == 0)
                 return;
-
-            // Get selected index from args
-            var itemIndex = args.ItemIndex;
-            // If filtered, map to inventory index
-            if (_cachedFilteredIndex != null && itemIndex >= 0 && itemIndex < _cachedFilteredIndex.Count)
-                itemIndex = _cachedFilteredIndex[itemIndex];
 
             var selectedItem = _cachedInventory.ElementAtOrDefault(itemIndex);
 
@@ -106,17 +105,9 @@ namespace Content.Client.VendingMachines
             if (_menu == null)
                 return;
 
-            _menu.OnItemSelected -= OnItemSelected;
+            _menu.OnItemCountSelected -= OnItemSelected;
             _menu.OnClose -= Close;
             _menu.Dispose();
-        }
-
-        private void OnSearchChanged(string? filter)
-        {
-            //ADT-Economy-Start
-            var component = EntMan.GetComponent<VendingMachineComponent>(Owner);
-            _menu?.Populate(_cachedInventory, out _cachedFilteredIndex, component.PriceMultiplier, component.Credits, filter);
-            //ADT-Economy-End
         }
     }
 }

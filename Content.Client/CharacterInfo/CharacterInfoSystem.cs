@@ -32,7 +32,7 @@ public sealed class CharacterInfoSystem : EntitySystem
     private void OnCharacterInfoEvent(CharacterInfoEvent msg, EntitySessionEventArgs args)
     {
         var entity = GetEntity(msg.NetEntity);
-        var data = new CharacterData(entity, msg.JobTitle, msg.Objectives, msg.Briefing, Name(entity), msg.Memory); //ADT-Economy
+        var data = new CharacterData(entity, msg.JobTitle, msg.Objectives, msg.Briefing, Name(entity), msg.Memory); //Economy
 
         OnCharacterUpdate?.Invoke(data);
     }
@@ -49,8 +49,8 @@ public sealed class CharacterInfoSystem : EntitySystem
         string Job,
         Dictionary<string, List<ObjectiveInfo>> Objectives,
         string? Briefing,
-        string EntityName, //ADT-Economy-Start
-        Dictionary<string, string> Memory //ADT-Economy-End
+        string EntityName, //Economy-Start
+        Dictionary<string, string> Memory //Economy-End
     );
 
     /// <summary>
