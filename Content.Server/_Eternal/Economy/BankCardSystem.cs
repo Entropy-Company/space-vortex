@@ -12,6 +12,7 @@ using Content.Server.GameTicking;
 using Content.Server.Roles.Jobs;
 using Content.Server.Station.Systems;
 using Content.Shared._Eternal.Economy;
+using Content.Shared.Access.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Inventory;
 using Content.Shared.Mind;
@@ -97,7 +98,24 @@ public sealed class BankCardSystem : EntitySystem
 
     private int GetSalary(EntityUid? mind)
     {
-        if (!_job.MindTryGetJob(mind, out JobPrototype? prototype) || !_salaries.Salaries.TryGetValue(prototype.ID, out var salary))
+        if (mind == null)
+            return 0;
+
+        if (!TryComp<MindComponent>(mind.Value, out var mindComponent))
+            return 0;
+
+        var entity = mindComponent.CurrentEntity;
+        if (entity == null)
+            return 0;
+
+        if (!_idCardSystem.TryFindIdCard(entity.Value, out var idCard) || !TryComp<IdCardComponent>(idCard, out var idCardComp))
+            return 0;
+
+        var jobTitle = idCardComp.LocalizedJobTitle;
+        if (string.IsNullOrEmpty(jobTitle))
+            return 0;
+
+        if (!_salaries.Salaries.TryGetValue(jobTitle, out var salary))
             return 0;
 
         return salary;
