@@ -18,21 +18,102 @@ public sealed partial class BankUiFragment : BoxContainer
 
     public Action<BankChangePinMessage>? OnChangePinAttempt;
 
+
+    public Action? OnRefreshRequested;
     public BankUiFragment()
     {
         RobustXamlLoader.Load(this);
+
+        RefreshButton.OnPressed += _ =>
+        {
+            OnRefreshRequested?.Invoke();
+        };
 
         AccountLinkButton.OnPressed += _ =>
         {
             _accountLinkActive = true;
             UpdateAccountLinkUi();
+            ChangePinPanel.Visible = false;
+            ChangePinShowButton.Visible = true;
+            TransferPanel.Visible = false;
+            TransferShowButton.Visible = true;
         };
 
         ChangePinShowButton.OnPressed += _ =>
         {
             ChangePinShowButton.Visible = false;
             ChangePinPanel.Visible = true;
+            _accountLinkActive = false;
+            UpdateAccountLinkUi();
+            TransferPanel.Visible = false;
+            TransferShowButton.Visible = true;
         };
+
+        TransferShowButton.OnPressed += _ =>
+        {
+            TransferShowButton.Visible = false;
+            TransferPanel.Visible = true;
+            ChangePinPanel.Visible = false;
+            ChangePinShowButton.Visible = true;
+            _accountLinkActive = false;
+            UpdateAccountLinkUi();
+        };
+
+        TransferCancelButton.OnPressed += _ =>
+        {
+            TransferPanel.Visible = false;
+            TransferShowButton.Visible = true;
+            TransferAccountLineEdit.Text = string.Empty;
+            TransferAmountLineEdit.Text = string.Empty;
+        };
+
+        TransferAccountLineEdit.OnTextChanged += _ =>
+        {
+            ValidateLineEdit(TransferAccountLineEdit, 6);
+            ValidateTransferFields();
+        };
+        TransferAmountLineEdit.OnTextChanged += _ =>
+        {
+            ValidateLineEdit(TransferAmountLineEdit, 9);
+            ValidateTransferFields();
+        };
+
+        TransferConfirmButton.OnPressed += _ =>
+        {
+            if (!TransferConfirmButton.Disabled)
+            {
+                if (!int.TryParse(TransferAccountLineEdit.Text, out var toAccount))
+                    return;
+                if (!int.TryParse(TransferAmountLineEdit.Text, out var amount))
+                    return;
+                if (TransferPinLineEdit.Text.Length != 4 || !int.TryParse(TransferPinLineEdit.Text, out var pin))
+                    return;
+                OnTransferAttempt?.Invoke(new BankTransferMessage(toAccount, amount, pin));
+                AccountLinkResultLabel.Visible = true;
+            }
+        };
+
+        TransferPinLineEdit.OnTextChanged += _ =>
+        {
+            ValidateLineEdit(TransferPinLineEdit, 4);
+            ValidateTransferFields();
+        };
+
+
+
+        void ValidateTransferFields()
+        {
+            var validAccount = TransferAccountLineEdit.Text.Length == 6 && int.TryParse(TransferAccountLineEdit.Text, out _);
+            var validAmount = false;
+            if (int.TryParse(TransferAmountLineEdit.Text, out var sum) && sum > 0)
+            {
+                var balance = _lastUiState?.Balance ?? 0;
+                validAmount = sum <= balance;
+            }
+            var validPin = TransferPinLineEdit.Text.Length == 4 && int.TryParse(TransferPinLineEdit.Text, out _);
+            TransferConfirmButton.Disabled = !(validAccount && validAmount && validPin);
+        }
+
 
         ChangePinCancelButton.OnPressed += _ =>
         {
@@ -59,7 +140,6 @@ public sealed partial class BankUiFragment : BoxContainer
                 return;
             }
             OnChangePinAttempt?.Invoke(new BankChangePinMessage(oldPin, newPin));
-            // Hide panel after attempt (UX: like account link)
             ChangePinPanel.Visible = false;
             ChangePinShowButton.Visible = true;
             OldPinLineEdit.Text = string.Empty;
@@ -105,12 +185,17 @@ public sealed partial class BankUiFragment : BoxContainer
         };
     }
 
+    public Action<BankTransferMessage>? OnTransferAttempt;
+
+    private BankCartridgeUiState? _lastUiState;
     public void UpdateState(BankCartridgeUiState state)
     {
+        _lastUiState = state;
         var accountLinked = state.AccountId != null;
 
         AccountLinkMessageLabel.Text = state.AccountLinkMessage;
         AccountLinkResultLabel.Text = state.AccountLinkResult;
+        AccountLinkResultLabel.Visible = !string.IsNullOrEmpty(state.AccountLinkResult);
 
         if (!string.IsNullOrEmpty(state.AccountLinkResult))
         {
@@ -123,6 +208,15 @@ public sealed partial class BankUiFragment : BoxContainer
                 ChangePinShowButton.Visible = true;
                 ChangePinResultLabel.Text = state.AccountLinkResult;
                 ChangePinResultLabel.Visible = true;
+            }
+            if (state.AccountLinkResult.Contains("выполнен успешно") ||
+                state.AccountLinkResult.Contains("Successfully transferred"))
+            {
+                TransferPanel.Visible = false;
+                TransferShowButton.Visible = true;
+                TransferAccountLineEdit.Text = string.Empty;
+                TransferAmountLineEdit.Text = string.Empty;
+                TransferPinLineEdit.Text = string.Empty;
             }
             else if (state.AccountLinkResult.Contains("PIN") || 
                      state.AccountLinkResult.Contains("Wrong old PIN") ||

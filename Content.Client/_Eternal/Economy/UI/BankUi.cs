@@ -22,6 +22,8 @@ public sealed partial class BankUi : UIFragment
 
         _fragment.OnLinkAttempt += message => userInterface.SendMessage(new CartridgeUiMessage(message));
         _fragment.OnChangePinAttempt += message => userInterface.SendMessage(new CartridgeUiMessage(message));
+        _fragment.OnTransferAttempt += message => userInterface.SendMessage(new CartridgeUiMessage(message));
+        _fragment.OnRefreshRequested += () => userInterface.SendMessage(new CartridgeUiMessage(new CartridgeUiRefreshMessage()));
     }
 
     public override void UpdateState(BoundUserInterfaceState state)

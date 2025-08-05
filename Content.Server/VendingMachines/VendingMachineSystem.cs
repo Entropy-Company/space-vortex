@@ -37,7 +37,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-
 using Content.Server.Cargo.Components;
 
 namespace Content.Server.VendingMachines

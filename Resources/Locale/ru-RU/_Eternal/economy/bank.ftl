@@ -22,3 +22,19 @@ bank-program-ui-change-pin-success = [color=green]PIN-код успешно из
 bank-program-ui-change-pin-error = [color=red]Ошибка изменения PIN-кода.[/color]
 bank-program-ui-change-pin-wrong-old = [color=red]Неверный старый PIN-код.[/color]
 bank-program-ui-change-pin-invalid = [color=red]Неверный формат PIN-кода.[/color] 
+
+# Перевод средств
+bank-program-ui-transfer-title = Перевод средств
+bank-program-ui-transfer-account = Номер счета получателя
+bank-program-ui-transfer-amount = Сумма
+bank-program-ui-transfer-pin = PIN-код
+bank-program-ui-transfer-confirm = Перевести
+bank-program-ui-transfer-cancel = Отмена
+bank-program-ui-transfer-received = Вы получили { $amount } кредитов от { $from }.
+bank-program-ui-transfer-success = [color=green]Перевод { $amount } кредитов на счет №{ $to } выполнен успешно.[/color]
+bank-program-ui-transfer-error-no-from = [color=red]Ошибка: не найден исходный счет.[/color]
+bank-program-ui-transfer-error-self = [color=red]Ошибка: нельзя переводить средства на свой же счет.[/color]
+bank-program-ui-transfer-error-no-to = [color=red]Ошибка: не найден целевой счет.[/color]
+bank-program-ui-transfer-error-amount = [color=red]Ошибка: некорректная сумма перевода.[/color]
+bank-program-ui-transfer-error-nomoney = [color=red]Ошибка: недостаточно средств для перевода.[/color]
+bank-program-ui-transfer-error-pin = [color=red]Неверный PIN-код.[/color]

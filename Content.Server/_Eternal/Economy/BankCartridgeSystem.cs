@@ -4,6 +4,9 @@ using Content.Shared._Eternal.Economy;
 using Content.Shared.PDA;
 using Content.Shared.Mind;
 using System.Linq;
+using Content.Shared.Chat;
+using Robust.Shared.Utility;
+using Robust.Shared.Maths;
 
 namespace Content.Server._Eternal.Economy;
 
@@ -62,6 +65,63 @@ public sealed class BankCartridgeSystem : EntitySystem
 
         var bankCard = AddComp<BankCardComponent>(pda.ContainedId.Value);
         bankCard.AccountId = account.AccountId;
+    }
+
+    private void OnTransfer(EntityUid uid, BankCartridgeComponent component, BankTransferMessage args)
+    {
+        // Проверка: есть ли текущий аккаунт
+        if (component.AccountId == null || !_bankCardSystem.TryGetAccount(component.AccountId.Value, out var fromAccount))
+        {
+            component.AccountLinkResult = Loc.GetString("bank-program-ui-transfer-error-no-from");
+            return;
+        }
+        // Проверка: нельзя переводить себе
+        if (component.AccountId.Value == args.ToAccountId)
+        {
+            component.AccountLinkResult = Loc.GetString("bank-program-ui-transfer-error-self");
+            return;
+        }
+        // Проверка: есть ли целевой аккаунт
+        if (!_bankCardSystem.TryGetAccount(args.ToAccountId, out var toAccount))
+        {
+            component.AccountLinkResult = Loc.GetString("bank-program-ui-transfer-error-no-to");
+            return;
+        }
+        // Проверка: сумма положительная
+        if (args.Amount <= 0)
+        {
+            component.AccountLinkResult = Loc.GetString("bank-program-ui-transfer-error-amount");
+            return;
+        }
+        // Проверка: правильный ли PIN
+        if (args.Pin != fromAccount.AccountPin)
+        {
+            component.AccountLinkResult = Loc.GetString("bank-program-ui-transfer-error-pin");
+            return;
+        }
+        // Проверка: хватает ли средств
+        if (fromAccount.Balance < args.Amount)
+        {
+            component.AccountLinkResult = Loc.GetString("bank-program-ui-transfer-error-nomoney");
+            return;
+        }
+        // Перевод средств
+        if (!_bankCardSystem.TryChangeBalance(fromAccount.AccountId, -args.Amount))
+        {
+            component.AccountLinkResult = Loc.GetString("bank-program-ui-transfer-error-nomoney");
+            return;
+        }
+        _bankCardSystem.TryChangeBalance(toAccount.AccountId, args.Amount);
+        component.AccountLinkResult = Loc.GetString("bank-program-ui-transfer-success", ("to", toAccount.AccountId), ("amount", args.Amount));
+
+        if (toAccount.CartridgeUid != null && Comp<Content.Shared.CartridgeLoader.CartridgeComponent>(toAccount.CartridgeUid.Value).LoaderUid is { } loaderUid)
+        {
+            _cartridgeLoaderSystem?.SendNotification(
+            loaderUid,
+            "NanoBank",
+            Loc.GetString("bank-program-ui-transfer-received", ("from", fromAccount.Name), ("amount", args.Amount))
+        );
+        }
     }
 
     private void OnChangePin(EntityUid uid, BankCartridgeComponent component, BankChangePinMessage args)
@@ -124,6 +184,12 @@ public sealed class BankCartridgeSystem : EntitySystem
                 break;
             case BankChangePinMessage pinMessage:
                 OnChangePin(uid, component, pinMessage);
+                break;
+            case BankTransferMessage transferMessage:
+                OnTransfer(uid, component, transferMessage);
+                break;
+            case CartridgeUiRefreshMessage:
+                // Просто обновить UI
                 break;
         }
 

@@ -4,6 +4,10 @@
 
     <PanelContainer StyleClasses="BackgroundDark"></PanelContainer>
     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="8">
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="False">
+            <Control HorizontalExpand="True" />
+            <Button Name="RefreshButton" Text="⟳" ToolTip="Обновить" MinWidth="24" MinHeight="24" Margin="0 0 4 0" />
+        </BoxContainer>
         <BoxContainer Name="LinkedAccount" Orientation="Vertical" Visible="False">
             <RichTextLabel Name="LinkedAccountNumberLabel" />
             <RichTextLabel Name="LinkedAccountNameLabel" />
@@ -22,6 +26,21 @@
                     <GridContainer Columns="2" Rows="1" HorizontalExpand="True" Margin="0 4 0 0">
                         <Button Name="SavePinButton" Text="{Loc 'bank-program-ui-save-pin'}" HorizontalExpand="True" />
                         <Button Name="ChangePinCancelButton" Text="{Loc 'bank-program-ui-link-cancel'}" HorizontalExpand="True" />
+                    </GridContainer>
+                </BoxContainer>
+            </PanelContainer>
+            <!-- Transfer Section Toggle Button -->
+            <Button Name="TransferShowButton" Text="{Loc 'bank-program-ui-transfer-title'}" HorizontalExpand="True" HorizontalAlignment="Center" />
+            <!-- Transfer Section (hidden by default) -->
+            <PanelContainer Name="TransferPanel" StyleClasses="BackgroundLight" Margin="5 5 5 5" Visible="False">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="False" Margin="5">
+                    <Label Text="{Loc 'bank-program-ui-transfer-title'}" />
+                    <LineEdit Name="TransferAccountLineEdit" PlaceHolder="{Loc 'bank-program-ui-transfer-account'}" HorizontalExpand="True" />
+                    <LineEdit Name="TransferAmountLineEdit" PlaceHolder="{Loc 'bank-program-ui-transfer-amount'}" HorizontalExpand="True" />
+                    <LineEdit Name="TransferPinLineEdit" PlaceHolder="{Loc 'bank-program-ui-transfer-pin'}" HorizontalExpand="True" />
+                    <GridContainer Columns="2" Rows="1" HorizontalExpand="True" Margin="0 4 0 0">
+                        <Button Name="TransferConfirmButton" Text="{Loc 'bank-program-ui-transfer-confirm'}" HorizontalExpand="True" />
+                        <Button Name="TransferCancelButton" Text="{Loc 'bank-program-ui-transfer-cancel'}" HorizontalExpand="True" />
                     </GridContainer>
                 </BoxContainer>
             </PanelContainer>
