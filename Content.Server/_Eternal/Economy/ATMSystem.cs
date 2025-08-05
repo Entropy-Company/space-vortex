@@ -112,7 +112,11 @@ public sealed class ATMSystem : SharedATMSystem
             return;
         }
 
-        _stackSystem.Spawn(args.Amount, _prototypeManager.Index<StackPrototype>(component.CreditStackPrototype), Transform(uid).Coordinates);
+        var transform = Transform(uid);
+        var forward = transform.LocalRotation.ToWorldVec();
+        var offset = forward * 0.7f;
+        var spawnCoords = transform.Coordinates.Offset(offset);
+        _stackSystem.Spawn(args.Amount, _prototypeManager.Index<StackPrototype>(component.CreditStackPrototype), spawnCoords);
         _audioSystem.PlayPvs(component.SoundWithdrawCurrency, uid);
 
         UpdateUiState(uid, account.Balance, true, Loc.GetString("atm-ui-select-withdraw-amount"));

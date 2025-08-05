@@ -26,22 +26,31 @@ internal sealed class BankAccountCreateCommand : IConsoleCommand
 {
 
     public string Command => "bankaccountcreate";
-    public string Description => "Создать и привязать банковский аккаунт игроку: bankaccountcreate <_netId> <account number> <pin> [auto_complete=true|false]";
-    public string Help => "bankaccountcreate <_netId> <account number> <pin> [auto_complete=true|false] -- _netId это сущность персонажа игрока, у которого в инвентаре должен быть КПК с ID-картой и катриджем банка. account number и pin будут установлены.";
+    public string Description => "Создать и привязать банковский аккаунт игроку: bankaccountcreate <_netId> <account number> <pin> [auto_complete=true|false] [salary=true|false]";
+    public string Help => "bankaccountcreate <_netId> <account number> <pin> [auto_complete=true|false] [salary=true|false] -- _netId это сущность персонажа игрока, у которого в инвентаре должен быть КПК с ID-картой и катриджем банка. account number и pin будут установлены. Если salary=false, аккаунт не будет получать зарплату.";
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         var autoComplete = true;
-        if (args.Length < 3 || args.Length > 4)
+        var salary = true;
+        if (args.Length < 3 || args.Length > 5)
         {
-            shell.WriteLine("Использование: bankaccountcreate <_netId> <account number> <pin> [auto_complete=true|false]");
+            shell.WriteLine("Использование: bankaccountcreate <_netId> <account number> <pin> [auto_complete=true|false] [salary=true|false]");
             return;
         }
-        if (args.Length == 4)
+        if (args.Length >= 4)
         {
             if (!bool.TryParse(args[3], out autoComplete))
             {
                 shell.WriteLine($"Неверное значение auto_complete: {args[3]}. Ожидается true или false.");
+                return;
+            }
+        }
+        if (args.Length == 5)
+        {
+            if (!bool.TryParse(args[4], out salary))
+            {
+                shell.WriteLine($"Неверное значение salary: {args[4]}. Ожидается true или false.");
                 return;
             }
         }
@@ -120,17 +129,24 @@ internal sealed class BankAccountCreateCommand : IConsoleCommand
         if (entMan.TryGetComponent<IdCardComponent>(idCardUid, out var idCardComp) && !string.IsNullOrWhiteSpace(idCardComp.FullName))
             ownerName = idCardComp.FullName;
         else
-            ownerName = "Unknown";
+            ownerName = "Неизвестно";
         account.Name = ownerName;
 
         account.CartridgeUid = bankCartridgeUid;
         bankCartridge.AccountId = account.AccountId;
         bankCard.AccountId = account.AccountId;
         bankCard.Pin = pin;
-        if (entMan.TryGetComponent<MindContainerComponent>(mob, out var mind) && mind.Mind != null && entMan.TryGetComponent<Content.Shared.Mind.MindComponent>(mind.Mind.Value, out var mindComp))
+
+        if (salary && entMan.TryGetComponent<MindContainerComponent>(mob, out var mind) && mind.Mind != null && entMan.TryGetComponent<Content.Shared.Mind.MindComponent>(mind.Mind.Value, out var mindComp))
         {
+            account.Mind = (mind.Mind.Value, mindComp);
             mindComp.AddMemory(new Memory("PIN", pin.ToString()));
-            mindComp.AddMemory(new Memory("Account", account.AccountId.ToString()));
+            mindComp.AddMemory(new Memory("Аккаунт №", account.AccountId.ToString()));
+        }
+        else if (!salary && entMan.TryGetComponent<MindContainerComponent>(mob, out var mind2) && mind2.Mind != null && entMan.TryGetComponent<Content.Shared.Mind.MindComponent>(mind2.Mind.Value, out var mindComp2))
+        {
+            mindComp2.AddMemory(new Memory("PIN", pin.ToString()));
+            mindComp2.AddMemory(new Memory("Аккаунт №", account.AccountId.ToString()));
         }
         shell.WriteLine($"Банковский аккаунт {account.AccountId} с PIN {pin} создан и привязан к ID-карте и катриджу банка игрока с _netId {args[0]}.");
     }
