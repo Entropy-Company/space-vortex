@@ -9,6 +9,7 @@
     offState: off
     brokenState: broken
     normalState: normal-unshaded
+    priceMultiplier: 0.1
   - type: Sprite
     sprite: _CorvaxNext/Structures/Machines/VendingMachines/captaindrobe.rsi
     layers:

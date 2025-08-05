@@ -1,4 +1,4 @@
-﻿namespace Content.Server.Cargo.Components;
+namespace Content.Server.Cargo.Components;
 
 /// <summary>
 /// This is used for setting a static, unchanging price for an object.
@@ -11,4 +11,8 @@ public sealed partial class StaticPriceComponent : Component
     /// </summary>
     [DataField("price", required: true)]
     public double Price;
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField("vendingPrice")]
+    public double? VendingPrice { get; set; }
 }

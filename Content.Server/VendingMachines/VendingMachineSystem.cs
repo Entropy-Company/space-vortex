@@ -38,6 +38,8 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
+using Content.Server.Cargo.Components;
+
 namespace Content.Server.VendingMachines
 {
     public sealed class VendingMachineSystem : SharedVendingMachineSystem
@@ -223,10 +225,18 @@ namespace Content.Server.VendingMachines
             args.Handled = true;
         }
 
+        /// <summary>
+        /// Returns the price for a vending machine entry. Uses ONLY VendingPrice if set, else 10. Ignores all other pricing logic.
+        /// </summary>
         protected override int GetEntryPrice(EntityPrototype proto)
         {
-            var price = (int)_pricing.GetEstimatedPrice(proto);
-            return price > 0 ? price : 25;
+            if (proto.Components.TryGetValue(Factory.GetComponentName<StaticPriceComponent>(), out var staticProto))
+            {
+                var staticPrice = (StaticPriceComponent) staticProto.Component;
+                if (staticPrice.VendingPrice != null)
+                    return (int) staticPrice.VendingPrice.Value;
+            }
+            return 10;
         }
 
         private int GetPrice(VendingMachineInventoryEntry entry, VendingMachineComponent comp, int count)

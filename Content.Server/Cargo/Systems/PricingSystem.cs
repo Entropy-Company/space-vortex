@@ -1,4 +1,4 @@
-﻿using Content.Server.Administration;
+using Content.Server.Administration;
 using Content.Server.Body.Systems;
 using Content.Server.Cargo.Components;
 using Content.Shared.Chemistry.EntitySystems;
@@ -182,29 +182,35 @@ public sealed class PricingSystem : EntitySystem
     /// <summary>
     /// Get a rough price for an entityprototype. Does not consider contained entities.
     /// </summary>
-    public double GetEstimatedPrice(EntityPrototype prototype)
+    /// <summary>
+    /// Returns the estimated price for an entity prototype.
+    /// If isVending is true, returns ONLY vendingPrice from StaticPriceComponent (if set), else 10. Ignores all other calculations.
+    /// </summary>
+    public double GetEstimatedPrice(EntityPrototype prototype, bool isVending = false)
     {
+        if (isVending)
+        {
+            if (prototype.Components.TryGetValue(Factory.GetComponentName<StaticPriceComponent>(), out var staticProto))
+            {
+                var staticPrice = (StaticPriceComponent) staticProto.Component;
+                if (staticPrice.VendingPrice != null)
+                    return staticPrice.VendingPrice.Value;
+            }
+            return 10;
+        }
         var ev = new EstimatedPriceCalculationEvent(prototype);
-
         RaiseLocalEvent(ref ev);
-
         if (ev.Handled)
             return ev.Price;
-
         var price = ev.Price;
         price += GetMaterialsPrice(prototype);
         price += GetSolutionsPrice(prototype);
-        // Can't use static price with stackprice
         var oldPrice = price;
         price += GetStackPrice(prototype);
-
         if (oldPrice.Equals(price))
         {
-            price += GetStaticPrice(prototype);
+            price += GetStaticPrice(prototype, isVending);
         }
-
-        // TODO: Proper container support.
-
         return price;
     }
 
@@ -359,13 +365,15 @@ public sealed class PricingSystem : EntitySystem
         return price;
     }
 
-    private double GetStaticPrice(EntityPrototype prototype)
+    private double GetStaticPrice(EntityPrototype prototype, bool isVending = false)
     {
         var price = 0.0;
 
         if (prototype.Components.TryGetValue(Factory.GetComponentName<StaticPriceComponent>(), out var staticProto))
         {
             var staticPrice = (StaticPriceComponent) staticProto.Component;
+            if (isVending && staticPrice.VendingPrice != null)
+                return staticPrice.VendingPrice.Value;
             price += staticPrice.Price;
         }
 
