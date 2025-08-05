@@ -1,2 +1,2 @@
-job-name-ADTBlueShieldOfficer = офицер Синего Щита
-JobADTBlueShieldOfficer = офицер Синего Щита
+job-name-ADTBlueShieldOfficer = офицер «Синий Щит»
+JobADTBlueShieldOfficer = офицер «Синий Щит»

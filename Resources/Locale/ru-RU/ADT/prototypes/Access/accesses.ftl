@@ -1,1 +1,1 @@
-id-card-access-level-blueshield = Офицер Синего Щита
+id-card-access-level-blueshield = Офицер «Синий Щит»

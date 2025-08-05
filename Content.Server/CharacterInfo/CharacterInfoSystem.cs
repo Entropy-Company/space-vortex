@@ -1,4 +1,4 @@
-﻿using Content.Server.Mind;
+using Content.Server.Mind;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
 using Content.Shared.CharacterInfo;
@@ -32,6 +32,7 @@ public sealed class CharacterInfoSystem : EntitySystem
 
         var objectives = new Dictionary<string, List<ObjectiveInfo>>();
         var jobTitle = Loc.GetString("character-info-no-profession");
+        var memories = new Dictionary<string, string>(); //Economy
         string? briefing = null;
         if (_minds.TryGetMind(entity, out var mindId, out var mind))
         {
@@ -54,8 +55,15 @@ public sealed class CharacterInfoSystem : EntitySystem
 
             // Get briefing
             briefing = _roles.MindGetBriefing(mindId);
+
+            //Economy-Start || Get memories
+            foreach (var memory in mind.Memories)
+            {
+                memories[memory.Name] = memory.Value;
+            }
+            //Economy-End
         }
 
-        RaiseNetworkEvent(new CharacterInfoEvent(GetNetEntity(entity), jobTitle, objectives, briefing), args.SenderSession);
+        RaiseNetworkEvent(new CharacterInfoEvent(GetNetEntity(entity), jobTitle, objectives, briefing, memories), args.SenderSession); //Economy
     }
 }

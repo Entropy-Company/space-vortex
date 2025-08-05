@@ -52,6 +52,11 @@
         mask:
         - ItemMask
   - type: Appearance
+  # Economy-Start
+  - type: Currency
+    price:
+      SpaceCash: 1
+  # Economy-End
 
 - type: material
   id: Credit

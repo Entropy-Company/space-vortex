@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared.Cargo.Components;
 using Content.Server.Cargo.Components;
 using Content.Server._CorvaxNext.Cargo.Components;
 using Content.Server._CorvaxNext.Cargo.Systems;
@@ -80,7 +81,8 @@ public sealed class StockTradingCartridgeSystem : EntitySystem
             ent.Comp.Station = station;
 
         if (!TryComp<StationStockMarketComponent>(ent.Comp.Station, out var stockMarket) ||
-            !TryComp<StationBankAccountComponent>(ent.Comp.Station, out var bankAccount))
+            !TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent.Comp.Station, out var bankAccount) ||
+            !TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent.Comp.Station, out var sharedAccount))
             return;
 
         // Convert company data to UI state format
@@ -95,7 +97,7 @@ public sealed class StockTradingCartridgeSystem : EntitySystem
         var state = new StockTradingUiState(
             entries: entries,
             ownedStocks: stockMarket.StockOwnership,
-            balance: _cargoSystem.GetBalanceFromAccount(ent.Comp.Station.Value, bankAccount.PrimaryAccount)
+            balance: _cargoSystem.GetBalanceFromAccount(ent.Comp.Station.Value, sharedAccount.PrimaryAccount)
         );
 
         _cartridgeLoader.UpdateCartridgeUiState(loader, state);

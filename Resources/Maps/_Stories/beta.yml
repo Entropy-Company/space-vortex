@@ -58929,8 +58929,8 @@ entities:
       pos: 55.5,19.5
       parent: 2
     - type: FaxMachine
-      name: Офицер Синего Щита
-      destinationAddress: Офицер Синего Щита
+      name: Офицер «Синий Щит»
+      destinationAddress: Офицер «Синий Щит»
     - type: Label
       currentLabel: Страж Клинка
     - type: NameModifier

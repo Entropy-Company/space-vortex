@@ -48,11 +48,12 @@ namespace Content.Server.Cargo.Systems
 
             var stationUid = _station.GetOwningStation(args.Used);
 
-            if (!TryComp(stationUid, out StationBankAccountComponent? bank))
+            if (!TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(stationUid, out var sharedAccount))
                 return;
 
             _audio.PlayPvs(ApproveSound, uid);
-            UpdateBankAccount((stationUid.Value, bank), (int) price, component.Account);
+            var bankAccountEnt = new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(stationUid.Value, sharedAccount);
+            UpdateBankAccount(bankAccountEnt, (int) price, component.Account);
             QueueDel(args.Used);
             args.Handled = true;
         }
@@ -125,15 +126,44 @@ namespace Content.Server.Cargo.Systems
 
         private void UpdateConsole()
         {
-            var stationQuery = EntityQueryEnumerator<StationBankAccountComponent>();
+            var stationQuery = EntityQueryEnumerator<Content.Shared.Cargo.Components.StationBankAccountComponent>();
             while (stationQuery.MoveNext(out var uid, out var bank))
             {
+                if (bank == null)
+                {
+                    Logger.Error($"[CargoSystem] Null bank component for entity {uid}");
+                    continue;
+                }
+                if (false)
+                {
+                    Logger.Warning($"[CargoSystem] BankAccount is null for entity {uid}, skipping.");
+                    continue;
+                }
+                if (bank.IncomeDelay == null)
+                {
+                    Logger.Error($"[CargoSystem] IncomeDelay is null for entity {uid}");
+                    continue;
+                }
+                if (bank.RevenueDistribution == null)
+                {
+                    Logger.Error($"[CargoSystem] RevenueDistribution is null for entity {uid}");
+                    continue;
+                }
                 if (Timing.CurTime < bank.NextIncomeTime)
                     continue;
                 bank.NextIncomeTime += bank.IncomeDelay;
 
+                Logger.Info($"[CargoSystem] UpdateConsole: uid={uid}, IncreasePerSecond={bank.IncreasePerSecond}, IncomeDelay={bank.IncomeDelay}, RevenueDistribution.Count={bank.RevenueDistribution.Count}");
+
                 var balanceToAdd = (int)Math.Round(bank.IncreasePerSecond * bank.IncomeDelay.TotalSeconds);
-                UpdateBankAccount((uid, bank), balanceToAdd, bank.RevenueDistribution);
+                try
+                {
+                    UpdateBankAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(uid, bank), balanceToAdd, bank.RevenueDistribution);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"[CargoSystem] Exception in UpdateBankAccount for entity {uid}: {ex}");
+                }
             }
         }
 
@@ -157,7 +187,7 @@ namespace Content.Server.Cargo.Systems
             var station = _station.GetOwningStation(uid);
 
             // No station to deduct from.
-            if (!TryComp(station, out StationBankAccountComponent? bank) ||
+            if (!TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var bank) ||
                 !TryComp(station, out StationDataComponent? stationData) ||
                 !TryGetOrderDatabase(station, out var orderDatabase))
             {
@@ -203,7 +233,9 @@ namespace Content.Server.Cargo.Systems
             }
 
             var cost = order.Price * order.OrderQuantity;
-            var accountBalance = GetBalanceFromAccount((station.Value, bank), order.Account);
+            if (!TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station.Value, out var sharedAccount))
+                return;
+            var accountBalance = GetBalanceFromAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(station.Value, sharedAccount), order.Account);
 
             // Not enough balance
             if (cost > accountBalance)
@@ -256,7 +288,7 @@ namespace Content.Server.Cargo.Systems
                 $"{ToPrettyString(player):user} approved order [orderId:{order.OrderId}, quantity:{order.OrderQuantity}, product:{order.ProductId}, requester:{order.Requester}, reason:{order.Reason}] on account {order.Account} with balance at {accountBalance}");
 
             orderDatabase.Orders[component.Account].Remove(order);
-            UpdateBankAccount((station.Value, bank), -cost, order.Account);
+            UpdateBankAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(station.Value, bank), -cost, order.Account);
             UpdateOrders(station.Value);
         }
 
@@ -367,7 +399,8 @@ namespace Content.Server.Cargo.Systems
             if (!TryGetOrderDatabase(stationUid, out var orderDatabase))
                 return;
 
-            if (!TryComp<StationBankAccountComponent>(stationUid, out var bank))
+            if (!TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(stationUid, out var bank) ||
+    !TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(stationUid, out var sharedAccount))
                 return;
 
             if (!_protoMan.TryIndex<CargoProductPrototype>(args.CargoProductId, out var product))
@@ -385,7 +418,7 @@ namespace Content.Server.Cargo.Systems
                 return;
             }
 
-            var targetAccount = component.Mode == CargoOrderConsoleMode.SendToPrimary ? bank.PrimaryAccount : component.Account;
+            var targetAccount = component.Mode == CargoOrderConsoleMode.SendToPrimary ? sharedAccount.PrimaryAccount : component.Account;
 
             var data = GetOrderData(args, product, GenerateOrderId(orderDatabase), component.Account);
 
@@ -438,15 +471,16 @@ namespace Content.Server.Cargo.Systems
         /// </summary>
         private List<CargoOrderData> RelevantOrders(Entity<StationCargoOrderDatabaseComponent> station, Entity<CargoOrderConsoleComponent> console)
         {
-            if (!TryComp<StationBankAccountComponent>(station, out var bank))
+            if (!TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var bank) ||
+                !TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var sharedAccount))
                 return [];
 
             var ourOrders = station.Comp.Orders[console.Comp.Account];
 
-            if (console.Comp.Account == bank.PrimaryAccount)
+            if (console.Comp.Account == sharedAccount.PrimaryAccount)
                 return ourOrders;
 
-            var otherOrders = station.Comp.Orders[bank.PrimaryAccount].Where(order => order.Account == console.Comp.Account);
+            var otherOrders = station.Comp.Orders[sharedAccount.PrimaryAccount].Where(order => order.Account == console.Comp.Account);
 
             return ourOrders.Concat(otherOrders).ToList();
         }
@@ -474,7 +508,8 @@ namespace Content.Server.Cargo.Systems
         {
             var amount = 0;
 
-            if (!TryComp<StationBankAccountComponent>(station, out var bank))
+            if (!TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var bank) ||
+                !TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var sharedAccount))
                 return amount;
 
             foreach (var order in station.Comp.Orders[account])
@@ -484,10 +519,10 @@ namespace Content.Server.Cargo.Systems
                 amount += order.OrderQuantity - order.NumDispatched;
             }
 
-            if (account == bank.PrimaryAccount)
+            if (account == sharedAccount.PrimaryAccount)
                 return amount;
 
-            foreach (var order in station.Comp.Orders[bank.PrimaryAccount])
+            foreach (var order in station.Comp.Orders[sharedAccount.PrimaryAccount])
             {
                 if (order.Account != account)
                     continue;

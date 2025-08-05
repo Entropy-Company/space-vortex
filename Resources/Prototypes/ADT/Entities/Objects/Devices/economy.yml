@@ -1,0 +1,26 @@
+- type: entity
+  parent: BaseItem
+  id: EZ_Eftpos
+  name: EFTPOS
+  description: Swipe your ID card to make purchases electronically.
+  components:
+    - type: Sprite
+      sprite: ADT/Objects/Devices/eftpos.rsi
+      state:
+      layers:
+        - state: eftpos
+        - state: eftpos-screen
+          shader: unshaded
+      netsync: false
+    - type: Eftpos
+    - type: ActivatableUI
+      key: enum.EftposKey.Key
+      singleUser: true
+    - type: UserInterface
+      interfaces:
+        enum.EftposKey.Key:
+          type: EftposBui
+    - type: Clothing
+      quickEquip: false
+      slots:
+      - Belt

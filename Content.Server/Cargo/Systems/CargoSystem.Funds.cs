@@ -27,12 +27,16 @@ public sealed partial class CargoSystem
     private void OnWithdrawFunds(Entity<CargoOrderConsoleComponent> ent, ref CargoConsoleWithdrawFundsMessage args)
     {
         if (_station.GetOwningStation(ent) is not { } station ||
-            !TryComp<StationBankAccountComponent>(station, out var bank))
+            !TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var bank))
+            return;
+
+        var sharedBank = CompOrNull<Content.Shared.Cargo.Components.StationBankAccountComponent>(station);
+        if (sharedBank == null)
             return;
 
         if (args.Account == ent.Comp.Account ||
             args.Amount <= 0 ||
-            args.Amount > GetBalanceFromAccount((station, bank), ent.Comp.Account) * ent.Comp.TransferLimit)
+            args.Amount > GetBalanceFromAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(station, sharedBank), ent.Comp.Account) * ent.Comp.TransferLimit)
             return;
 
         if (Timing.CurTime < ent.Comp.NextAccountActionTime)
@@ -46,7 +50,7 @@ public sealed partial class CargoSystem
         }
 
         ent.Comp.NextAccountActionTime = Timing.CurTime + ent.Comp.AccountActionDelay;
-        UpdateBankAccount((station, bank), -args.Amount,  ent.Comp.Account, dirty: false);
+        UpdateBankAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(station, bank), -args.Amount, ent.Comp.Account, dirty: false);
         _audio.PlayPvs(ApproveSound, ent);
 
         var tryGetIdentityShortInfoEvent = new TryGetIdentityShortInfoEvent(ent, args.Actor);
@@ -71,7 +75,7 @@ public sealed partial class CargoSystem
         else
         {
             var otherAccount = _protoMan.Index(args.Account.Value);
-            UpdateBankAccount((station, bank), args.Amount, args.Account.Value);
+            UpdateBankAccount(new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(station, bank), args.Amount, args.Account.Value);
 
             if (!_emag.CheckFlag(ent, EmagType.Interaction))
             {
@@ -106,23 +110,27 @@ public sealed partial class CargoSystem
     private void OnSetFundingAllocation(Entity<FundingAllocationConsoleComponent> ent, ref SetFundingAllocationBuiMessage args)
     {
         if (_station.GetOwningStation(ent) is not { } station ||
-            !TryComp<StationBankAccountComponent>(station, out var bank))
+            !TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var bank))
             return;
 
-        var expectedCount = _allowPrimaryAccountAllocation ? bank.RevenueDistribution.Count : bank.RevenueDistribution.Count - 1;
+        var sharedBank = CompOrNull<Content.Shared.Cargo.Components.StationBankAccountComponent>(station);
+        if (sharedBank == null)
+            return;
+
+        var expectedCount = _allowPrimaryAccountAllocation ? sharedBank.RevenueDistribution.Count : sharedBank.RevenueDistribution.Count - 1;
         if (args.Percents.Count != expectedCount)
             return;
 
         var differs = false;
         foreach (var (account, percent) in args.Percents)
         {
-            if (percent != (int) Math.Round(bank.RevenueDistribution[account] * 100))
+            if (percent != (int) Math.Round(sharedBank.RevenueDistribution[account] * 100))
             {
                 differs = true;
                 break;
             }
         }
-        differs = differs || args.PrimaryCut != bank.PrimaryCut || args.LockboxCut != bank.LockboxCut;
+        differs = differs || args.PrimaryCut != sharedBank.PrimaryCut || args.LockboxCut != sharedBank.LockboxCut;
 
         if (!differs)
             return;
@@ -130,24 +138,24 @@ public sealed partial class CargoSystem
         if (args.Percents.Values.Sum() != 100)
             return;
 
-        var primaryCut = bank.RevenueDistribution[bank.PrimaryAccount];
-        bank.RevenueDistribution.Clear();
+        var primaryCut = sharedBank.RevenueDistribution[sharedBank.PrimaryAccount];
+        sharedBank.RevenueDistribution.Clear();
         foreach (var (account, percent )in args.Percents)
         {
-            bank.RevenueDistribution.Add(account, percent / 100.0);
+            sharedBank.RevenueDistribution.Add(account, percent / 100.0);
         }
         if (!_allowPrimaryAccountAllocation)
         {
-            bank.RevenueDistribution.Add(bank.PrimaryAccount, 0);
+            sharedBank.RevenueDistribution.Add(sharedBank.PrimaryAccount, 0);
         }
 
         if (_allowPrimaryCutAdjustment && args.PrimaryCut is >= 0.0 and <= 1.0)
         {
-            bank.PrimaryCut = args.PrimaryCut;
+            sharedBank.PrimaryCut = args.PrimaryCut;
         }
         if (_lockboxCutEnabled && args.LockboxCut is >= 0.0 and <= 1.0)
         {
-            bank.LockboxCut = args.LockboxCut;
+            sharedBank.LockboxCut = args.LockboxCut;
         }
 
         Dirty(station, bank);
@@ -156,7 +164,7 @@ public sealed partial class CargoSystem
         _adminLogger.Add(
             LogType.Action,
             LogImpact.Medium,
-            $"{ToPrettyString(args.Actor):player} set station {ToPrettyString(station)} fund distribution: {string.Join(',', bank.RevenueDistribution.Select(p => $"{p.Key}: {p.Value}").ToList())}, primary cut: {bank.PrimaryCut}, lockbox cut: {bank.LockboxCut}");
+            $"{ToPrettyString(args.Actor):player} set station {ToPrettyString(station)} fund distribution: {string.Join(',', sharedBank.RevenueDistribution.Select(p => $"{p.Key}: {p.Value}").ToList())}, primary cut: {sharedBank.PrimaryCut}, lockbox cut: {sharedBank.LockboxCut}");
     }
 
     private void OnFundAllocationBuiOpen(Entity<FundingAllocationConsoleComponent> ent, ref BeforeActivatableUIOpenEvent args)

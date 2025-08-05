@@ -2,6 +2,7 @@ using Content.Server.Cargo.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Station.Systems;
 using Content.Server.StationRecords.Systems;
+using Content.Shared.Cargo;
 using Content.Shared.Cargo.Components;
 using Content.Shared.Cargo.Prototypes;
 using Content.Shared.Delivery;
@@ -76,17 +77,19 @@ public sealed partial class DeliverySystem : SharedDeliverySystem
         if (!Resolve(ent, ref ent.Comp))
             return;
 
-        if (!TryComp<StationBankAccountComponent>(ent.Comp.RecipientStation, out var account))
+        if (!TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent.Comp.RecipientStation, out var account))
             return;
 
-        var stationAccountEnt = (ent.Comp.RecipientStation.Value, account);
+        var stationAccountEnt = new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(ent.Comp.RecipientStation.Value, account);
 
         var multiplier = GetDeliveryMultiplier(ent!); // Resolve so we know it's got the component
 
+        var sharedAccount = CompOrNull<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent.Comp.RecipientStation);
+        var primaryAccount = sharedAccount?.PrimaryAccount ?? "Cargo";
         _cargo.UpdateBankAccount(
             stationAccountEnt,
             (int)(ent.Comp.BaseSpesoReward * multiplier),
-           _cargo.CreateAccountDistribution((ent.Comp.RecipientStation.Value, account)));
+            primaryAccount);
     }
 
     /// <summary>
@@ -96,7 +99,7 @@ public sealed partial class DeliverySystem : SharedDeliverySystem
     /// <param name="reason">The penalty reason, displayed in front of the message.</param>
     protected override void HandlePenalty(Entity<DeliveryComponent> ent, string? reason = null)
     {
-        if (!TryComp<StationBankAccountComponent>(ent.Comp.RecipientStation, out var stationAccount))
+        if (!TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent.Comp.RecipientStation, out var stationAccount))
             return;
 
         if (ent.Comp.WasPenalized)
@@ -116,17 +119,22 @@ public sealed partial class DeliverySystem : SharedDeliverySystem
             { ent.Comp.PenaltyBankAccount, 1.0 }
         };
 
-        var penaltyAccountBalance = stationAccount.Accounts[ent.Comp.PenaltyBankAccount];
+        var sharedAccount = CompOrNull<Content.Shared.Cargo.Components.StationBankAccountComponent>(ent.Comp.RecipientStation);
+        if (sharedAccount == null)
+            return;
+        var penaltyAccountBalance = sharedAccount.Accounts[ent.Comp.PenaltyBankAccount];
         var calculatedPenalty = (int)(ent.Comp.BaseSpesoPenalty * multiplier);
 
         // Prevents cargo from going into negatives
         if (calculatedPenalty > penaltyAccountBalance )
             calculatedPenalty = Math.Max(0, penaltyAccountBalance);
 
+        var penaltyAccountEnt = new Entity<Content.Shared.Cargo.Components.StationBankAccountComponent?>(ent.Comp.RecipientStation.Value, stationAccount);
         _cargo.UpdateBankAccount(
-            (ent.Comp.RecipientStation.Value, stationAccount),
+            penaltyAccountEnt,
             -calculatedPenalty,
-            dist);
+            ent.Comp.PenaltyBankAccount);
+
 
         var message = Loc.GetString("delivery-penalty-message", ("reason", reason), ("spesos", calculatedPenalty), ("account", localizedAccountName.ToUpper()));
         _chat.TrySendInGameICMessage(ent, message, InGameICChatType.Speak, hideChat: true);

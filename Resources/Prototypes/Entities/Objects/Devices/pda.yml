@@ -85,6 +85,7 @@
       - NewsReaderCartridge
       - SecWatchCartridge # Corvax-Next-SecWatch
       - NanoChatCartridge # Corvax-Next-PDAChat
+      - EZ_WalletCartridge # Entropy-Zero-Economy
     cartridgeSlot:
       priority: -1
       name: device-pda-slot-component-slot-name-cartridge

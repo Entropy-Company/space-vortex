@@ -10,7 +10,6 @@ using Robust.Client.UserInterface;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.IdentityManagement;
 using Robust.Client.Graphics;
-using Robust.Shared.Utility;
 
 namespace Content.Client.VendingMachines.UI
 {
@@ -21,16 +20,12 @@ namespace Content.Client.VendingMachines.UI
         [Dependency] private readonly IEntityManager _entityManager = default!;
 
         private readonly Dictionary<EntProtoId, EntityUid> _dummies = [];
-        private readonly Dictionary<EntProtoId, (ListContainerButton Button, VendingMachineItem Item)> _listItems = new();
-        private readonly Dictionary<EntProtoId, uint> _amounts = new();
-
-        /// <summary>
-        /// Whether the vending machine is able to be interacted with or not.
-        /// </summary>
-        private bool _enabled;
-
         public event Action<GUIBoundKeyEventArgs, ListData>? OnItemSelected;
-
+        public Action<VendingMachineWithdrawMessage>? OnWithdraw; //Economy
+        // ADT vending eject count start
+        public event Action<VendingMachineInventoryEntry, VendingMachineItem>? OnItemCountSelected;
+        public double PriceMultiplier = 1;
+        // ADT vending eject count end
         public VendingMachineMenu()
         {
             MinSize = new Vector2(250, 150); // Corvax-Resize
@@ -73,25 +68,54 @@ namespace Content.Client.VendingMachines.UI
 
         private void GenerateButton(ListData data, ListContainerButton button)
         {
-            if (data is not VendorItemsListData { ItemProtoID: var protoID, ItemText: var text })
+            if (data is not VendorItemsListData { ItemProtoID: var protoID, ItemText: var text, Entry: var entry })
                 return;
 
+            // ADT vending eject count start
             var item = new VendingMachineItem(protoID, text);
-            _listItems[protoID] = (button, item);
+            if (entry.Amount <= 0)
+            {
+                item.Count.AddItem("Нет", 0);
+            }
+            else
+            {
+                for (var i = 0; i < entry.Amount; i++)
+                {
+                    var amount = i + 1;
+                    var price = (int)(entry.Price * PriceMultiplier);
+                    var priceStr = price > 0 ? $" [{price * amount}$]" : "";
+
+                    item.Count.AddItem($"{amount} шт." + priceStr, i);
+                }
+            }
+            item.Count.Select(0);
+            item.Count.OnItemSelected += args => item.Count.Select(args.Id);
+            item.BuyButton.OnPressed += _ => OnItemCountSelected?.Invoke(entry, item);
+            // ADT vending eject count end
+
             button.AddChild(item);
-            button.AddStyleClass("ButtonSquare");
-            button.Disabled = !_enabled || _amounts[protoID] == 0;
+
+            button.ToolTip = text;
         }
 
         /// <summary>
         /// Populates the list of available items on the vending machine interface
         /// and sets icons based on their prototypes
         /// </summary>
-        public void Populate(List<VendingMachineInventoryEntry> inventory, bool enabled)
+        public void Populate(List<VendingMachineInventoryEntry> inventory, double priceMultiplier, int credits)
         {
-            _enabled = enabled;
-            _listItems.Clear();
-            _amounts.Clear();
+            //Economy-Start
+            CreditsLabel.Text = Loc.GetString("vending-ui-credits-amount", ("credits", credits));
+            WithdrawButton.Disabled = credits == 0;
+            WithdrawButton.OnPressed += _ =>
+            {
+                if (credits == 0)
+                    return;
+
+                OnWithdraw?.Invoke(new VendingMachineWithdrawMessage());
+            };
+            //var vendComp = _entityManager.GetComponent<VendingMachineComponent>(entityUid); //Economy
+//Economy-End
 
             if (inventory.Count == 0 && VendingContents.Visible)
             {
@@ -123,9 +147,13 @@ namespace Content.Client.VendingMachines.UI
 
                 if (!_prototypeManager.TryIndex(entry.ID, out var prototype))
                 {
-                    _amounts[entry.ID] = 0;
                     continue;
                 }
+
+                //Economy-Start
+                var price = (int)(entry.Price * priceMultiplier);
+                PriceMultiplier = priceMultiplier;
+                //Economy-Start
 
                 if (!_dummies.TryGetValue(entry.ID, out var dummy))
                 {
@@ -134,51 +162,17 @@ namespace Content.Client.VendingMachines.UI
                 }
 
                 var itemName = Identity.Name(dummy, _entityManager);
-                var itemText = $"{itemName} [{entry.Amount}]";
-                _amounts[entry.ID] = entry.Amount;
+                var itemText = $" [{entry.Amount}] {itemName}";
 
                 if (itemText.Length > longestEntry.Length)
                     longestEntry = itemText;
 
-                listData.Add(new VendorItemsListData(prototype.ID, i)
-                {
-                    ItemText = itemText,
-                });
+                listData.Add(new VendorItemsListData(prototype.ID, itemText, i, entry)); // ADT vending eject count
             }
 
             VendingContents.PopulateList(listData);
 
             SetSizeAfterUpdate(longestEntry.Length, inventory.Count);
-        }
-
-        /// <summary>
-        /// Updates text entries for vending data in place without modifying the list controls.
-        /// </summary>
-        public void UpdateAmounts(List<VendingMachineInventoryEntry> cachedInventory, bool enabled)
-        {
-            _enabled = enabled;
-
-            foreach (var proto in _dummies.Keys)
-            {
-                if (!_listItems.TryGetValue(proto, out var button))
-                    continue;
-
-                var dummy = _dummies[proto];
-                if (!cachedInventory.TryFirstOrDefault(o => o.ID == proto, out var entry))
-                    continue;
-                var amount = entry.Amount;
-                // Could be better? Problem is all inventory entries get squashed.
-                var text = GetItemText(dummy, amount);
-
-                button.Item.SetText(text);
-                button.Button.Disabled = !enabled || amount == 0;
-            }
-        }
-
-        private string GetItemText(EntityUid dummy, uint amount)
-        {
-            var itemName = Identity.Name(dummy, _entityManager);
-            return $"{itemName} [{amount}]";
         }
 
         private void SetSizeAfterUpdate(int longestEntryLength, int contentCount)
@@ -188,8 +182,6 @@ namespace Content.Client.VendingMachines.UI
         }
     }
 
-    public record VendorItemsListData(EntProtoId ItemProtoID, int ItemIndex) : ListData
-    {
-        public string ItemText = string.Empty;
-    }
 }
+
+public record VendorItemsListData(EntProtoId ItemProtoID, string ItemText, int ItemIndex, VendingMachineInventoryEntry Entry) : ListData; // ADT vending eject count tweaked

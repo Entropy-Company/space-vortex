@@ -1,5 +1,6 @@
 using Content.Server.Access.Systems;
 using Content.Server.Administration.Logs;
+using Content.Shared.Cargo.Components;
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
 using Content.Server._CorvaxNext.Cargo.Components;
@@ -156,21 +157,22 @@ public sealed class StockMarketSystem : EntitySystem
             return false;
 
         // Check if the station has a bank account
-        if (!TryComp<StationBankAccountComponent>(station, out var bank))
+        if (!TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var bank) ||
+            !TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var sharedAccount))
             return false;
 
         var company = stockMarket.Companies[companyIndex];
         var totalValue = (int)Math.Round(company.CurrentPrice * amount);
 
         // See if we can afford it
-        if (_cargo.GetBalanceFromAccount(station, bank.PrimaryAccount) < totalValue)
+        if (_cargo.GetBalanceFromAccount(station, sharedAccount.PrimaryAccount) < totalValue)
             return false;
 
         if (!stockMarket.StockOwnership.TryGetValue(companyIndex, out var currentOwned))
             currentOwned = 0;
 
         // Update the bank account
-        _cargo.UpdateBankAccount((station, bank), -totalValue, bank.PrimaryAccount);
+        _cargo.UpdateBankAccount((station, sharedAccount), -totalValue, sharedAccount.PrimaryAccount);
         stockMarket.StockOwnership[companyIndex] = currentOwned + amount;
 
         // Log the transaction
@@ -191,7 +193,8 @@ public sealed class StockMarketSystem : EntitySystem
             return false;
 
         // Check if the station has a bank account
-        if (!TryComp<StationBankAccountComponent>(station, out var bank))
+        if (!TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var bank) ||
+            !TryComp<Content.Shared.Cargo.Components.StationBankAccountComponent>(station, out var sharedAccount))
             return false;
 
         if (!stockMarket.StockOwnership.TryGetValue(companyIndex, out var currentOwned) || currentOwned < amount)
@@ -208,7 +211,7 @@ public sealed class StockMarketSystem : EntitySystem
             stockMarket.StockOwnership.Remove(companyIndex);
 
         // Update the bank account
-        _cargo.UpdateBankAccount((station, bank), totalValue, bank.PrimaryAccount);
+        _cargo.UpdateBankAccount((station, sharedAccount), totalValue, sharedAccount.PrimaryAccount);
 
         // Log the transaction
         _adminLogger.Add(LogType.Action,
