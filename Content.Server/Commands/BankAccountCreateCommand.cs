@@ -26,15 +26,24 @@ internal sealed class BankAccountCreateCommand : IConsoleCommand
 {
 
     public string Command => "bankaccountcreate";
-    public string Description => "Создать и привязать банковский аккаунт игроку: bankaccountcreate <_netId> <account number> <pin>";
-    public string Help => "bankaccountcreate <_netId> <account number> <pin> -- _netId это сущность персонажа игрока, у которого в инвентаре должен быть КПК с ID-картой и катриджем банка. account number и pin будут установлены.";
+    public string Description => "Создать и привязать банковский аккаунт игроку: bankaccountcreate <_netId> <account number> <pin> [auto_complete=true|false]";
+    public string Help => "bankaccountcreate <_netId> <account number> <pin> [auto_complete=true|false] -- _netId это сущность персонажа игрока, у которого в инвентаре должен быть КПК с ID-картой и катриджем банка. account number и pin будут установлены.";
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        if (args.Length != 3)
+        var autoComplete = true;
+        if (args.Length < 3 || args.Length > 4)
         {
-            shell.WriteLine("Использование: bankaccountcreate <_netId> <account number> <pin>");
+            shell.WriteLine("Использование: bankaccountcreate <_netId> <account number> <pin> [auto_complete=true|false]");
             return;
+        }
+        if (args.Length == 4)
+        {
+            if (!bool.TryParse(args[3], out autoComplete))
+            {
+                shell.WriteLine($"Неверное значение auto_complete: {args[3]}. Ожидается true или false.");
+                return;
+            }
         }
         if (!NetEntity.TryParse(args[0], out var netId))
         {
@@ -76,8 +85,16 @@ internal sealed class BankAccountCreateCommand : IConsoleCommand
         var idCardUid = pda.ContainedId.Value;
         if (!entMan.HasComponent<BankCardComponent>(idCardUid))
         {
-            shell.WriteLine("На ID-карте нет компонента BankCardComponent.");
-            return;
+            if (autoComplete)
+            {
+                entMan.AddComponent<BankCardComponent>(idCardUid);
+                shell.WriteLine("BankCardComponent был автоматически добавлен к ID-карте.");
+            }
+            else
+            {
+                shell.WriteLine("На ID-карте нет компонента BankCardComponent.");
+                return;
+            }
         }
         var bankCard = entMan.GetComponent<BankCardComponent>(idCardUid);
         BankCartridgeComponent? bankCartridge = null;
