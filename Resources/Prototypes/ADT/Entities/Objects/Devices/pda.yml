@@ -34,6 +34,7 @@
       - NewsReaderCartridge
       - MedTekCartridge
       - NanoChatCartridge
+      - EZ_WalletCartridge # Entropy-Zero-Economy
     diskSpace: 8 # ADT tweak
 
 - type: entity

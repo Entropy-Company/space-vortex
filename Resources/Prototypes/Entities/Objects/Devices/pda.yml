@@ -159,6 +159,7 @@
     - WantedListCartridge
     - CrimeAssistCartridge # Corvax-Next-CrimeAssist
     - NanoChatCartridge # Corvax-Next-PDAChat
+    - EZ_WalletCartridge # Entropy-Zero-Economy
 
 - type: entity
   parent: BasePDA
@@ -175,6 +176,7 @@
       - MedTekCartridge
       - SecWatchCartridge # Corvax-Next-SecWatch
       - NanoChatCartridge # Corvax-Next-PDAChat
+      - EZ_WalletCartridge # Entropy-Zero-Economy
 
 - type: entity
   parent: BasePDA
@@ -489,6 +491,7 @@
       - NanoChatCartridge # Corvax-Next-PDAChat
       - StockTradingCartridge # Corvax-Next-StockTrading
       - AstroNavCartridge
+      - EZ_WalletCartridge # Entropy-Zero-Economy
 
 - type: entity
   parent: BasePDA
@@ -536,6 +539,7 @@
       - AstroNavCartridge
       - SecWatchCartridge # Corvax-Next-SecWatch
       - NanoChatCartridge # Corvax-Next-PDAChat
+      - EZ_WalletCartridge # Entropy-Zero-Economy
 
 - type: entity
   parent: BasePDA
@@ -675,6 +679,7 @@
     - WantedListCartridge
     - NanoChatCartridge # Corvax-Next-PDAChat
     - StockTradingCartridge # Corvax-Next-StockTrading
+    - EZ_WalletCartridge # Entropy-Zero-Economy
 
 - type: entity
   parent: BasePDA
@@ -897,6 +902,7 @@
     - CrimeAssistCartridge # Corvax-Next-CrimeAssist
     - LogProbeCartridge
     - NanoChatCartridge # Corvax-Next-PDAChat
+    - EZ_WalletCartridge # Entropy-Zero-Economy
 
 - type: entity
   parent: BaseSecurityPDA
@@ -970,6 +976,7 @@
       - LogProbeCartridge
       - AstroNavCartridge
       - NanoChatCartridge # Corvax-Next-PDAChat
+      - EZ_WalletCartridge # Entropy-Zero-Economy
 
 - type: entity
   parent: CentcomPDA
@@ -1149,6 +1156,7 @@
       - LogProbeCartridge
       - AstroNavCartridge
       - NanoChatCartridge # Corvax-Next-PDAChat
+      - EZ_WalletCartridge # Entropy-Zero-Economy
 
 - type: entity
   parent: ERTLeaderPDA
@@ -1263,6 +1271,7 @@
     - NewsReaderCartridge
     - NanoChatCartridge # Corvax-Next-PDAChat
     - StockTradingCartridge # Corvax-Next-StockTrading
+    - EZ_WalletCartridge # Entropy-Zero-Economy
 
 - type: entity
   parent: BasePDA
@@ -1328,6 +1337,7 @@
     - CrimeAssistCartridge # Corvax-Next-CrimeAssist
     - LogProbeCartridge
     - NanoChatCartridge # Corvax-Next-PDAChat
+    - EZ_WalletCartridge # Entropy-Zero-Economy
 
 - type: entity
   parent: BaseMedicalPDA
@@ -1357,6 +1367,7 @@
     - WantedListCartridge
     - MedTekCartridge
     - NanoChatCartridge # Corvax-Next-PDAChat
+    - EZ_WalletCartridge # Entropy-Zero-Economy
 
 - type: entity
   parent: ClownPDA
