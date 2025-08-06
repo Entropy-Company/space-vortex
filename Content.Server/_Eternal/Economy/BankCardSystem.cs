@@ -111,14 +111,13 @@ public sealed class BankCardSystem : EntitySystem
         if (!_idCardSystem.TryFindIdCard(entity.Value, out var idCard) || !TryComp<IdCardComponent>(idCard, out var idCardComp))
             return 0;
 
-        var jobTitle = idCardComp.LocalizedJobTitle;
-        if (string.IsNullOrEmpty(jobTitle))
+        var jobIcon = $"{idCardComp.JobIcon}";
+        if (string.IsNullOrEmpty(jobIcon))
             return 0;
-
-        if (!_salaries.Salaries.TryGetValue(jobTitle, out var salary))
-            return 0;
-
-        return salary;
+        var jobKey = jobIcon.StartsWith("JobIcon") ? jobIcon.Substring(7) : jobIcon;
+        if (_salaries.Salaries.TryGetValue(jobKey, out var salary))
+            return salary;
+        return 0;
     }
 
     private void OnMapInit(EntityUid uid, BankCardComponent component, MapInitEvent args)

@@ -1,46 +1,46 @@
 - type: salary
   id: Salaries
   salaries:
-    офицер «Синий Щит»: 1000
-    агент внутренних дел: 800
-    капитан: 800
-    старший инженер: 600
-    главный врач: 600
-    глава персонала: 600
-    глава службы безопасности: 600
-    научный руководитель: 600
-    квартирмейстер: 600
-    грузчик: 200
-    утилизатор: 300
-    бармен: 200
-    ботаник: 200
-    боксёр: 150
-    священник: 150
-    повар: 200
-    клоун: 150
-    уборщик: 200
-    пилот: 300
-    бригмедик: 300
-    помощник смотрителя: 300
-    библиотекарь: 150
-    мим: 150
-    музыкант: 150
-    пассажир: 100
-    репортёр: 150
-    зоотехник: 150
-    сервисный работник: 150
-    атмосферный техник: 400
-    инженер: 300
-    технический ассистент: 200
-    химик: 400
-    хирург: 400
-    врач: 300
-    интерн: 200
-    психолог: 200
-    парамедик: 400
-    кадет СБ: 200
-    офицер СБ: 300
-    детектив: 400
-    смотритель: 500
-    учёный: 300
-    научный ассистент: 200
+    ADTBlueShieldOfficer: 1000
+    IAA: 800
+    Captain: 800
+    ChiefEngineer: 600
+    ChiefMedicalOfficer: 600
+    HeadOfPersonnel: 600
+    HeadOfSecurity: 600
+    ResearchDirector: 600
+    Quartermaster: 600
+    CargoTechnician: 200
+    SalvageSpecialist: 300
+    Bartender: 200
+    Botanist: 200
+    Boxer: 150
+    Chaplain: 150
+    Chef: 200
+    Clown: 150
+    Janitor: 200
+    Pilot: 300
+    Brigmedic: 300
+    WardenHelper: 300
+    Librarian: 150
+    Mime: 150
+    Musician: 150
+    Passenger: 100
+    Reporter: 150
+    Zookeeper: 150
+    ServiceWorker: 150
+    AtmosphericTechnician: 400
+    StationEngineer: 300
+    TechnicalAssistant: 200
+    Chemist: 400
+    Surgeon: 400
+    MedicalDoctor: 300
+    MedicalIntern: 200
+    Psychologist: 200
+    Paramedic: 400
+    SecurityCadet: 200
+    SecurityOfficer: 300
+    Detective: 400
+    Warden: 500
+    Scientist: 300
+    ResearchAssistant: 200
