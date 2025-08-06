@@ -83,42 +83,37 @@ public sealed class BankCardSystem : EntitySystem
     }
 
     private void PaySalary()
+{
+    var idCardQuery = EntityQuery<IdCardComponent, BankCardComponent>();
+    foreach (var (idCard, bankCard) in idCardQuery)
     {
-        foreach (var account in _accounts.Where(account =>
-                     account.Mind is {Comp.UserId: not null, Comp.CurrentEntity: not null} &&
-                     _playerManager.TryGetSessionById(account.Mind.Value.Comp.UserId!.Value, out _) &&
-                     !_mobState.IsDead(account.Mind.Value.Comp.CurrentEntity!.Value)))
-        {
-            account.Balance += GetSalary(account.Mind);
-        }
+        if (!bankCard.AccountId.HasValue || !TryGetAccount(bankCard.AccountId.Value, out var account))
+            continue;
 
-        _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("salary-pay-announcement"),
-            colorOverride: Color.FromHex("#18abf5"));
+        if (account.Mind is not { Comp.UserId: not null, Comp.CurrentEntity: not null })
+            continue;
+
+        if (!_playerManager.TryGetSessionById(account.Mind.Value.Comp.UserId!.Value, out _) ||
+            _mobState.IsDead(account.Mind.Value.Comp.CurrentEntity!.Value))
+            continue;
+
+        account.Balance += GetSalary(idCard);
     }
 
-    private int GetSalary(EntityUid? mind)
-    {
-        if (mind == null)
-            return 0;
+    _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("salary-pay-announcement"),
+        colorOverride: Color.FromHex("#18abf5"));
+}
 
-        if (!TryComp<MindComponent>(mind.Value, out var mindComponent))
-            return 0;
-
-        var entity = mindComponent.CurrentEntity;
-        if (entity == null)
-            return 0;
-
-        if (!_idCardSystem.TryFindIdCard(entity.Value, out var idCard) || !TryComp<IdCardComponent>(idCard, out var idCardComp))
-            return 0;
-
-        var jobIcon = $"{idCardComp.JobIcon}";
-        if (string.IsNullOrEmpty(jobIcon))
-            return 0;
-        var jobKey = jobIcon.StartsWith("JobIcon") ? jobIcon.Substring(7) : jobIcon;
-        if (_salaries.Salaries.TryGetValue(jobKey, out var salary))
-            return salary;
+    private int GetSalary(IdCardComponent idCard)
+{
+    var jobIcon = $"{idCard.JobIcon}";
+    if (string.IsNullOrEmpty(jobIcon))
         return 0;
-    }
+    var jobKey = jobIcon.StartsWith("JobIcon") ? jobIcon.Substring(7) : jobIcon;
+    if (_salaries.Salaries.TryGetValue(jobKey, out var salary))
+        return salary;
+    return 0;
+}
 
     private void OnMapInit(EntityUid uid, BankCardComponent component, MapInitEvent args)
     {
@@ -162,7 +157,10 @@ public sealed class BankCardSystem : EntitySystem
             if (!TryComp(mind.Mind, out MindComponent? mindComponent))
                 return;
 
-            bankAccount.Balance = GetSalary(mind.Mind) + 100;
+            if (!TryComp<IdCardComponent>(id, out var idCardComp))
+                return;
+
+            bankAccount.Balance = GetSalary(idCardComp) + 100;
             mindComponent.AddMemory(new Memory("PIN", bankAccount.AccountPin.ToString()));
             mindComponent.AddMemory(new Memory(Loc.GetString("character-info-memories-account-number"),
                 bankAccount.AccountId.ToString()));
