@@ -7,6 +7,8 @@ using System.Linq;
 using Content.Shared.Chat;
 using Robust.Shared.Utility;
 using Robust.Shared.Maths;
+using Content.Server.GameTicking;
+using Robust.Shared.Timing;
 
 namespace Content.Server._Eternal.Economy;
 
@@ -14,6 +16,8 @@ public sealed class BankCartridgeSystem : EntitySystem
 {
     [Dependency] private readonly CartridgeLoaderSystem? _cartridgeLoaderSystem = default!;
     [Dependency] private readonly BankCardSystem _bankCardSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
 
     public override void Initialize()
     {
@@ -114,6 +118,27 @@ public sealed class BankCartridgeSystem : EntitySystem
         _bankCardSystem.TryChangeBalance(toAccount.AccountId, args.Amount);
         component.AccountLinkResult = Loc.GetString("bank-program-ui-transfer-success", ("to", toAccount.AccountId), ("amount", args.Amount));
 
+        fromAccount.AddTransaction(new TransactionRecord(
+            TransactionRecord.TransactionType.TransferSent,
+            $"Перевод на счет {toAccount.AccountId} ({toAccount.Name})",
+            -args.Amount,
+            Robust.Shared.Maths.Color.Red,
+            DateTime.MinValue.Add(_timing.CurTime.Subtract(_gameTicker.RoundStartTimeSpan)),
+            counterpartyAccount: toAccount.AccountId.ToString(),
+            counterpartyName: toAccount.Name,
+            comment: string.IsNullOrWhiteSpace(args.Comment) ? null : args.Comment
+        ));
+        toAccount.AddTransaction(new TransactionRecord(
+            TransactionRecord.TransactionType.TransferReceived,
+            $"Получено со счета {fromAccount.AccountId} ({fromAccount.Name})",
+            args.Amount,
+            Robust.Shared.Maths.Color.Lime,
+            DateTime.MinValue.Add(_timing.CurTime.Subtract(_gameTicker.RoundStartTimeSpan)),
+            counterpartyAccount: fromAccount.AccountId.ToString(),
+            counterpartyName: fromAccount.Name,
+            comment: string.IsNullOrWhiteSpace(args.Comment) ? null : args.Comment
+        ));
+
         if (toAccount.CartridgeUid != null && Comp<Content.Shared.CartridgeLoader.CartridgeComponent>(toAccount.CartridgeUid.Value).LoaderUid is { } loaderUid)
         {
             var comment = string.IsNullOrWhiteSpace(args.Comment) ? string.Empty : args.Comment;
@@ -182,18 +207,23 @@ public sealed class BankCartridgeSystem : EntitySystem
         {
             case BankAccountLinkMessage message:
                 OnAccountLink(uid, component, message);
+                UpdateUiState(uid, GetEntity(args.LoaderUid), component);
                 break;
             case BankChangePinMessage pinMessage:
                 OnChangePin(uid, component, pinMessage);
+                UpdateUiState(uid, GetEntity(args.LoaderUid), component);
                 break;
             case BankTransferMessage transferMessage:
                 OnTransfer(uid, component, transferMessage);
+                UpdateUiState(uid, GetEntity(args.LoaderUid), component);
+                break;
+            case BankTransactionHistoryRequestMessage msg:
+                OnTransactionHistoryRequest(uid, component, msg, GetEntity(args.LoaderUid));
                 break;
             case CartridgeUiRefreshMessage:
+                UpdateUiState(uid, GetEntity(args.LoaderUid), component);
                 break;
         }
-
-        UpdateUiState(uid, GetEntity(args.LoaderUid), component);
     }
 
     private void UpdateUiState(EntityUid cartridgeUid, EntityUid loaderUid, BankCartridgeComponent? component = null)
@@ -234,5 +264,15 @@ public sealed class BankCartridgeSystem : EntitySystem
             return;
 
         UpdateUiState(cartridgeUid, component.Loader.Value, component);
+    }
+
+    private void OnTransactionHistoryRequest(EntityUid uid, BankCartridgeComponent component, BankTransactionHistoryRequestMessage msg, EntityUid loaderUid)
+    {
+        if (!_bankCardSystem.TryGetAccount(msg.AccountId, out var account))
+        {
+            return;
+        }
+        var records = account.GetTransactions(1000);
+        _cartridgeLoaderSystem?.UpdateCartridgeUiState(loaderUid, new BankTransactionHistoryResponseMessage(records));
     }
 }

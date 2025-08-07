@@ -6,6 +6,8 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
+using Content.Server.GameTicking;
+using Robust.Shared.Timing;
 
 namespace Content.Server._Eternal.Economy;
 
@@ -16,6 +18,8 @@ public sealed class EftposSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly HandsSystem _sharedHandsSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
 
     public override void Initialize()
     {
@@ -60,6 +64,33 @@ public sealed class EftposSystem : EntitySystem
         {
             _popupSystem.PopupEntity(Loc.GetString("eftpos-transaction-success"), uid);
             _audioSystem.PlayPvs(component.SoundApply, uid);
+
+            if (_bankCardSystem.TryGetAccount(bankCard.AccountId.Value, out var payerAccount))
+            {
+                string receiverName = component.BankAccountId.Value.ToString();
+                if (_bankCardSystem.TryGetAccount(component.BankAccountId.Value, out var receiverAcc))
+                    receiverName = string.IsNullOrWhiteSpace(receiverAcc.Name) ? receiverAcc.AccountId.ToString() : receiverAcc.Name;
+                payerAccount.AddTransaction(new TransactionRecord(
+                    TransactionRecord.TransactionType.Purchase,
+                    $"Безналичная оплата, счет: {component.BankAccountId.Value} ({receiverName})",
+                    -component.Amount,
+                    Robust.Shared.Maths.Color.Red,
+                    DateTime.MinValue.Add(_timing.CurTime.Subtract(_gameTicker.RoundStartTimeSpan))
+                ));
+            }
+            if (_bankCardSystem.TryGetAccount(component.BankAccountId.Value, out var receiverAccount))
+            {
+                string payerName = bankCard.AccountId.Value.ToString();
+                if (_bankCardSystem.TryGetAccount(bankCard.AccountId.Value, out var payerAcc))
+                    payerName = string.IsNullOrWhiteSpace(payerAcc.Name) ? payerAcc.AccountId.ToString() : payerAcc.Name;
+                receiverAccount.AddTransaction(new TransactionRecord(
+                    TransactionRecord.TransactionType.Purchase,
+                    $"Безналичная оплата, счет: {bankCard.AccountId.Value} ({payerName})",
+                    component.Amount,
+                    Robust.Shared.Maths.Color.Lime,
+                    DateTime.MinValue.Add(_timing.CurTime.Subtract(_gameTicker.RoundStartTimeSpan))
+                ));
+            }
         }
         else
         {

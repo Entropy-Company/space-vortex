@@ -12,6 +12,8 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
+using Content.Server.GameTicking;
+using Robust.Shared.Timing;
 
 namespace Content.Server._Eternal.Economy;
 
@@ -24,7 +26,8 @@ public sealed class ATMSystem : SharedATMSystem
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
     [Dependency] private readonly ContainerSystem _container = default!;
-
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
 
     public override void Initialize()
     {
@@ -65,11 +68,23 @@ public sealed class ATMSystem : SharedATMSystem
         var bankCard = Comp<BankCardComponent>(component.CardSlot.Item.Value);
         var amount = stack.Count;
 
-        _bankCardSystem.TryChangeBalance(bankCard.AccountId!.Value, amount);
-        Del(args.Used);
-
-        _audioSystem.PlayPvs(component.SoundInsertCurrency, uid);
-        UpdateUiState(uid, _bankCardSystem.GetBalance(bankCard.AccountId.Value), true, Loc.GetString("atm-ui-select-withdraw-amount"));
+        if (_bankCardSystem.TryChangeBalance(bankCard.AccountId!.Value, amount))
+        {
+            Del(args.Used);
+            args.Handled = true;
+            _audioSystem.PlayPvs(component.SoundInsertCurrency, uid);
+            UpdateUiState(uid, _bankCardSystem.GetBalance(bankCard.AccountId.Value), true, Loc.GetString("atm-ui-select-withdraw-amount"));
+            if (_bankCardSystem.TryGetAccount(bankCard.AccountId.Value, out var account))
+            {
+                account.AddTransaction(new TransactionRecord(
+                    TransactionRecord.TransactionType.Deposit,
+                    $"Пополнение через банкомат",
+                    amount,
+                    Robust.Shared.Maths.Color.Lime,
+                    DateTime.MinValue.Add(_timing.CurTime.Subtract(_gameTicker.RoundStartTimeSpan))
+                ));
+            }
+        }
     }
 
     private void OnCardInserted(EntityUid uid, ATMComponent component, EntInsertedIntoContainerMessage args)
@@ -111,14 +126,19 @@ public sealed class ATMSystem : SharedATMSystem
             _audioSystem.PlayPvs(component.SoundDeny, uid);
             return;
         }
-
+        account.AddTransaction(new TransactionRecord(
+            TransactionRecord.TransactionType.Withdraw,
+            $"Снятие через банкомат",
+            -args.Amount,
+            Robust.Shared.Maths.Color.Red,
+            DateTime.MinValue.Add(_timing.CurTime.Subtract(_gameTicker.RoundStartTimeSpan))
+        ));
         var transform = Transform(uid);
         var forward = transform.LocalRotation.ToWorldVec();
         var offset = forward * 0.7f;
         var spawnCoords = transform.Coordinates.Offset(offset);
         _stackSystem.Spawn(args.Amount, _prototypeManager.Index<StackPrototype>(component.CreditStackPrototype), spawnCoords);
         _audioSystem.PlayPvs(component.SoundWithdrawCurrency, uid);
-
         UpdateUiState(uid, account.Balance, true, Loc.GetString("atm-ui-select-withdraw-amount"));
     }
 

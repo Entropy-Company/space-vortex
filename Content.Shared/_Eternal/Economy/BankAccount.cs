@@ -1,4 +1,5 @@
-﻿using Content.Shared.Cargo.Prototypes;
+using System.Linq;
+using Content.Shared.Cargo.Prototypes;
 using Content.Shared.Mind;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -7,6 +8,23 @@ namespace Content.Shared._Eternal.Economy;
 
 public sealed class BankAccount
 {
+    private const int MaxTransactions = 1000;
+    private readonly Queue<TransactionRecord> _transactions = new();
+
+    public void AddTransaction(TransactionRecord record)
+    {
+        if (_transactions.Count >= MaxTransactions)
+            _transactions.Dequeue();
+        _transactions.Enqueue(record);
+    }
+
+    public List<TransactionRecord> GetTransactions(int count = 1000)
+    {
+        if (count > MaxTransactions)
+            count = MaxTransactions;
+        return _transactions.ToList().AsEnumerable().Reverse().Take(count).ToList();
+    }
+
     public readonly int AccountId;
     public int AccountPin;
     public int Balance;

@@ -8,6 +8,7 @@ using Content.Server.Emp;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Stack;
+using Content.Shared.GameTicking;
 using Content.Server.Store.Components;
 using Content.Server._Eternal.Economy;
 using Content.Shared._Eternal.Economy;
@@ -38,6 +39,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Server.Cargo.Components;
+using Content.Server.GameTicking;
 
 namespace Content.Server.VendingMachines
 {
@@ -49,6 +51,7 @@ namespace Content.Server.VendingMachines
         [Dependency] private readonly PricingSystem _pricing = default!;
         [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
         [Dependency] private readonly IGameTiming _timing = default!;
+        [Dependency] private readonly GameTicker _gameTicker = default!;
         [Dependency] private readonly SpeakOnUIClosedSystem _speakOnUIClosed = default!;
         //Economy-Start
         [Dependency] private readonly BankCardSystem _bankCard = default!;
@@ -394,8 +397,24 @@ namespace Content.Server.VendingMachines
                             || account.Balance < price)
                             continue;
 
-                        _bankCard.TryChangeBalance(bankCard.AccountId.Value, -price);
-                        success = true;
+                        if (_bankCard.TryChangeBalance(bankCard.AccountId.Value, -price))
+                        {
+                            success = true;
+                            if (_bankCard.TryGetAccount(bankCard.AccountId.Value, out var buyerAccount))
+                            {
+                                var itemName = entry.ID;
+                                if (PrototypeManager.TryIndex<EntityPrototype>(entry.ID, out var proto))
+                                    itemName = proto.Name;
+                                var now = _timing.CurTime.Subtract(_gameTicker.RoundStartTimeSpan);
+                                buyerAccount.AddTransaction(new TransactionRecord(
+                                    TransactionRecord.TransactionType.Purchase,
+                                    $"Покупка: {itemName}",
+                                    -price,
+                                    Robust.Shared.Maths.Color.Red,
+                                    DateTime.MinValue.Add(now)
+                                ));
+                            }
+                        }
                         break;
                     }
                 }
