@@ -2,13 +2,21 @@
                    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                    xmlns:ui1="clr-namespace:Content.Client._Eternal.Economy.UI">
 
-    <PanelContainer StyleClasses="BackgroundDark"></PanelContainer>
-    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="8">
+    <ScrollContainer VerticalExpand="True" HScrollEnabled="True" HorizontalExpand="True" SetWidth="525" SetHeight="323">
+    <BoxContainer Orientation="Vertical" Margin="8" VerticalExpand="True" MinSize="315 150" HorizontalExpand="True">
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="False">
             <Control HorizontalExpand="True" />
-            <Button Name="RefreshButton" Text="⟳" ToolTip="Обновить" MinWidth="24" MinHeight="24" Margin="0 0 4 0" />
+            <Button Name="RefreshButton" ToolTip="Обновить" MinWidth="30" MinHeight="30" Margin="0 0 4 0">
+                <Control HorizontalExpand="True" VerticalExpand="True">
+                    <TextureRect Name="RefreshIcon"
+                                StyleClasses="ButtonSquare"
+                                TexturePath="/Textures/Interface/VerbIcons/refresh.svg.192dpi.png"
+                                Stretch="KeepAspectCentered"
+                                MaxWidth="20" MaxHeight="20"/>
+                </Control>
+            </Button>
         </BoxContainer>
-        <BoxContainer Name="LinkedAccount" Orientation="Vertical" Visible="False">
+        <BoxContainer Name="LinkedAccount" Orientation="Vertical" Visible="False" HorizontalExpand="True">
             <RichTextLabel Name="LinkedAccountNumberLabel" />
             <RichTextLabel Name="LinkedAccountNameLabel" />
             <RichTextLabel Name="LinkedAccountBalanceLabel" />
@@ -19,7 +27,7 @@
             <PanelContainer Name="ChangePinPanel" StyleClasses="BackgroundLight" Margin="5 5 5 5" Visible="False">
                 <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="False" Margin="5">
                     <Label Text="{Loc 'bank-program-ui-change-pin-title'}" />
-                    <GridContainer Columns="2" Rows="2" HorizontalExpand="True" Margin="0 4 0 0">
+                    <GridContainer Columns="2" Rows="1" HorizontalExpand="True" Margin="0 4 0 0">
                         <LineEdit Name="OldPinLineEdit" PlaceHolder="{Loc 'bank-program-ui-old-pin'}" HorizontalExpand="True" />
                         <LineEdit Name="NewPinLineEdit" PlaceHolder="{Loc 'bank-program-ui-new-pin'}" HorizontalExpand="True" />
                     </GridContainer>
@@ -35,9 +43,12 @@
             <PanelContainer Name="TransferPanel" StyleClasses="BackgroundLight" Margin="5 5 5 5" Visible="False">
                 <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="False" Margin="5">
                     <Label Text="{Loc 'bank-program-ui-transfer-title'}" />
-                    <LineEdit Name="TransferAccountLineEdit" PlaceHolder="{Loc 'bank-program-ui-transfer-account'}" HorizontalExpand="True" />
-                    <LineEdit Name="TransferAmountLineEdit" PlaceHolder="{Loc 'bank-program-ui-transfer-amount'}" HorizontalExpand="True" />
-                    <LineEdit Name="TransferPinLineEdit" PlaceHolder="{Loc 'bank-program-ui-transfer-pin'}" HorizontalExpand="True" />
+                    <GridContainer Columns="2" Rows="2" HorizontalExpand="True" Margin="0 4 0 0">
+                        <LineEdit Name="TransferAccountLineEdit" PlaceHolder="{Loc 'bank-program-ui-transfer-account'}" HorizontalExpand="True" />
+                        <LineEdit Name="TransferAmountLineEdit" PlaceHolder="{Loc 'bank-program-ui-transfer-amount'}" HorizontalExpand="True" />
+                        <LineEdit Name="TransferPinLineEdit" PlaceHolder="{Loc 'bank-program-ui-transfer-pin'}" HorizontalExpand="True" />
+                        <LineEdit Name="TransferCommentLineEdit" PlaceHolder="{Loc 'bank-program-ui-transfer-comment'}" HorizontalExpand="True" />
+                    </GridContainer>
                     <GridContainer Columns="2" Rows="1" HorizontalExpand="True" Margin="0 4 0 0">
                         <Button Name="TransferConfirmButton" Text="{Loc 'bank-program-ui-transfer-confirm'}" HorizontalExpand="True" />
                         <Button Name="TransferCancelButton" Text="{Loc 'bank-program-ui-transfer-cancel'}" HorizontalExpand="True" />
@@ -62,5 +73,7 @@
             </BoxContainer>
         </controls:StripeBack>
         <RichTextLabel Name="AccountLinkResultLabel" Visible="False" />
+        <Control MinSize="1 1" />
     </BoxContainer>
+</ScrollContainer>
 </ui1:BankUiFragment>

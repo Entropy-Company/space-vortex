@@ -77,7 +77,16 @@ public sealed partial class BankUiFragment : BoxContainer
             ValidateLineEdit(TransferAmountLineEdit, 9);
             ValidateTransferFields();
         };
+        TransferCommentLineEdit.OnTextChanged += _ =>
+        {
+            var text = TransferCommentLineEdit.Text;
+            if (text.Length > 120)
+                text = text[..120];
+            if (TransferCommentLineEdit.Text != text)
+                TransferCommentLineEdit.Text = text;
+        };
 
+        
         TransferConfirmButton.OnPressed += _ =>
         {
             if (!TransferConfirmButton.Disabled)
@@ -88,7 +97,8 @@ public sealed partial class BankUiFragment : BoxContainer
                     return;
                 if (TransferPinLineEdit.Text.Length != 4 || !int.TryParse(TransferPinLineEdit.Text, out var pin))
                     return;
-                OnTransferAttempt?.Invoke(new BankTransferMessage(toAccount, amount, pin));
+                var comment = string.IsNullOrWhiteSpace(TransferCommentLineEdit.Text) ? null : TransferCommentLineEdit.Text;
+                OnTransferAttempt?.Invoke(new BankTransferMessage(toAccount, amount, pin, comment));
                 AccountLinkResultLabel.Visible = true;
             }
         };

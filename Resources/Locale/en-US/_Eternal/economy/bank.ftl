@@ -23,7 +23,8 @@ bank-program-ui-change-pin-error = [color=red]PIN change error.[/color]
 bank-program-ui-change-pin-wrong-old = [color=red]Wrong old PIN.[/color]
 bank-program-ui-change-pin-invalid = [color=red]Invalid PIN format.[/color] 
 
-bank-program-ui-transfer-received = [color=green]You have received { $amount } credits from { $from }.[/color]
+bank-program-ui-transfer-received = [color=green]You have received { $amount } credits from { $from }. { $comment }[/color]
+bank-program-ui-transfer-comment = Comment
 bank-program-ui-transfer-received-chat = [color=green]You have received { $amount } credits from { $from }.[/color]
 bank-program-ui-transfer-error-no-from = [color=red]Error: Source account not found.[/color]
 bank-program-ui-transfer-error-self = [color=red]Error: Cannot transfer to your own account.[/color]

@@ -30,7 +30,8 @@ bank-program-ui-transfer-amount = Сумма
 bank-program-ui-transfer-pin = PIN-код
 bank-program-ui-transfer-confirm = Перевести
 bank-program-ui-transfer-cancel = Отмена
-bank-program-ui-transfer-received = Вы получили { $amount } кредитов от { $from }.
+bank-program-ui-transfer-received = Перевод на ваш счет: { $amount } кредитов от { $from }. { $comment }
+bank-program-ui-transfer-comment = Комментарий (Необязательно)
 bank-program-ui-transfer-success = [color=green]Перевод { $amount } кредитов на счет №{ $to } выполнен успешно.[/color]
 bank-program-ui-transfer-error-no-from = [color=red]Ошибка: не найден исходный счет.[/color]
 bank-program-ui-transfer-error-self = [color=red]Ошибка: нельзя переводить средства на свой же счет.[/color]

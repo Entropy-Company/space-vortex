@@ -333,7 +333,7 @@ namespace Content.Server.VendingMachines
         /// <param name="itemId">The prototype ID of the item</param>
         /// <param name="throwItem">Whether the item should be thrown in a random direction after ejection</param>
         /// <param name="vendComponent"></param>
-        public void TryEjectVendorItem(EntityUid uid, InventoryType type, string itemId, bool throwItem, int count, VendingMachineComponent? vendComponent = null, EntityUid? sender = null) // ADT vending eject count
+        public void TryEjectVendorItem(EntityUid uid, InventoryType type, string itemId, bool throwItem, int count, VendingMachineComponent? vendComponent = null, EntityUid? sender = null) //  vending eject count
         {
             if (!Resolve(uid, ref vendComponent))
                 return;
@@ -418,10 +418,11 @@ namespace Content.Server.VendingMachines
             if (TryComp(uid, out SpeakOnUIClosedComponent? speakComponent))
                 _speakOnUIClosed.TrySetFlag((uid, speakComponent));
 
-            entry.Amount -= (uint)count;    // ADT vending eject count
+            entry.Amount -= (uint)count;    // vending eject count
             Dirty(uid, vendComponent);
             TryUpdateVisualState(uid, vendComponent);
             Audio.PlayPvs(vendComponent.SoundVend, uid);
+            UpdateVendingMachineInterfaceState(uid, vendComponent);
         }
 
         /// <summary>
@@ -432,11 +433,11 @@ namespace Content.Server.VendingMachines
         /// <param name="type">The type of inventory the item is from</param>
         /// <param name="itemId">The prototype ID of the item</param>
         /// <param name="component"></param>
-        public void AuthorizedVend(EntityUid uid, EntityUid sender, InventoryType type, string itemId, VendingMachineComponent component, int count)    // ADT vending eject count
+        public void AuthorizedVend(EntityUid uid, EntityUid sender, InventoryType type, string itemId, VendingMachineComponent component, int count)    //  vending eject count
         {
             if (IsAuthorized(uid, sender, component))
             {
-                TryEjectVendorItem(uid, type, itemId, component.CanShoot, count, component, sender); // ADT vending eject count
+                TryEjectVendorItem(uid, type, itemId, component.CanShoot, count, component, sender); //  vending eject count
             }
         }
 
@@ -500,11 +501,11 @@ namespace Content.Server.VendingMachines
                 var entry = GetEntry(uid, item.ID, item.Type, vendComponent);
                 if (entry != null)
                     entry.Amount--;
-                EjectItem(uid, 1, vendComponent, forceEject);   // ADT vending eject count
+                EjectItem(uid, 1, vendComponent, forceEject);   //  vending eject count
             }
             else
             {
-                TryEjectVendorItem(uid, item.Type, item.ID, throwItem, 1, vendComponent);   // ADT vending eject count
+                TryEjectVendorItem(uid, item.Type, item.ID, throwItem, 1, vendComponent);   //  vending eject count
             }
         }
 
@@ -534,7 +535,7 @@ namespace Content.Server.VendingMachines
                 var offset = wallMountComponent.Direction.ToWorldVec() * WallVendEjectDistanceFromWall;
                 spawnCoordinates = spawnCoordinates.Offset(offset);
             }
-            // ADT vending eject count start
+            //  vending eject count start
             for (var i = 0; i < count; i++)
             {
                 var ent = Spawn(vendComponent.NextItemToEject, spawnCoordinates);
@@ -546,11 +547,11 @@ namespace Content.Server.VendingMachines
                     _throwingSystem.TryThrow(ent, direction, vendComponent.NonLimitedEjectForce);
                 }
             }
-            // ADT vending eject count end
+            //  vending eject count end
 
             vendComponent.NextItemToEject = null;
             vendComponent.ThrowNextItem = false;
-            vendComponent.NextItemCount = 1;    // ADT vending eject count
+            vendComponent.NextItemCount = 1;    //  vending eject count
         }
 
         private VendingMachineInventoryEntry? GetEntry(EntityUid uid, string entryId, InventoryType type, VendingMachineComponent? component = null)
@@ -582,7 +583,7 @@ namespace Content.Server.VendingMachines
                         comp.EjectAccumulator = 0f;
                         comp.Ejecting = false;
 
-                        EjectItem(uid, comp.NextItemCount, comp);   // ADT vending eject count
+                        EjectItem(uid, comp.NextItemCount, comp);   //  vending eject count
                     }
                 }
 

@@ -116,11 +116,12 @@ public sealed class BankCartridgeSystem : EntitySystem
 
         if (toAccount.CartridgeUid != null && Comp<Content.Shared.CartridgeLoader.CartridgeComponent>(toAccount.CartridgeUid.Value).LoaderUid is { } loaderUid)
         {
+            var comment = string.IsNullOrWhiteSpace(args.Comment) ? string.Empty : args.Comment;
             _cartridgeLoaderSystem?.SendNotification(
-            loaderUid,
-            "NanoBank",
-            Loc.GetString("bank-program-ui-transfer-received", ("from", fromAccount.Name), ("amount", args.Amount))
-        );
+                loaderUid,
+                "NanoBank",
+                Loc.GetString("bank-program-ui-transfer-received", ("from", fromAccount.Name), ("amount", args.Amount), ("comment", comment))
+            );
         }
     }
 
@@ -189,7 +190,6 @@ public sealed class BankCartridgeSystem : EntitySystem
                 OnTransfer(uid, component, transferMessage);
                 break;
             case CartridgeUiRefreshMessage:
-                // Просто обновить UI
                 break;
         }
 

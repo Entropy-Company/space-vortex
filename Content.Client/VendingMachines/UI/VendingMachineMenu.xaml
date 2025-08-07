@@ -8,12 +8,21 @@
     <BoxContainer Name="MainContainer" Orientation="Vertical">
         <LineEdit Name="SearchBar" PlaceHolder="{Loc 'vending-machine-component-search-filter'}" HorizontalExpand="True"  Margin ="4 4"/>
         <!-- Economy-Start -->
-        <BoxContainer Orientation="Horizontal">
-            <Label Name="CreditsLabel" HorizontalExpand="True"/>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" MinSize="0 54" Margin="4 2 4 2" StyleClasses="windowBackground Panel">
+            <EntityPrototypeView
+                Name="CreditsIcon"
+                Access="Public"
+                MinSize="32 32"
+                MaxSize="32 32"
+                Margin="4 0 4 0" />
+            <Label Name="CreditsLabel" HorizontalExpand="True" VerticalAlignment="Center"/>
             <Button
                 Name="WithdrawButton"
                 Text="{Loc 'store-ui-default-withdraw-text'}"
-                HorizontalAlignment="Right"/>
+                MinSize="70 25"
+                Margin="0 0 4 0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"/>
         </BoxContainer>
         <!-- Economy-End -->
         <co:SearchListContainer Name="VendingContents" VerticalExpand="True" Margin="4 0"/>
