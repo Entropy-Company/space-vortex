@@ -1729,6 +1729,7 @@
     offState: off
     brokenState: broken
     normalState: normal-unshaded
+    priceMultiplier: 0
   - type: DatasetVocalizer
     dataset: MediDrobeAds
   - type: SpeakOnUIClosed
@@ -1786,6 +1787,7 @@
     offState: off
     brokenState: broken
     normalState: normal-unshaded
+    priceMultiplier: 0
   - type: DatasetVocalizer
     dataset: CuraDrobeAds
   - type: SpeakOnUIClosed
@@ -1814,6 +1816,7 @@
     offState: off
     brokenState: broken
     normalState: normal-unshaded
+    priceMultiplier: 0
   - type: DatasetVocalizer
     dataset: AtmosDrobeAds
   - type: SpeakOnUIClosed
@@ -1846,6 +1849,7 @@
     offState: off
     brokenState: broken
     normalState: normal-unshaded
+    priceMultiplier: 0
   - type: DatasetVocalizer
     dataset: EngiDrobeAds
   - type: SpeakOnUIClosed
@@ -1878,6 +1882,7 @@
     offState: off
     brokenState: broken
     normalState: normal-unshaded
+    priceMultiplier: 0
   - type: DatasetVocalizer
     dataset: ChefDrobeAds
   - type: SpeakOnUIClosed
@@ -1997,6 +2002,7 @@
     offState: off
     brokenState: broken
     normalState: normal-unshaded
+    priceMultiplier: 0
   - type: DatasetVocalizer
     dataset: SyndieDrobeAds
   - type: SpeakOnUIClosed
@@ -2058,6 +2064,7 @@
     offState: off
     brokenState: broken
     normalState: normal-unshaded
+    priceMultiplier: 0
   - type: DatasetVocalizer
     dataset: GeneDrobeAds
   - type: SpeakOnUIClosed
@@ -2086,6 +2093,7 @@
     offState: off
     brokenState: broken
     normalState: normal-unshaded
+    priceMultiplier: 0
   - type: DatasetVocalizer
     dataset: ViroDrobeAds
   - type: SpeakOnUIClosed
@@ -2114,6 +2122,7 @@
     offState: off
     brokenState: broken
     normalState: normal-unshaded
+    priceMultiplier: 0
   - type: Sprite
     sprite: Structures/Machines/VendingMachines/centdrobe.rsi
     layers:
