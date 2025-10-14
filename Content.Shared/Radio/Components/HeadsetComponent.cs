@@ -5,6 +5,7 @@
 // SPDX-License-Identifier: MIT
 
 using Content.Shared.Inventory;
+using Robust.Shared.Serialization.TypeSerializers.Implementations;
 
 namespace Content.Shared.Radio.Components;
 
@@ -21,4 +22,7 @@ public sealed partial class HeadsetComponent : Component
 
     [DataField("requiredSlot")]
     public SlotFlags RequiredSlot = SlotFlags.EARS;
+
+    [DataField]
+    public Color Color { get; private set; } = Color.Lime;
 }
