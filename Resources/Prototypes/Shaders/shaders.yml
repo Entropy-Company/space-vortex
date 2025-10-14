@@ -138,3 +138,11 @@
   id: Hologram
   kind: source
   path: "/Textures/Shaders/hologram.swsl"
+
+- type: shader
+  id: Phasing
+  kind: source
+  path: "/Textures/Shaders/phasing.swsl"
+  params:
+    phaseColor: 0.5,0.8,1.0
+    distortionStrength: 1.0

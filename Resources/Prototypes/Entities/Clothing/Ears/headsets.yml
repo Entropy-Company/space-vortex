@@ -161,6 +161,8 @@
     sprite: Clothing/Ears/Headsets/cargo.rsi
   - type: Clothing
     sprite: Clothing/Ears/Headsets/cargo.rsi
+  - type: Headset
+    color: "#b48b57"
 
 - type: entity
   parent: ClothingHeadsetCargo
@@ -172,6 +174,8 @@
     sprite: Clothing/Ears/Headsets/mining.rsi
   - type: Clothing
     sprite: Clothing/Ears/Headsets/mining.rsi
+  - type: Headset
+    color: "#b48b57"
 
 - type: entity
   parent: [ClothingHeadsetCargo, BaseCommandContraband]
@@ -185,6 +189,8 @@
       - EncryptionKeyCargo
       - EncryptionKeyCommand
       - EncryptionKeyCommon
+  - type: Headset
+    color: "#b48b57"
 
 - type: entity
   parent: [ ClothingHeadset, BaseCentcommContraband ]
@@ -351,6 +357,8 @@
     sprite: Clothing/Ears/Headsets/security.rsi
   - type: Clothing
     sprite: Clothing/Ears/Headsets/security.rsi
+  - type: Headset
+    color: "#ff4242"
 
 - type: entity
   parent: [ClothingHeadset, BaseSecurityContraband]
@@ -368,6 +376,8 @@
     sprite: Clothing/Ears/Headsets/brigmedic.rsi
   - type: Clothing
     sprite: Clothing/Ears/Headsets/brigmedic.rsi
+  - type: Headset
+    color: "#ff4242"
 
 - type: entity
   parent: ClothingHeadset
