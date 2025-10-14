@@ -207,6 +207,8 @@
     sprite: Clothing/Ears/Headsets/security.rsi
   - type: Clothing
     sprite: Clothing/Ears/Headsets/security.rsi
+  - type: Headset
+    color: "#ff4242"
 
 - type: entity
   parent: [ClothingHeadsetAlt, BaseCommandContraband]
