@@ -7,12 +7,118 @@ SPDX-License-Identifier: MIT
 -->
 
 <cartridges:NotekeeperUiFragment xmlns:cartridges="clr-namespace:Content.Client.CartridgeLoader.Cartridges"
-                                 xmlns="https://spacestation14.io" Margin="1 0 2 0">
+                                 xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                                 xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                                 xmlns="https://spacestation14.io"
+                                 Margin="1 0 2 0"
+                                 Orientation="Vertical"
+                                 HorizontalExpand="True"
+                                 VerticalExpand="True">
     <PanelContainer StyleClasses="BackgroundDark"></PanelContainer>
-    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
-        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="True">
-            <BoxContainer Orientation="Vertical" Name="MessageContainer" HorizontalExpand="True" VerticalExpand="True"/>
+
+    <!-- Header with back button -->
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="5,5,5,5">
+        <Button
+            Name="BackButton"
+            MinWidth="64"
+            HorizontalAlignment="Left"
+            Text="{Loc 'notekeeper-ui-back-text'}"
+            ToolTip="{Loc 'notekeeper-ui-back-tooltip'}"
+            Access="Public"/>
+        <Control HorizontalExpand="True"/>
+        <Button
+            Name="NewNoteButton"
+            MinWidth="120"
+            HorizontalAlignment="Right"
+            Text="{Loc 'notekeeper-ui-new-note'}"
+            ToolTip="{Loc 'notekeeper-ui-new-note-tooltip'}"
+            Access="Public"/>
+    </BoxContainer>
+
+    <!-- Notes list view -->
+    <BoxContainer Name="NotesListView" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+        <controls:StripeBack>
+            <PanelContainer>
+                <Label Name="ListTitle" Align="Center" Text="{Loc 'notekeeper-ui-notes-list-title'}"/>
+            </PanelContainer>
+        </controls:StripeBack>
+        <ScrollContainer
+                Name="NotesListScroll"
+                HScrollEnabled="False"
+                HorizontalExpand="True"
+                MinSize="0 0"
+                SizeFlagsStretchRatio="2"
+                VerticalExpand="True">
+            <BoxContainer
+                Name="NotesListContainer"
+                MinSize="0 0"
+                Orientation="Vertical"
+                SizeFlagsStretchRatio="2"
+                VerticalExpand="True">
+            </BoxContainer>
         </ScrollContainer>
-        <LineEdit Name="Input" HorizontalExpand="True" SetHeight="32"/>
+    </BoxContainer>
+
+    <!-- Note editor view -->
+    <BoxContainer Name="NoteEditorView" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Visible="False">
+        <controls:StripeBack>
+            <PanelContainer>
+                <Label Name="EditorTitle" Align="Center" Text="{Loc 'notekeeper-ui-edit-note-title'}"/>
+            </PanelContainer>
+        </controls:StripeBack>
+        <BoxContainer Orientation="Vertical" Margin="5,5,5,5" VerticalExpand="True">
+            <Label Text="{Loc 'notekeeper-ui-note-title-label'}" Margin="0,0,0,2"/>
+            <LineEdit Name="TitleInput" HorizontalExpand="True" SetHeight="32" Margin="0,0,0,8"/>
+            <PanelContainer VerticalExpand="True" Margin="0,0,0,8">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#202023" BorderThickness="1" BorderColor="#3B3E56"/>
+                </PanelContainer.PanelOverride>
+                <TextEdit Name="ContentInput"
+                          HorizontalExpand="True"
+                          VerticalExpand="True"
+                          Margin="8,8,8,8"
+                          Access="Public"/>
+            </PanelContainer>
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="5,5,5,5">
+            <Button
+                Name="SaveButton"
+                MinWidth="64"
+                HorizontalAlignment="Left"
+                Text="{Loc 'notekeeper-ui-save-note'}"
+                ToolTip="{Loc 'notekeeper-ui-save-note-tooltip'}"
+                Access="Public"
+                HorizontalExpand="True"/>
+            <Button
+                Name="DeleteButton"
+                MinWidth="64"
+                HorizontalAlignment="Right"
+                Text="{Loc 'notekeeper-ui-delete-note'}"
+                ToolTip="{Loc 'notekeeper-ui-delete-note-tooltip'}"/>
+        </BoxContainer>
+    </BoxContainer>
+
+    <!-- Note view (read-only) -->
+    <BoxContainer Name="NoteViewView" Orientation="Vertical" HorizontalExpand="True" Visible="False">
+        <controls:StripeBack>
+            <PanelContainer>
+                <Label Name="ViewTitle" Align="Center" Text="{Loc 'notekeeper-ui-view-note-title'}"/>
+            </PanelContainer>
+        </controls:StripeBack>
+        <BoxContainer Orientation="Vertical" Margin="5,5,5,5">
+            <Label Name="NoteViewTitleLabel" StyleClasses="LabelBig" Margin="0,0,0,2"/>
+            <PanelContainer MaxHeight="200" VerticalExpand="False" Margin="0,0,0,8">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#00000000" BorderThickness="1" BorderColor="#00000000"/>
+                </PanelContainer.PanelOverride>
+                <ScrollContainer MaxHeight="220" VerticalExpand="True" HorizontalExpand="True" Margin="8,8,8,8" ReturnMeasure="True">
+                    <RichTextLabel Name="NoteViewContentLabel" HorizontalExpand="True" Margin="0,0,0,0"/>
+                </ScrollContainer>
+            </PanelContainer>
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="5,5,5,5" VerticalAlignment="Bottom">
+            <Control HorizontalExpand="True"/>
+            <Button Name="EditButton" Text="{Loc 'notekeeper-ui-edit'}"/>
+        </BoxContainer>
     </BoxContainer>
 </cartridges:NotekeeperUiFragment>
