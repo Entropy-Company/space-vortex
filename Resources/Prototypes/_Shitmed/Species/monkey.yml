@@ -158,7 +158,7 @@
   id: MobMonkeyMarkingLimits
   points:
     Special: # the cat ear joke
-      points: 1 # Corvax-Sponsors
+      points: 1 
       required: false
     HeadTop:
       points: 1
