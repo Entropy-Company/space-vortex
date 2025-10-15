@@ -6,4 +6,4 @@
 
 carry-verb = Поднять на руки
 carry-too-heavy = Ты недостаточно силён.
-carry-started = { ($carrier) } пытается тебя поднять!
+carry-started = { $carrier } пытается тебя поднять!
