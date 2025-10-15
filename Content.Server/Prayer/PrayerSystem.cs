@@ -92,22 +92,19 @@ public sealed class PrayerSystem : EntitySystem
     }
 
     /// <summary>
-    /// Subtly messages a player by giving them a popup and a chat message.
+    /// Subtly messages a player by giving them a popup only.
     /// </summary>
     /// <param name="target">The IPlayerSession that you want to send the message to</param>
     /// <param name="source">The IPlayerSession that sent the message</param>
     /// <param name="messageString">The main message sent to the player via the chatbox</param>
-    /// <param name="popupMessage">The popup to notify the player, also prepended to the messageString</param>
+    /// <param name="popupMessage">The popup to notify the player</param>
     public void SendSubtleMessage(ICommonSession target, ICommonSession source, string messageString, string popupMessage)
     {
         if (target.AttachedEntity == null)
             return;
 
-        var message = popupMessage == "" ? "" : popupMessage + (messageString == "" ? "" : $" \"{messageString}\"");
-
         _popupSystem.PopupEntity(popupMessage, target.AttachedEntity.Value, target, PopupType.Large);
-        _chatManager.ChatMessageToOne(ChatChannel.Local, messageString, message, EntityUid.Invalid, false, target.Channel);
-        _adminLogger.Add(LogType.AdminMessage, LogImpact.Low, $"{ToPrettyString(target.AttachedEntity.Value):player} received subtle message from {source.Name}: {message}");
+        _adminLogger.Add(LogType.AdminMessage, LogImpact.Low, $"{ToPrettyString(target.AttachedEntity.Value):player} received subtle message from {source.Name}: {popupMessage}");
     }
 
     /// <summary>
