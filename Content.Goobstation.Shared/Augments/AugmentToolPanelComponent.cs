@@ -17,6 +17,12 @@ public sealed partial class AugmentToolPanelComponent : Component
     /// </summary>
     [DataField]
     public float SwitchCharge = 10f;
+
+    /// <summary>
+    /// Whether this tool panel requires power to function.
+    /// </summary>
+    [DataField]
+    public bool RequiresPower = true;
 }
 
 /// <summary>

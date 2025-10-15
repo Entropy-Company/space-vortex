@@ -43,8 +43,10 @@ public sealed class AugmentToolPanelSystem : SharedAugmentToolPanelSystem
 
     private void OnSwitchTool(Entity<AugmentToolPanelComponent> augment, ref AugmentToolPanelSwitchMessage args)
     {
-        if (_augment.GetBody(augment) is not {} body ||
-            !_augmentPowerCell.TryUseChargeBody(body, augment.Comp.SwitchCharge))
+        if (_augment.GetBody(augment) is not {} body)
+            return;
+
+        if (augment.Comp.RequiresPower && !_augmentPowerCell.TryUseChargeBody(body, augment.Comp.SwitchCharge))
             return;
 
         SwitchTool(augment, GetEntity(args.DesiredTool), body);
