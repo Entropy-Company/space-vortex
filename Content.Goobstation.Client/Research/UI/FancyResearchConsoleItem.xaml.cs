@@ -25,7 +25,7 @@ public sealed partial class FancyResearchConsoleItem : LayoutContainer
 {
     // Public fields
     public TechnologyPrototype Prototype;
-    public Action<TechnologyPrototype, ResearchAvailability>? SelectAction;
+    public event Action<TechnologyPrototype, ResearchAvailability>? SelectAction;
     public ResearchAvailability Availability;
 
     // Some visuals
@@ -37,6 +37,8 @@ public sealed partial class FancyResearchConsoleItem : LayoutContainer
     public Color BorderColor = DefaultBorderColor;
     public Color HoveredColor = DefaultHoveredColor;
 
+    // Quick study removed
+
     public FancyResearchConsoleItem(TechnologyPrototype proto, SpriteSystem sprite, ResearchAvailability availability)
     {
         RobustXamlLoader.Load(this);
@@ -46,8 +48,8 @@ public sealed partial class FancyResearchConsoleItem : LayoutContainer
         Prototype = proto;
 
         ResearchDisplay.Texture = sprite.Frame0(proto.Icon);
-        Button.OnPressed += Selected;
         Button.OnDrawModeChanged += UpdateColor;
+        Button.OnPressed += Selected;
 
         (Color, HoveredColor, BorderColor) = availability switch
         {
@@ -73,6 +75,7 @@ public sealed partial class FancyResearchConsoleItem : LayoutContainer
     {
         base.ExitedTree();
 
+        Button.OnDrawModeChanged -= UpdateColor;
         Button.OnPressed -= Selected;
     }
 

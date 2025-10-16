@@ -9,6 +9,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+using System;
 using System.Linq;
 using System.Numerics;
 using Content.Client.Research;
@@ -79,6 +80,24 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
     private const float MinZoom = 0.5f;
     private const float MaxZoom = 2f;
     private const float ZoomSpeed = 0.125f;
+    
+    private string? _selectedDiscipline;
+    private readonly Dictionary<string, (Button Tab, Control ProgressControl)> _disciplineControls = new();
+    private readonly Dictionary<string, List<TechnologyPrototype>> _technologiesByDiscipline = new();
+    private readonly List<FancyResearchConsoleItem> _techItems = new();
+
+    private string? _lastSelectedTechId;
+    private DateTime _lastSelectTime;
+
+    // UI Elements (resolved at runtime to avoid dependency on source generator)
+    private readonly Control _staticSprite;
+    private readonly Button _serverButton;
+    private readonly Control _dragContainer;
+    private readonly Button _recenterButton;
+    private readonly RichTextLabel _researchAmountLabel;
+    private readonly BoxContainer _disciplineTabsContainer;
+    private readonly BoxContainer _disciplineProgressContainer;
+    private readonly BoxContainer _infoContainer;
 
     public FancyResearchConsoleMenu()
     {
@@ -87,14 +106,32 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
         _research = _entity.System<ResearchSystem>();
         _sprite = _entity.System<SpriteSystem>();
         _accessReader = _entity.System<AccessReaderSystem>();
-        StaticSprite.SetFromSpriteSpecifier(new SpriteSpecifier.Rsi(new("_Goobstation/Interface/rnd-static.rsi"), "static"));
-        StaticSprite.DisplayRect.CanShrink = true;
-        StaticSprite.DisplayRect.Stretch = TextureRect.StretchMode.Scale;
 
-        ServerButton.OnPressed += _ => OnServerButtonPressed?.Invoke();
-        DragContainer.OnKeyBindDown += OnKeybindDown;
-        DragContainer.OnKeyBindUp += OnKeybindUp;
-        RecenterButton.OnPressed += _ => Recenter();
+        // Resolve UI elements by Name
+        _staticSprite = this.FindControl<Control>("StaticSprite");
+        _serverButton = this.FindControl<Button>("ServerButton");
+        _dragContainer = this.FindControl<Control>("DragContainer");
+        _recenterButton = this.FindControl<Button>("RecenterButton");
+        _researchAmountLabel = this.FindControl<RichTextLabel>("ResearchAmountLabel");
+        _disciplineTabsContainer = this.FindControl<BoxContainer>("DisciplineTabsContainer");
+        _disciplineProgressContainer = this.FindControl<BoxContainer>("DisciplineProgressContainer");
+        _infoContainer = this.FindControl<BoxContainer>("InfoContainer");
+
+        // Setup static sprite
+        if (_staticSprite is AnimatedTextureRect animatedTextureRect)
+        {
+            animatedTextureRect.SetFromSpriteSpecifier(new SpriteSpecifier.Rsi(new("_Goobstation/Interface/rnd-static.rsi"), "static"));
+            if (animatedTextureRect.DisplayRect is TextureRect textureRect)
+            {
+                textureRect.CanShrink = true;
+                textureRect.Stretch = TextureRect.StretchMode.Scale;
+            }
+        }
+
+        _serverButton.OnPressed += _ => OnServerButtonPressed?.Invoke();
+        _dragContainer.OnKeyBindDown += OnKeybindDown;
+        _dragContainer.OnKeyBindUp += OnKeybindUp;
+        _recenterButton.OnPressed += _ => Recenter();
 
         UpdatePanels(List);
         Recenter();
@@ -103,70 +140,195 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
     public void SetEntity(EntityUid entity)
         => Entity = entity;
 
-    public void UpdatePanels(Dictionary<string, ResearchAvailability> dict)
+    public void UpdatePanels(Dictionary<string, ResearchAvailability> list)
     {
-        DragContainer.RemoveAllChildren();
-        List = dict;
-
-        foreach (var tech in List)
+        List = list;
+        
+        // Group technologies by discipline
+        _technologiesByDiscipline.Clear();
+        foreach (var techProto in _prototype.EnumeratePrototypes<TechnologyPrototype>())
         {
-            var proto = _prototype.Index<TechnologyPrototype>(tech.Key);
-
-            var control = new FancyResearchConsoleItem(proto, _sprite, tech.Value);
-            DragContainer.AddChild(control);
-
-            // Set position for all tech, relating to _position
-            LayoutContainer.SetPosition(control, _position + proto.Position * 150 * _zoom);
-            control.SelectAction += SelectTech;
-
-            if (tech.Key == CurrentTech)
-                SelectTech(proto, tech.Value);
+            if (!_technologiesByDiscipline.ContainsKey(techProto.Discipline))
+            {
+                _technologiesByDiscipline[techProto.Discipline] = new List<TechnologyPrototype>();
+            }
+            _technologiesByDiscipline[techProto.Discipline].Add(techProto);
+        }
+        
+        UpdateInformationPanel(Points);
+        UpdateDisciplineTabs();
+        
+        // Update visible technologies based on selected discipline
+        if (_selectedDiscipline != null)
+        {
+            UpdateActiveTab(_selectedDiscipline);
         }
     }
 
     public void UpdateInformationPanel(int points)
     {
         Points = points;
-
-        var amountMsg = new FormattedMessage();
-        amountMsg.AddMarkupOrThrow(Loc.GetString("research-console-menu-research-points-text",
-            ("points", points)));
-        ResearchAmountLabel.SetMessage(amountMsg);
-
-        if (!_entity.TryGetComponent(Entity, out TechnologyDatabaseComponent? database))
+        _researchAmountLabel.SetMessage(Loc.GetString("research-console-menu-research-points-text", ("points", Points)));
+        
+        // Update progress for all disciplines
+        if (_entity.TryGetComponent<TechnologyDatabaseComponent>(Entity, out var database))
+        {
+            foreach (var (disciplineId, (_, progressControl)) in _disciplineControls)
+            {
+                var discipline = _prototype.Index<TechDisciplinePrototype>(disciplineId);
+                var percentage = _research.GetTierCompletionPercentage(database, discipline, _prototype);
+                UpdateDisciplineProgress(disciplineId, percentage);
+            }
+        }
+    }
+    
+    private void UpdateDisciplineTabs()
+    {
+        if (!_entity.TryGetComponent<TechnologyDatabaseComponent>(Entity, out var database))
             return;
-
-        TierDisplayContainer.RemoveAllChildren();
+            
+        // Clear existing tabs and progress controls
+        _disciplineTabsContainer.RemoveAllChildren();
+        _disciplineProgressContainer.RemoveAllChildren();
+        _disciplineControls.Clear();
+        
+        // Create a tab and progress control for each discipline
         foreach (var disciplineId in database.SupportedDisciplines)
         {
             var discipline = _prototype.Index<TechDisciplinePrototype>(disciplineId);
-            var tier = _research.GetTierCompletionPercentage(database, discipline, _prototype);
-
-            // i'm building the small-ass control here to spare me some mild annoyance in making a new file
-            var texture = new TextureRect
+            var percentage = _research.GetTierCompletionPercentage(database, discipline, _prototype);
+            
+            // Create tab button
+            var tabButton = new Button
             {
-                TextureScale = new Vector2(2, 2),
-                VerticalAlignment = VAlignment.Center
+                Text = Loc.GetString(discipline.Name),
+                ToggleMode = true,
+                MinWidth = 0,
+                MinHeight = 40,
+                HorizontalExpand = true,
+                SizeFlagsStretchRatio = 1,
+                Margin = new Thickness(2)
             };
-            var label = new RichTextLabel();
-            texture.Texture = _sprite.Frame0(discipline.Icon);
-            label.SetMessage(Loc.GetString("research-console-tier-percentage", ("perc", tier)));
-
-            var control = new BoxContainer
+            
+            // Create progress control (ICON: PERCENT), left-aligned
+            var percentLabel = new Label
             {
+                Text = $"{percentage:0}%",
+                HorizontalAlignment = HAlignment.Left,
+                StyleClasses = { "LabelBigBold" }
+            };
+            var progressBox = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                HorizontalExpand = true,
+                VerticalExpand = false,
+                Margin = new Thickness(3, 5),
                 Children =
                 {
-                    texture,
-                    label,
-                    new Control
+                    new TextureRect
                     {
-                        MinWidth = 10
-                    }
+                        Texture = _sprite.Frame0(discipline.Icon),
+                        TextureScale = new Vector2(2, 2),
+                        HorizontalAlignment = HAlignment.Left,
+                        VerticalAlignment = VAlignment.Center,
+                        Margin = new Thickness(0, 0, 2, 0)
+                    },
+                    new Label
+                    {
+                        Text = ":",
+                        HorizontalAlignment = HAlignment.Left,
+                        VerticalAlignment = VAlignment.Center,
+                        Margin = new Thickness(0, 0, 2, 0)
+                    },
+                    percentLabel
                 }
             };
-            TierDisplayContainer.AddChild(control);
+            
+            // Store controls
+            _disciplineControls[disciplineId] = (tabButton, progressBox);
+            
+            // Add to UI
+            _disciplineTabsContainer.AddChild(tabButton);
+            _disciplineProgressContainer.AddChild(progressBox);
+            
+            // Set up tab selection
+            tabButton.OnToggled += args =>
+            {
+                if (args.Pressed)
+                {
+                    _selectedDiscipline = disciplineId;
+                    UpdateActiveTab(disciplineId);
+                }
+            };
+            
+            // Select first discipline by default
+            if (_selectedDiscipline == null)
+            {
+                tabButton.Pressed = true;
+                _selectedDiscipline = disciplineId;
+            }
         }
     }
+    
+    private void UpdateDisciplineProgress(string disciplineId, float percentage)
+    {
+        if (_disciplineControls.TryGetValue(disciplineId, out var controls))
+        {
+            var childIndex = Math.Max(0, controls.ProgressControl.ChildCount - 1);
+            if (controls.ProgressControl.GetChild(childIndex) is Label percentageLabel)
+            {
+                percentageLabel.Text = $"{percentage:0}%";
+            }
+        }
+    }
+    
+    private void UpdateActiveTab(string selectedDisciplineId)
+    {
+        // Update tab styles
+        foreach (var (disciplineId, (tab, _)) in _disciplineControls)
+        {
+            var isActive = disciplineId == selectedDisciplineId;
+            tab.Pressed = isActive;
+            tab.StyleClasses.Remove("tab-active");
+            if (isActive)
+            {
+                tab.StyleClasses.Add("tab-active");
+            }
+        }
+        
+        // Clear existing tech items
+        foreach (var item in _techItems)
+        {
+            _dragContainer.RemoveChild(item);
+        }
+        _techItems.Clear();
+        
+        // Add technologies for selected discipline
+        if (_technologiesByDiscipline.TryGetValue(selectedDisciplineId, out var technologies))
+        {
+            foreach (var techProto in technologies)
+            {
+                if (!List.TryGetValue(techProto.ID, out var availability))
+                    continue;
+
+                var techItem = new FancyResearchConsoleItem(techProto, _sprite, availability);
+                techItem.SelectAction += (p, a) => SelectTech(p, a);
+                
+                // Position the technology in the research tree
+                var pos = techProto.Position * 150 * _zoom;
+                LayoutContainer.SetPosition(techItem, _position + pos);
+                techItem.SetScale(_zoom);
+                
+                _dragContainer.AddChild(techItem);
+                _techItems.Add(techItem);
+            }
+        }
+        
+        // Update the view to ensure everything is visible
+        Recenter();
+    }
+
+    
 
     #region Drag handle
     protected override void MouseMove(GUIMouseMoveEventArgs args)
@@ -179,7 +341,7 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
         _position += args.Relative;
 
         // Move all tech
-        foreach (var child in DragContainer.Children)
+        foreach (var child in _dragContainer.Children)
         {
             LayoutContainer.SetPosition(child, child.Position + args.Relative);
         }
@@ -201,7 +363,7 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
         if (MathHelper.CloseTo(oldZoom, _zoom))
             return;
 
-        foreach (var child in DragContainer.Children)
+        foreach (var child in _dragContainer.Children)
         {
             if (child is not FancyResearchConsoleItem research)
                 continue;
@@ -242,14 +404,34 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
     /// <param name="availability">Tech availablity</param>
     public void SelectTech(TechnologyPrototype proto, ResearchAvailability availability)
     {
-        InfoContainer.RemoveAllChildren();
+        var now = DateTime.UtcNow;
+        var isSame = _lastSelectedTechId == proto.ID;
+        var withinWindow = (now - _lastSelectTime) <= TimeSpan.FromSeconds(0.5);
+
+        if (isSame && withinWindow)
+        {
+            if (_player.LocalEntity.HasValue &&
+                availability == ResearchAvailability.Available &&
+                _accessReader.IsAllowed(_player.LocalEntity.Value, Entity))
+            {
+                OnTechnologyCardPressed?.Invoke(proto.ID);
+            }
+
+            _lastSelectTime = DateTime.MinValue;
+            return;
+        }
+
+        _lastSelectedTechId = proto.ID;
+        _lastSelectTime = now;
+
+        _infoContainer.RemoveAllChildren();
         if (!_player.LocalEntity.HasValue)
             return;
 
         CurrentTech = proto.ID;
         var control = new FancyTechnologyInfoPanel(proto, _accessReader.IsAllowed(_player.LocalEntity.Value, Entity), availability, _sprite);
         control.BuyAction += args => OnTechnologyCardPressed?.Invoke(args.ID);
-        InfoContainer.AddChild(control);
+        _infoContainer.AddChild(control);
     }
 
     /// <summary>
@@ -258,7 +440,7 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
     public void Recenter()
     {
         _position = new(45, 250);
-        foreach (var item in DragContainer.Children)
+        foreach (var item in _dragContainer.Children)
         {
             if (item is not FancyResearchConsoleItem research)
                 continue;
@@ -271,8 +453,12 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
     {
         base.Close();
 
-        DragContainer.RemoveAllChildren();
-        InfoContainer.RemoveAllChildren();
+        foreach (var item in _techItems)
+        {
+            _dragContainer.RemoveChild(item);
+        }
+        _techItems.Clear();
+        _infoContainer.RemoveAllChildren();
     }
 
     private sealed partial class DisciplineButton(TechDisciplinePrototype proto) : Button
