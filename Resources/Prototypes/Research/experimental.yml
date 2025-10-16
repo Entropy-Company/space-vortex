@@ -1,34 +1,122 @@
-# SPDX-FileCopyrightText: 2023 T-Stalker <43253663+DogZeroX@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2023 Ubaser <134914314+UbaserB@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2023 brainfood1183 <113240905+brainfood1183@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2023 chromiumboy <50505512+chromiumboy@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2023 metalgearsloth <31366439+metalgearsloth@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2024 Debug <49997488+DebugOk@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2024 Ed <96445749+TheShuEd@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2024 Emisse <99158783+Emisse@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2024 GeneralGaws <122978178+GeneralGaws@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2024 GeneralGaws <limonmessi@mail.ru>
-# SPDX-FileCopyrightText: 2024 Hannah Giovanna Dawson <karakkaraz@gmail.com>
-# SPDX-FileCopyrightText: 2024 Kara <lunarautomaton6@gmail.com>
-# SPDX-FileCopyrightText: 2024 Nemanja <98561806+EmoGarbage404@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2024 deltanedas <@deltanedas:kde.org>
-# SPDX-FileCopyrightText: 2025 Aiden <28298836+Aidenkrz@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2025 Aiden <aiden@djkraz.com>
-# SPDX-FileCopyrightText: 2025 FaDeOkno <143940725+FaDeOkno@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2025 FaDeOkno <logkedr18@gmail.com>
-# SPDX-FileCopyrightText: 2025 Fishbait <Fishbait@git.ml>
-# SPDX-FileCopyrightText: 2025 GoobBot <uristmchands@proton.me>
-# SPDX-FileCopyrightText: 2025 ImHoks <imhokzzzz@gmail.com>
-# SPDX-FileCopyrightText: 2025 KillanGenifer <killangenifer@gmail.com>
-# SPDX-FileCopyrightText: 2025 SX_7 <sn1.test.preria.2002@gmail.com>
-# SPDX-FileCopyrightText: 2025 coderabbitai[bot] <136622811+coderabbitai[bot]@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2025 deltanedas <39013340+deltanedas@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2025 fishbait <gnesse@gmail.com>
-# SPDX-FileCopyrightText: 2025 gluesniffler <159397573+gluesniffler@users.noreply.github.com>
-#
-# SPDX-License-Identifier: AGPL-3.0-or-later
-# Tier 1
-
+- type: technology
+  id: AdvancedRobotics
+  name: research-technology-advanced-robotics
+  icon:
+    sprite: Mobs/Silicon/station_ai.rsi
+    state: ai
+  discipline: Experimental
+  tier: 2
+  cost: 7500
+  recipeUnlocks:
+    - AsimovCircuitBoard
+    - CorporateCircuitBoard
+    - NTDefaultCircuitBoard
+    - CommandmentCircuitBoard
+    - PaladinCircuitBoard
+    - LiveLetLiveCircuitBoard
+    - StationEfficiencyCircuitBoard
+    - RobocopCircuitBoard
+    - OverlordCircuitBoard
+    - GameMasterCircuitBoard
+    - ArtistCircuitBoard
+    - NutimovCircuitBoard
+  position: 0, 1
+  technologyPrerequisites:
+    - AdvancedAnomalyResearch
+- type: technology
+  id: BluespaceMining
+  name: research-technology-bluespace-mining
+  icon:
+    sprite: _CorvaxGoob/Bluespace/harvester.rsi
+    state: tap_0
+  discipline: Experimental
+  tier: 3
+  cost: 7500
+  recipeUnlocks:
+    - MachineBluespaceHarvesterCircuitboard
+    - MachineBluespaceTransitorCircuitboard
+  position: -1, -1
+  technologyPrerequisites:
+    - BluespaceTheory
+- type: technology
+  id: Pinpointers
+  name: research-technology-pinpointing
+  icon:
+    sprite: Objects/Devices/pinpointer.rsi
+    state: pinpointer
+  discipline: Experimental
+  tier: 2
+  cost: 7500
+  recipeUnlocks:
+    - Pinpointer
+    - PinpointerArtifact
+    - PinpointerAnomaly
+    - PinpointerBorg
+  position: 1, -2
+  technologyPrerequisites:
+    - DeterrenceTechnologies
+- type: technology
+  id: ModsuitsTech
+  name: research-technology-modsuits
+  icon:
+    sprite: _Goobstation/Objects/Specific/Robotics/modsuit_parts.rsi
+    state: mod-core-standard
+  discipline: Experimental
+  tier: 1
+  cost: 5000
+  recipeUnlocks:
+    - ModsuitChestplate
+    - ModsuitBoots
+    - ModsuitHelmet
+    - ModsuitGauntlets
+    - ModsuitShell
+    - ModsuitPlatingExternal
+  position: 0, 0
+  technologyPrerequisites:
+    - MagnetsTech
+- type: technology
+  id: BluespaceTheory
+  name: research-technology-bluespace-theory
+  icon:
+    sprite: _Goobstation/Objects/Materials/materials.rsi
+    state: bluespace_crystal
+  discipline: Experimental
+  tier: 1
+  cost: 5000
+  recipeUnlocks:
+    - MaterialBSCrystal
+  position: 0, -1
+  technologyPrerequisites:
+    - DeterrenceTechnologies
+- type: technology
+  id: ExperimentalScience
+  name: research-technology-experimental-science
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: std_mod
+  discipline: Experimental
+  tier: 2
+  cost: 7500
+  recipeUnlocks:
+    - ExperimentalCircuitBoard
+  position: -1, 1
+  technologyPrerequisites:
+    - AdvancedRobotics
+    - AdvancedAnomalyResearch
+- type: technology
+  id: XenoBiology
+  name: research-technology-xeno-biology
+  icon:
+    sprite: _White/Mobs/Aliens/Xenomorphs/drone.rsi
+    state: xenomorph
+  discipline: Experimental
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+    - XenoCompatibilityImplanter
+  position: -2, 1
+  technologyPrerequisites:
+    - ExperimentalScience
 - type: technology
   id: BasicRobotics
   name: research-technology-basic-robotics
@@ -39,11 +127,11 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-  - ProximitySensor
-  - Drone # Goobstation
-  - AiRemoteBrain # Goobstation
-  position: -1,0
-
+    - ProximitySensor
+    - Drone
+    - AiRemoteBrain
+  position: 3, 1
+  technologyPrerequisites: []
 - type: technology
   id: BasicAnomalousResearch
   name: research-technology-basic-anomalous-research
@@ -54,17 +142,14 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-  - AnomalyScanner
-  - AnomalyLocator
-  - AnomalyLocatorWide
-  - APECircuitboard
-  - AnomalyVesselCircuitboard
-  # Goobstation R&D Console rework start
-  position: -2,0
+    - AnomalyScanner
+    - AnomalyLocator
+    - AnomalyLocatorWide
+    - APECircuitboard
+    - AnomalyVesselCircuitboard
+  position: 2, 1
   technologyPrerequisites:
-  - BasicRobotics
-  # Goobstation R&D Console rework end
-
+    - BasicRobotics
 - type: technology
   id: BasicXenoArcheology
   name: research-technology-basic-xenoarcheology
@@ -75,15 +160,12 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-  - NodeScanner
-  - AnalysisComputerCircuitboard
-  - ArtifactAnalyzerMachineCircuitboard
-  # Goobstation R&D Console rework start
-  position: -2,2
+    - NodeScanner
+    - AnalysisComputerCircuitboard
+    - ArtifactAnalyzerMachineCircuitboard
+  position: 1, 3
   technologyPrerequisites:
-  - BasicRobotics
-  # Goobstation R&D Console rework end
-
+    - BasicRobotics
 - type: technology
   id: AlternativeResearch
   name: research-technology-alternative-research
@@ -94,13 +176,10 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-  - TechDiskComputerCircuitboard
-  # Goobstation R&D Console rework start
+    - TechDiskComputerCircuitboard
+  position: 2, 0
   technologyPrerequisites:
-  - BasicRobotics
-  position: -2,-1
-  # Goobstation R&D Console rework end
-
+    - BasicRobotics
 - type: technology
   id: MagnetsTech
   name: research-technology-magnets-tech
@@ -111,14 +190,11 @@
   tier: 1
   cost: 7500
   recipeUnlocks:
-  - ClothingShoesBootsMagSci
-  - ClothingShoesBootsMoon
-  # Goobstation R&D Console rework start
-  position: -3,-1
+    - ClothingShoesBootsMagSci
+    - ClothingShoesBootsMoon
+  position: 1, 0
   technologyPrerequisites:
-  - AlternativeResearch
-  # Goobstation R&D Console rework end
-
+    - AlternativeResearch
 - type: technology
   id: AnomalyCoreHarnessing
   name: research-technology-anomaly-harnessing
@@ -129,15 +205,10 @@
   tier: 1
   cost: 10000
   recipeUnlocks:
-  - WeaponGauntletGorilla
-  # Goobstation R&D Console rework start
-  position: -3,1
+    - WeaponGauntletGorilla
+  position: 0, 2
   technologyPrerequisites:
-  - BasicAnomalousResearch
-  # Goobstation R&D Console rework end
-
-# Tier 2
-
+    - BasicAnomalousResearch
 - type: technology
   id: AbnormalArtifactManipulation
   name: research-technology-abnormal-artifact-manipulation
@@ -148,13 +219,10 @@
   tier: 2
   cost: 5000
   recipeUnlocks:
-  - ArtifactCrusherMachineCircuitboard
-  # Goobstation R&D Console rework start
-  position: -3,2
+    - ArtifactCrusherMachineCircuitboard
+  position: 0, 3
   technologyPrerequisites:
-  - BasicXenoArcheology
-  # Goobstation R&D Console rework end
-
+    - BasicXenoArcheology
 - type: technology
   id: AdvancedAnomalyResearch
   name: research-technology-advanced-anomaly-research
@@ -165,13 +233,12 @@
   tier: 2
   cost: 10000
   recipeUnlocks:
-  - WeaponPistolCHIMP
-  - AnomalySynchronizerCircuitboard
-  - AnomalyVesselExperimentalCircuitboard
+    - WeaponPistolCHIMP
+    - AnomalySynchronizerCircuitboard
+    - AnomalyVesselExperimentalCircuitboard
+  position: 1, 1
   technologyPrerequisites:
-  - BasicAnomalousResearch
-  position: -3,0
-
+    - BasicAnomalousResearch
 - type: technology
   id: DeterrenceTechnologies
   name: research-technology-deterrence
@@ -182,14 +249,11 @@
   tier: 2
   cost: 7500
   recipeUnlocks:
-  - WeaponParticleDecelerator
-  - HoloprojectorField
-  # Goobstation R&D Console rework start
-  position: -3,-2
+    - WeaponParticleDecelerator
+    - HoloprojectorField
+  position: 1, -1
   technologyPrerequisites:
-  - AlternativeResearch
-  # Goobstation R&D Console rework end
-
+    - AlternativeResearch
 - type: technology
   id: GravityManipulation
   name: research-technology-gravity-manipulation
@@ -202,15 +266,10 @@
   recipeUnlocks:
     - WeaponForceGun
     - WeaponTetherGun
-  # Goobstation R&D Console rework start
-  position: -4,2
+  position: -1, 3
   technologyPrerequisites:
-  - AbnormalArtifactManipulation
-  - AnomalyCoreHarnessing
-  # Goobstation R&D Console rework end
-
-# Tier 3
-
+    - AbnormalArtifactManipulation
+    - AnomalyCoreHarnessing
 - type: technology
   id: QuantumLeaping
   name: research-technology-quantum-leaping
@@ -219,16 +278,13 @@
     state: icon
   discipline: Experimental
   tier: 3
-  cost: 15000 # Goobstation 10000 -> 15000
+  cost: 15000
   recipeUnlocks:
-  - DeviceQuantumSpinInverter
-  - QuantumTelepadMachineCircuitboard # CorvaxGoob-QuantumTelepad
-  # Goobstation R&D Console rework start
-  position: -5,2
+    - DeviceQuantumSpinInverter
+    - QuantumTelepadMachineCircuitboard
+  position: -2, 3
   technologyPrerequisites:
-  - GravityManipulation
-  # Goobstation R&D Console rework end
-
+    - GravityManipulation
 - type: technology
   id: BluespaceTimeManipulation
   name: research-technology-bluespace-time-manipulation
@@ -237,11 +293,9 @@
     state: icon
   discipline: Experimental
   tier: 3
-  cost: 15000 # Goob 10000 -> 150000
+  cost: 15000
   recipeUnlocks:
-  - DeviceDesynchronizer
-  # Goobstation R&D Console rework start
-  position: -5,3
+    - DeviceDesynchronizer
+  position: -2, 4
   technologyPrerequisites:
-  - GravityManipulation
-  # Goobstation R&D Console rework end
+    - GravityManipulation
