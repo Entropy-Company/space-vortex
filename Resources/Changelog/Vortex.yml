@@ -5,3 +5,33 @@ Entries:
     type: Remove
   id: 1
   time: '2025-10-16T00:00:00.000Z'
+- author: Neyran
+  changes:
+  - message: Ветки РнД/НИО теперь разделены на вкладки.
+    type: Tweak
+  id: 2
+  time: '2025-10-16T15:23:00.000Z'
+- author: Neyran
+  changes:
+  - message: Из аплинка был удален дробовик NZ CSG-242 и магазины к нему.
+    type: Remove
+  id: 3
+  time: '2025-10-16T15:23:00.000Z'
+- author: Neyran
+  changes:
+  - message: Обновлены приложение новостей и заметок под более удобный формат для использования.
+    type: Twick
+  id: 4
+  time: '2025-10-16T15:23:00.000Z'
+- author: Neyran
+  changes:
+  - message: Отображение должностей в гарнитуре.
+    type: Add
+  id: 5
+  time: '2025-10-16T15:23:00.000Z'
+- author: Neyran
+  changes:
+  - message: Новое шейдер: Фазирование.
+    type: Add
+  id: 6
+  time: '2025-10-16T15:23:00.000Z'
