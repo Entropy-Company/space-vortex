@@ -290,19 +290,9 @@ public sealed class PaperSystem : EntitySystem
     /// </summary>
     public bool TryStamp(Entity<PaperComponent> entity, StampDisplayInfo stampInfo, string spriteStampState)
     {
-        if (!entity.Comp.StampedBy.Contains(stampInfo))
-        {
-            entity.Comp.StampedBy.Add(stampInfo);
-            Dirty(entity);
-            if (entity.Comp.StampState == null && TryComp<AppearanceComponent>(entity, out var appearance))
-            {
-                entity.Comp.StampState = spriteStampState;
-                // Would be nice to be able to display multiple sprites on the paper
-                // but most of the existing images overlap
-                _appearance.SetData(entity, PaperVisuals.Stamp, entity.Comp.StampState, appearance);
-            }
-        }
-        return true;
+        //Vortex added
+        return TryAddStampInfo(entity, stampInfo, spriteStampState, allowDuplicate: false);
+        //Vortex end
     }
 
     /// <summary>
