@@ -20,7 +20,7 @@ Entries:
 - author: Neyran
   changes:
   - message: Обновлены приложение новостей и заметок под более удобный формат для использования.
-    type: Twick
+    type: Tweak
   id: 4
   time: '2025-10-16T15:23:00.000Z'
 - author: Neyran
