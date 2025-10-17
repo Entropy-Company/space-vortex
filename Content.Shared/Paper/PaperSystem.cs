@@ -351,6 +351,25 @@ public sealed class PaperSystem : EntitySystem
     {
         _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.Mode));
     }
+
+    //Vortex added
+    public bool TryAddStampInfo(Entity<PaperComponent> entity, StampDisplayInfo stampInfo, string? spriteStampState, bool allowDuplicate)
+    {
+        if (!allowDuplicate && entity.Comp.StampedBy.Contains(stampInfo))
+            return true;
+
+        entity.Comp.StampedBy.Add(stampInfo);
+        Dirty(entity);
+
+        if (spriteStampState != null && entity.Comp.StampState == null && TryComp<AppearanceComponent>(entity, out var appearance))
+        {
+            entity.Comp.StampState = spriteStampState;
+            _appearance.SetData(entity, PaperVisuals.Stamp, entity.Comp.StampState, appearance);
+        }
+
+        return true;
+    }
+    //Vortex end
 }
 
 /// <summary>

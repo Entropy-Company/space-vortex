@@ -14,6 +14,8 @@ using Content.Shared.Tag;
 using Content.Shared.Verbs;
 using Robust.Server.Audio;
 using Robust.Shared.Player;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Content.Server._DV.Paper;
 
@@ -22,6 +24,9 @@ public sealed class SignatureSystem : EntitySystem
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly IdCardSystem _idCard = default!;
     [Dependency] private readonly PaperSystem _paper = default!;
+    //Vortex added
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    //Vortex end
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly TagSystem _tags = default!;
 
@@ -74,13 +79,50 @@ public sealed class SignatureSystem : EntitySystem
 
         var signatureName = DetermineEntitySignature(signer);
 
+        //Vortex added
+        // Parse controls from paper content
+        var content = comp.Content ?? string.Empty;
+        var repeatLimit = ParseIntTag(content, "sign_repeat_limit") ?? 1;
+        var totalLimit = ParseIntTag(content, "sign_limit") ?? int.MaxValue;
+        var hasPlaceholders = HasSignPlaceholders(content);
+
+        // Enforce total signature limit
+        if (comp.StampedBy.Count >= totalLimit)
+        {
+            _popup.PopupEntity(Loc.GetString("paper-signed-failure", ("target", paper.Owner)), signer, signer, PopupType.SmallCaution);
+            return false;
+        }
+
+        // Enforce per-signer repeat limit (count by name)
+        var existingByThisSigner = comp.StampedBy.Count(s => s.StampedName == signatureName);
+        if (existingByThisSigner >= repeatLimit)
+        {
+            _popup.PopupEntity(Loc.GetString("paper-signed-failure", ("target", paper.Owner)), signer, signer, PopupType.SmallCaution);
+            return false;
+        }
+
         var stampInfo = new StampDisplayInfo()
         {
             StampedName = signatureName,
             StampedColor = Color.DarkSlateGray, //TODO Make this configurable depending on the pen.
         };
 
-        if (!comp.StampedBy.Contains(stampInfo) && _paper.TryStamp(paper, stampInfo, SignatureStampState))
+        // If placeholders exist, add entry but avoid visual stamp sprite; also allow duplicate entries up to repeatLimit.
+        var allowDuplicate = repeatLimit > 1;
+        var spriteState = hasPlaceholders ? null : SignatureStampState;
+        //Vortex added
+        if (hasPlaceholders)
+        {
+            // Clear existing world overlay so only textual signatures are visible
+            comp.StampState = null;
+            if (TryComp<AppearanceComponent>(paper, out var appearance))
+                _appearance.SetData(paper, PaperComponent.PaperVisuals.Stamp, "", appearance);
+            Dirty(paper);
+        }
+        //Vortex end
+        //Vortex end
+
+        if (_paper.TryAddStampInfo(paper, stampInfo, spriteState, allowDuplicate))
         {
             // Show popups and play a paper writing sound
             if (!HasComp<DevilComponent>(signer)) // Goobstation - Don't display popups for devils, it covers the others.
@@ -109,6 +151,25 @@ public sealed class SignatureSystem : EntitySystem
             return false;
         }
     }
+
+    //Vortex added
+    private static int? ParseIntTag(string content, string tag)
+    {
+        // Matches <tag=number> or [tag=number]
+        var m1 = Regex.Match(content, $"<\\s*{Regex.Escape(tag)}\\s*=\\s*(\\d+)\\s*>");
+        if (m1.Success && int.TryParse(m1.Groups[1].Value, out var val1))
+            return val1;
+        var m2 = Regex.Match(content, $"\\[\\s*{Regex.Escape(tag)}\\s*=\\s*(\\d+)\\s*\\]");
+        if (m2.Success && int.TryParse(m2.Groups[1].Value, out var val2))
+            return val2;
+        return null;
+    }
+
+    private static bool HasSignPlaceholders(string content)
+    {
+        return Regex.IsMatch(content, "(<\\s*sign\\s*=\\s*\\d+\\s*>)|(\\[\\s*sign\\s*=\\s*\\d+\\s*\\])");
+    }
+    //Vortex end
 
     private string DetermineEntitySignature(EntityUid uid)
     {
