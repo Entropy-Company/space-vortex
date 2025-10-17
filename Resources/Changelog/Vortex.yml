@@ -31,7 +31,7 @@ Entries:
   time: '2025-10-16T15:23:00.000Z'
 - author: Neyran
   changes:
-  - message: Новое шейдер: Фазирование.
+  - message: Новое шейдер - Фазирование.
     type: Add
   id: 6
   time: '2025-10-16T15:23:00.000Z'
