@@ -1187,7 +1187,7 @@ namespace Content.Client.Lobby.UI
             if (_prototypeManager.HasIndex<GuideEntryPrototype>(species))
                 page = new ProtoId<GuideEntryPrototype>(species.Id); // Gross. See above todo comment.
 
-            if (_prototypeManager.TryIndex(DefaultSpeciesGuidebook, out var guideRoot))
+            if (_prototypeManager.TryIndex<GuideEntryPrototype>(DefaultSpeciesGuidebook, out var guideRoot))
             {
                 var dict = new Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry>();
                 dict.Add(DefaultSpeciesGuidebook, guideRoot);
@@ -1922,10 +1922,10 @@ namespace Content.Client.Lobby.UI
             WidthSlider.MaxValue = species.MaxWidth;
 
             var height = MathF.Round(species.AverageHeight * HeightSlider.Value);
-            HeightLabel.Text = Loc.GetString("humanoid-profile-editor-height-label", ("height", (int) height));
+            HeightLabel.Text = Loc.GetString("humanoid-profile-editor-ee-height-label", ("height", (int) height));
 
             var width = MathF.Round(species.AverageWidth * WidthSlider.Value);
-            WidthLabel.Text = Loc.GetString("humanoid-profile-editor-width-label", ("width", (int) width));
+            WidthLabel.Text = Loc.GetString("humanoid-profile-editor-ee-width-label", ("width", (int) width));
 
             UpdateDimensions(SliderUpdate.Both);
         }
@@ -1967,10 +1967,10 @@ namespace Content.Client.Lobby.UI
             SetProfileWidth(widthValue);
 
             var height = MathF.Round(species.AverageHeight * HeightSlider.Value);
-            HeightLabel.Text = Loc.GetString("humanoid-profile-editor-height-label", ("height", (int) height));
+            HeightLabel.Text = Loc.GetString("humanoid-profile-editor-ee-height-label", ("height", (int) height));
 
             var width = MathF.Round(species.AverageWidth * WidthSlider.Value);
-            WidthLabel.Text = Loc.GetString("humanoid-profile-editor-width-label", ("width", (int) width));
+            WidthLabel.Text = Loc.GetString("humanoid-profile-editor-ee-width-label", ("width", (int) width));
 
             UpdateWeight();
         }

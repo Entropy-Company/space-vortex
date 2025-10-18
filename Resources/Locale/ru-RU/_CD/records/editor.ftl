@@ -1,5 +1,5 @@
 # Редактор записей
-humanoid-profile-editor-cd-records-tab = Досье / Записи
+humanoid-profile-editor-cd-records-tab = Бекграунд
 
 # Общие
 humanoid-profile-editor-cd-records-height = Рост (см):
