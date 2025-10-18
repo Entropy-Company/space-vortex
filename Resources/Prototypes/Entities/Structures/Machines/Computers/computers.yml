@@ -705,7 +705,7 @@
     energy: 1.6
     color: "#1f8c28"
   - type: Computer
-    board: CriminalRecordsComputerCircuitboard
+    board: SecureRecordsComputerCircuitboard
   - type: AccessReader
     access: [["Security"]]
   - type: GuideHelp

@@ -137,6 +137,17 @@
     - type: Sprite
       state: cpu_security
     - type: ComputerBoard
+      prototype: ComputerSecureRecords
+
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: SecureRecordsComputerCircuitboard
+  name: secure records computer board
+  description: A computer printed circuit board for a secure records computer.
+  components:
+    - type: Sprite
+      state: cpu_security
+    - type: ComputerBoard
       prototype: ComputerCriminalRecords
 
 - type: entity

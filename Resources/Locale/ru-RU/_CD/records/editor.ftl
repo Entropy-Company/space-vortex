@@ -7,7 +7,7 @@ humanoid-profile-editor-cd-records-weight = Вес (кг):
 humanoid-profile-editor-cd-records-contact-name = Контактные лица для экстренной связи:
 
 # Трудовая деятельность
-humanoid-profile-editor-cd-records-employment = Сотрудник
+humanoid-profile-editor-cd-records-employment = Тудовые записи
 humanoid-profile-editor-cd-records-work-authorization = Разрешение на работу:
 
 # Безопасность
