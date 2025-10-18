@@ -141,17 +141,6 @@
 
 - type: entity
   parent: BaseComputerCircuitboard
-  id: SecureRecordsComputerCircuitboard
-  name: secure records computer board
-  description: A computer printed circuit board for a secure records computer.
-  components:
-    - type: Sprite
-      state: cpu_security
-    - type: ComputerBoard
-      prototype: ComputerCriminalRecords
-
-- type: entity
-  parent: BaseComputerCircuitboard
   id: StationRecordsComputerCircuitboard
   name: station records computer board
   description: A computer printed circuit board for a station records computer.
@@ -160,17 +149,6 @@
       state: cpu_command
     - type: ComputerBoard
       prototype: ComputerStationRecords
-
-- type: entity
-  parent: BaseComputerCircuitboard
-  id: LaborRecordsComputerCircuitboard
-  name: station labor computer board
-  description: A computer printed circuit board for a labor records computer.
-  components:
-    - type: Sprite
-      state: cpu_command
-    - type: ComputerBoard
-      prototype: ComputerLaborRecords
 
 - type: entity
   parent: BaseComputerCircuitboard

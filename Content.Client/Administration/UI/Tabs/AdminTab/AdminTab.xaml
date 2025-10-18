@@ -36,8 +36,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
             <cc:CommandButton Command="faxui" Text="{Loc admin-player-actions-window-admin-fax}"/>
             <cc:CommandButton Command="timetransferpanel" Text="{Loc admin-player-actions-window-time-transfer}"/>
             <cc:CommandButton Command="achatwindow" Text="{Loc admin-player-actions-window-admin-chat}"/>
-            <!-- CD: records purge button -->
-            <cc:UICommandButton Command="purgecharacterrecords" Text="{Loc admin-player-actions-window-cd-record-purge}" WindowType="{x:Type cdAdmin:ModifyCharacterRecords}"/>
         </GridContainer>
     </BoxContainer>
 </Control>

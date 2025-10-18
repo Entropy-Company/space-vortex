@@ -134,7 +134,7 @@ public sealed partial class PlayerProvidedCharacterRecords
     {
         return new PlayerProvidedCharacterRecords(
             hasWorkAuthorization: true,
-            height: 175, weight: 72,
+            height: 0, weight: 0, // Height and Weight are now calculated from appearance data
             emergencyContactName: "",
             identifyingFeatures: "",
             allergies: "Нет",
