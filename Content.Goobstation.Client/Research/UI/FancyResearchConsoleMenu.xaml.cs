@@ -324,8 +324,7 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
             }
         }
         
-        // Update the view to ensure everything is visible
-        Recenter();
+        // Don't auto-recenter to preserve user's scroll/zoom position
     }
 
     

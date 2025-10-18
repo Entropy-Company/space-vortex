@@ -23,7 +23,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
                       Orientation="Horizontal"
                       HorizontalExpand="True"
                       VerticalExpand="False"
-                      MinHeight="50"
+                      MinHeight="30"
                       Margin="10 0 10 0">
             <!-- Tabs will be added here programmatically -->
         </BoxContainer>
