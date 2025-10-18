@@ -47,3 +47,9 @@ Entries:
     type: Add
   id: 8
   time: '2025-10-18T22:53:00.000Z'
+- author: Neyran
+  changes:
+  - message: "Возвращение расы фелинидов."
+    type: Add
+  id: 9
+  time: '2025-10-18T19:21:00.000Z'
